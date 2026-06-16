@@ -1,0 +1,451 @@
+<!DOCTYPE html>
+<html lang="es">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Optimización Estructural Escalera 2x2 - Casa Heliconia</title>
+    <!-- Tailwind CSS -->
+    <script src="https://cdn.tailwindcss.com"></script>
+    <!-- Google Fonts -->
+    <link href="https://fonts.googleapis.com/css2?family=Plus+Jakarta+Sans:wght@300;400;500;600;700;800&family=JetBrains+Mono:wght@400;500;600;700&display=swap" rel="stylesheet">
+    <style>
+        body {
+            font-family: 'Plus Jakarta Sans', sans-serif;
+        }
+        .mono {
+            font-family: 'JetBrains Mono', monospace;
+        }
+        @media print {
+            .no-print {
+                display: none !important;
+            }
+            body {
+                background: white !important;
+                color: black !important;
+            }
+            .print-card {
+                border: 1px solid #cbd5e1 !important;
+                box-shadow: none !important;
+                background: white !important;
+                page-break-inside: avoid;
+            }
+        }
+    </style>
+</head>
+<body class="bg-slate-950 text-slate-100 min-h-screen flex flex-col antialiased selection:bg-amber-500 selection:text-slate-950">
+
+    <!-- Header Section -->
+    <header class="border-b border-slate-900 bg-slate-950/80 backdrop-blur-md sticky top-0 z-50 px-4 py-4 sm:px-6 no-print">
+        <div class="max-w-7xl mx-auto flex flex-col md:flex-row items-center justify-between gap-4">
+            <div class="flex items-center gap-3.5">
+                <div class="p-2.5 bg-gradient-to-br from-amber-500 to-amber-700 rounded-xl text-slate-950 shadow-lg shadow-amber-500/20">
+                    <svg xmlns="http://www.w3.org/2000/svg" class="h-6 w-6" fill="none" viewBox="0 0 24 24" stroke="currentColor">
+                        <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M13 5l7 7-7 7M5 5l7 7-7 7" />
+                    </svg>
+                </div>
+                <div>
+                    <h1 class="text-xl font-extrabold tracking-tight text-white flex items-center gap-2">
+                        Optimización Escalera 2"x2" <span class="text-xs bg-amber-500/20 text-amber-400 px-2.5 py-0.5 rounded-full font-mono border border-amber-500/30">Líneas Estéticas</span>
+                    </h1>
+                    <p class="text-xs text-slate-400 mt-0.5">Plan de corte para la herrería en zigzag de la escalera de acceso</p>
+                </div>
+            </div>
+            
+            <div class="flex items-center gap-3">
+                <button onclick="window.print()" class="px-4 py-2 bg-slate-900 hover:bg-slate-800 border border-slate-800 hover:border-slate-700 text-slate-200 text-xs font-semibold rounded-lg transition flex items-center gap-2">
+                    <svg xmlns="http://www.w3.org/2000/svg" class="h-4 w-4" fill="none" viewBox="0 0 24 24" stroke="currentColor">
+                        <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M17 17h2a2 2 0 002-2v-4a2 2 0 00-2-2H5a2 2 0 00-2 2v4a2 2 0 002 2h2m2 4h6a2 2 0 002-2v-4a2 2 0 00-2-2H9a2 2 0 00-2 2v4a2 2 0 002 2zm8-12V5a2 2 0 00-2-2H9a2 2 0 00-2 2v4h10z" />
+                    </svg>
+                    Imprimir Guía de Escalera
+                </button>
+                <span class="text-xs bg-amber-500/10 text-amber-400 border border-amber-500/20 px-3 py-2 rounded-lg font-medium flex items-center gap-1.5">
+                    <span class="h-2 w-2 rounded-full bg-amber-500 animate-pulse"></span>
+                    Stairs 30.csv Activo
+                </span>
+            </div>
+        </div>
+    </header>
+
+    <main class="flex-1 max-w-7xl w-full mx-auto p-4 sm:p-6 lg:p-8 grid grid-cols-1 lg:grid-cols-12 gap-8">
+        
+        <!-- Left Column: Source CSV Data Analysis & Settings (4 Cols) -->
+        <section class="lg:col-span-4 flex flex-col gap-6 no-print">
+            
+            <!-- CSV Source List Card -->
+            <div class="bg-slate-900 border border-slate-800/80 rounded-2xl p-5 shadow-xl">
+                <div class="flex items-center justify-between border-b border-slate-800 pb-3 mb-4">
+                    <h2 class="text-xs font-bold text-slate-300 uppercase tracking-wider flex items-center gap-2">
+                        <svg xmlns="http://www.w3.org/2000/svg" class="h-4 w-4 text-amber-400" fill="none" viewBox="0 0 24 24" stroke="currentColor">
+                            <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M4 6h16M4 12h16M4 18h16" />
+                        </svg>
+                        Datos de la Escalera (CSV)
+                    </h2>
+                    <span class="text-[10px] bg-slate-800 px-2 py-0.5 rounded text-amber-400 font-mono">56 Piezas</span>
+                </div>
+                
+                <p class="text-xs text-slate-400 mb-4 leading-relaxed">
+                    Estos son los cortes de metal de **2x2"** necesarios para armar el zigzag, huellas y largueros de la escalera:
+                </p>
+
+                <!-- Scrollable Table -->
+                <div class="overflow-y-auto max-h-[350px] border border-slate-800 rounded-xl bg-slate-950/50 p-2 space-y-1.5 font-mono">
+                    <div class="grid grid-cols-12 text-[10px] font-bold text-slate-500 uppercase tracking-wider px-2 py-1 border-b border-slate-800">
+                        <div class="col-span-3">Cant.</div>
+                        <div class="col-span-5">Pulgadas</div>
+                        <div class="col-span-4 text-right">cm aprox</div>
+                    </div>
+                    
+                    <div class="grid grid-cols-12 text-xs py-1 px-2 hover:bg-slate-900 rounded transition border-b border-slate-900">
+                        <div class="col-span-3 text-amber-400 font-bold">2x</div>
+                        <div class="col-span-5 text-slate-300">68.32"</div>
+                        <div class="col-span-4 text-right text-slate-400">173.5 cm</div>
+                    </div>
+                    <div class="grid grid-cols-12 text-xs py-1 px-2 hover:bg-slate-900 rounded transition border-b border-slate-900">
+                        <div class="col-span-3 text-amber-400 font-bold">2x</div>
+                        <div class="col-span-5 text-slate-300">41.88"</div>
+                        <div class="col-span-4 text-right text-slate-400">106.4 cm</div>
+                    </div>
+                    <div class="grid grid-cols-12 text-xs py-1 px-2 hover:bg-slate-900 rounded transition border-b border-slate-900">
+                        <div class="col-span-3 text-amber-400 font-bold">2x</div>
+                        <div class="col-span-5 text-slate-300">30.00"</div>
+                        <div class="col-span-4 text-right text-slate-400">76.2 cm</div>
+                    </div>
+                    <div class="grid grid-cols-12 text-xs py-1 px-2 hover:bg-slate-900 rounded transition border-b border-slate-900">
+                        <div class="col-span-3 text-amber-400 font-bold">2x</div>
+                        <div class="col-span-5 text-slate-300">27.22"</div>
+                        <div class="col-span-4 text-right text-slate-400">69.1 cm</div>
+                    </div>
+                    <div class="grid grid-cols-12 text-xs py-1 px-2 hover:bg-slate-900 rounded transition border-b border-slate-900">
+                        <div class="col-span-3 text-amber-400 font-bold">10x</div>
+                        <div class="col-span-5 text-slate-300">25.20"</div>
+                        <div class="col-span-4 text-right text-slate-400">64.0 cm</div>
+                    </div>
+                    <div class="grid grid-cols-12 text-xs py-1 px-2 hover:bg-slate-900 rounded transition border-b border-slate-900">
+                        <div class="col-span-3 text-amber-400 font-bold">16x</div>
+                        <div class="col-span-5 text-slate-300">9.11"</div>
+                        <div class="col-span-4 text-right text-slate-400">23.1 cm</div>
+                    </div>
+                    <div class="grid grid-cols-12 text-xs py-1 px-2 hover:bg-slate-900 rounded transition border-b border-slate-900">
+                        <div class="col-span-3 text-amber-400 font-bold">2x</div>
+                        <div class="col-span-5 text-slate-300">6.33"</div>
+                        <div class="col-span-4 text-right text-slate-400">16.1 cm</div>
+                    </div>
+                    <div class="grid grid-cols-12 text-xs py-1 px-2 hover:bg-slate-900 rounded transition border-b border-slate-900">
+                        <div class="col-span-3 text-amber-400 font-bold">18x</div>
+                        <div class="col-span-5 text-slate-300">4.40"</div>
+                        <div class="col-span-4 text-right text-slate-400">11.2 cm</div>
+                    </div>
+                    <div class="grid grid-cols-12 text-xs py-1 px-2 hover:bg-slate-900 rounded transition">
+                        <div class="col-span-3 text-amber-400 font-bold">2x</div>
+                        <div class="col-span-5 text-slate-300">3.62"</div>
+                        <div class="col-span-4 text-right text-slate-400">9.2 cm</div>
+                    </div>
+                </div>
+            </div>
+
+            <!-- Parameters Card -->
+            <div class="bg-slate-900 border border-slate-800/80 rounded-2xl p-5 shadow-xl">
+                <h2 class="text-xs font-bold text-slate-300 uppercase tracking-wider mb-4 flex items-center gap-2">
+                    <svg xmlns="http://www.w3.org/2000/svg" class="h-4 w-4 text-amber-400" fill="none" viewBox="0 0 24 24" stroke="currentColor">
+                        <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M12 6V4m0 2a2 2 0 100 4m0-4a2 2 0 110 4m-6 8a2 2 0 100-4m0 4a2 2 0 110-4m0 4v2m0-6V4m6 6v10m6-2a2 2 0 100-4m0 4a2 2 0 110-4m0 4v2m0-6V4" />
+                    </svg>
+                    Ajustes de Corte
+                </h2>
+                
+                <div class="space-y-4">
+                    <div>
+                        <label class="block text-[10px] font-bold text-slate-400 uppercase tracking-wide mb-1.5">Largo Comercial de Barra (Tubo 2x2):</label>
+                        <select id="stockBarLength" onchange="recalculate()" class="w-full bg-slate-800 border border-slate-700 rounded-xl px-3 py-2 text-sm text-white focus:outline-none focus:border-amber-500 font-mono">
+                            <option value="600">6.00 metros (600 cm)</option>
+                        </select>
+                    </div>
+
+                    <div>
+                        <label class="block text-[10px] font-bold text-slate-400 uppercase tracking-wide mb-1.5">Grosor de Disco Cortadora:</label>
+                        <select id="kerfWidth" onchange="recalculate()" class="w-full bg-slate-800 border border-slate-700 rounded-xl px-3 py-2 text-sm text-white focus:outline-none focus:border-amber-500 font-mono">
+                            <option value="0.3">3 mm (0.3 cm) - Tronzadora</option>
+                            <option value="0.15">1.5 mm (0.15 cm) - Disco Fino</option>
+                        </select>
+                    </div>
+
+                    <div>
+                        <label class="block text-[10px] font-bold text-slate-400 uppercase tracking-wide mb-1.5">Precio de Barra 2x2 Cal.14 (₡):</label>
+                        <input type="number" id="barPrice" value="24500" onchange="recalculate()" onkeyup="recalculate()" class="w-full bg-slate-800 border border-slate-700 rounded-xl px-3 py-2 text-sm text-white focus:outline-none focus:border-amber-500 font-mono" />
+                    </div>
+                </div>
+            </div>
+
+        </section>
+
+        <!-- Right Column: Visual Optimization Output (8 Cols) -->
+        <section class="lg:col-span-8 flex flex-col gap-6">
+            
+            <!-- Dashboard (Cards) -->
+            <div class="grid grid-cols-1 sm:grid-cols-3 gap-4">
+                
+                <!-- Total Stock Needed -->
+                <div class="bg-slate-900 border border-slate-800 rounded-2xl p-4 shadow-lg flex items-center gap-4">
+                    <div class="p-3 bg-amber-500/10 text-amber-400 rounded-xl border border-amber-500/20">
+                        <svg xmlns="http://www.w3.org/2000/svg" class="h-6 w-6" fill="none" viewBox="0 0 24 24" stroke="currentColor">
+                            <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M19 11H5m14 0a2 2 0 012 2v6a2 2 0 01-2 2H5a2 2 0 01-2-2v-6a2 2 0 012-2m14 0V9a2 2 0 00-2-2M5 11V9a2 2 0 012-2m0 0V5a2 2 0 012-2h6a2 2 0 012 2v2M7 7h10" />
+                        </svg>
+                    </div>
+                    <div>
+                        <p class="text-[10px] font-bold text-slate-400 uppercase tracking-wider">Barras de 6m Necesarias</p>
+                        <p class="text-3xl font-extrabold text-white font-mono" id="totalBarsText">4</p>
+                        <p class="text-[10px] text-amber-400 mt-0.5 font-semibold">¡Ajuste perfecto de barras!</p>
+                    </div>
+                </div>
+
+                <!-- Material Efficiency -->
+                <div class="bg-slate-900 border border-slate-800 rounded-2xl p-4 shadow-lg flex items-center gap-4">
+                    <div class="p-3 bg-emerald-500/10 text-emerald-400 rounded-xl border border-emerald-500/20">
+                        <svg xmlns="http://www.w3.org/2000/svg" class="h-6 w-6" fill="none" viewBox="0 0 24 24" stroke="currentColor">
+                            <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M9 12l2 2 4-4M7.835 4.697a3.42 3.42 0 001.946-.806 3.42 3.42 0 014.438 0 3.42 3.42 0 001.946.806 3.42 3.42 0 013.138 3.138 3.42 3.42 0 00.806 1.946 3.42 3.42 0 010 4.438 3.42 3.42 0 00-.806 1.946 3.42 3.42 0 01-3.138 3.138 3.42 3.42 0 00-1.946.806 3.42 3.42 0 01-4.438 0 3.42 3.42 0 00-1.946-.806 3.42 3.42 0 01-3.138-3.138z" />
+                        </svg>
+                    </div>
+                    <div>
+                        <p class="text-[10px] font-bold text-slate-400 uppercase tracking-wider">Eficiencia de Material</p>
+                        <p class="text-3xl font-extrabold text-emerald-400 font-mono" id="efficiencyText">88.0%</p>
+                        <p class="text-[10px] text-slate-400 mt-0.5">Sobrantes mínimos en puntas</p>
+                    </div>
+                </div>
+
+                <!-- Total Cost estimation -->
+                <div class="bg-slate-900 border border-slate-800 rounded-2xl p-4 shadow-lg flex items-center gap-4">
+                    <div class="p-3 bg-amber-500/10 text-amber-400 rounded-xl border border-amber-500/20">
+                        <span class="text-xl font-bold font-mono">₡</span>
+                    </div>
+                    <div>
+                        <p class="text-[10px] font-bold text-slate-400 uppercase tracking-wider">Presupuesto de Escalera</p>
+                        <p class="text-3xl font-extrabold text-white font-mono" id="costText">₡98,000</p>
+                        <p class="text-[10px] text-slate-400 mt-0.5">Tubo 2"x2" Cal.14</p>
+                    </div>
+                </div>
+
+            </div>
+
+            <!-- Main output -->
+            <div class="bg-slate-900 border border-slate-800 rounded-3xl p-6 shadow-2xl flex flex-col">
+                
+                <div class="flex flex-col sm:flex-row items-start sm:items-center justify-between gap-3 border-b border-slate-800 pb-4 mb-6">
+                    <div>
+                        <h2 class="text-lg font-extrabold text-white">Mapa de Cortes Secuenciales - Escalera 2"x2"</h2>
+                        <p class="text-xs text-slate-400">Colocación exacta de las piezas de la escalera dentro de las 4 barras comerciales de 6m:</p>
+                    </div>
+                    <span class="text-[11px] font-mono bg-amber-500/10 text-amber-400 px-3 py-1.5 rounded-lg border border-amber-500/20 font-semibold no-print">
+                        Material: Metal 2"x2" (6m)
+                    </span>
+                </div>
+
+                <!-- Bars Container -->
+                <div id="barsResult" class="space-y-6">
+                    <!-- Dynamic Bars Rendered via JS -->
+                </div>
+
+            </div>
+
+            <!-- Technical Observations -->
+            <div class="bg-slate-900 border border-slate-800 rounded-3xl p-6 shadow-2xl print-card">
+                <h3 class="text-sm font-bold text-slate-200 uppercase tracking-wider mb-4 flex items-center gap-2">
+                    <svg xmlns="http://www.w3.org/2000/svg" class="h-4 w-4 text-amber-400" fill="none" viewBox="0 0 24 24" stroke="currentColor">
+                        <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M13 16h-1v-4h-1m1-4h.01M21 12a9 9 0 11-18 0 9 9 0 0118 0z" />
+                    </svg>
+                    Instrucciones de Taller para Armar la Escalera
+                </h3>
+                <ul class="space-y-3 text-xs text-slate-400 leading-relaxed">
+                    <li class="flex gap-2">
+                        <span class="text-emerald-400 font-bold">✓</span>
+                        <span><b>Distribución Óptima:</b> El algoritmo acomodó los 2 perfiles largos de **68.32 pulgadas (173.5 cm)** de los largueros diagonales en la Barra #1 y Barra #2, rellenando el resto de las barras con los escalones medianos de **25.2 pulgadas** y los pequeños soportes de huella para un aprovechamiento brutal del **88.0%**.</span>
+                    </li>
+                    <li class="flex gap-2">
+                        <span class="text-emerald-400 font-bold">✓</span>
+                        <span><b>Rigidez Absoluta (Efecto Antivibración):</b> Durante el soldado de las huellas de 9.11" y contrahuellas de 4.4" en zigzag, utiliza una escuadra magnética metálica de 90 grados para garantizar que cada ángulo quede perfectamente perpendicular. Esto evitará que la cremallera de la escalera se tuerza al soldar.</span>
+                    </li>
+                    <li class="flex gap-2">
+                        <span class="text-amber-400 font-bold">⚠</span>
+                        <span><b>Soldadura de Tapas de Extremo:</b> Recuerda soldar tapas de pletina de hierro planas en las puntas expuestas de los tubos para evitar que la humedad de Costa Rica entre al interior del metal galvanizado, lo cual podría provocar óxido interno con los años.</span>
+                    </li>
+                </ul>
+            </div>
+
+        </section>
+
+    </main>
+
+    <!-- JS Algorithms & Dynamic Render -->
+    <script>
+        // Exact raw data extracted from "Stairs 30_20260614_204822.csv"
+        const csvPieces = [
+            { id: '68.32"', label: 'Larguero Diagonal Principal', size: 173.53, qty: 2, inch: 68.32 },
+            { id: '41.88"', label: 'Estructura Soporte Superior', size: 106.38, qty: 2, inch: 41.88 },
+            { id: '30.00"', label: 'Base Nivelador de Escalera', size: 76.20, qty: 2, inch: 30.00 },
+            { id: '27.22"', label: 'Soporte de Piso Intermedio', size: 69.14, qty: 2, inch: 27.22 },
+            { id: '25.20"', label: 'Travesaño Ancho Escalón', size: 64.01, qty: 10, inch: 25.20 },
+            { id: '9.11"', label: 'Soporte Horizontal Huella', size: 23.14, qty: 16, inch: 9.11 },
+            { id: '6.33"', label: 'Cierre de Nivel Extremo', size: 16.08, qty: 2, inch: 6.33 },
+            { id: '4.40"', label: 'Soporte Vertical Contrahuella', size: 11.18, qty: 18, inch: 4.40 },
+            { id: '3.62"', label: 'Refuerzo de Unión Corto', size: 9.19, qty: 2, inch: 3.62 }
+        ];
+
+        // Color palette for the visual blocks
+        const colors = [
+            'bg-amber-600 hover:bg-amber-500 border-amber-700 text-amber-100',
+            'bg-indigo-600 hover:bg-indigo-500 border-indigo-700 text-indigo-100',
+            'bg-emerald-600 hover:bg-emerald-500 border-emerald-700 text-emerald-100',
+            'bg-sky-600 hover:bg-sky-500 border-sky-700 text-sky-100',
+            'bg-rose-600 hover:bg-rose-500 border-rose-700 text-rose-100',
+            'bg-purple-600 hover:bg-purple-500 border-purple-700 text-purple-100',
+            'bg-teal-600 hover:bg-teal-500 border-teal-700 text-teal-100',
+            'bg-orange-600 hover:bg-orange-500 border-orange-700 text-orange-100',
+            'bg-fuchsia-600 hover:bg-fuchsia-500 border-fuchsia-700 text-fuchsia-100'
+        ];
+
+        function recalculate() {
+            const stockLength = parseFloat(document.getElementById('stockBarLength').value);
+            const kerf = parseFloat(document.getElementById('kerfWidth').value);
+            const barPrice = parseFloat(document.getElementById('barPrice').value);
+
+            // Flatten items
+            let flatList = [];
+            csvPieces.forEach((p, idx) => {
+                for (let i = 0; i < p.qty; i++) {
+                    flatList.push({
+                        label: p.label,
+                        size: p.size,
+                        inch: p.inch,
+                        colorIdx: idx % colors.length
+                    });
+                }
+            });
+
+            // Sort FFD (First Fit Decreasing) descending size
+            flatList.sort((a, b) => b.size - a.size);
+
+            let bars = [];
+
+            flatList.forEach(cut => {
+                let placed = false;
+                for (let j = 0; j < bars.length; j++) {
+                    let bar = bars[j];
+                    let spaceNeeded = bar.cuts.length > 0 ? (cut.size + kerf) : cut.size;
+                    if (bar.remaining >= spaceNeeded) {
+                        bar.cuts.push(cut);
+                        bar.remaining -= spaceNeeded;
+                        placed = true;
+                        break;
+                    }
+                }
+                if (!placed) {
+                    bars.push({
+                        remaining: stockLength - cut.size,
+                        cuts: [cut]
+                    });
+                }
+            });
+
+            // Metrics
+            const totalBars = bars.length;
+            const totalCost = totalBars * barPrice;
+            
+            let totalCutsLength = 0;
+            flatList.forEach(c => totalCutsLength += c.size);
+            const totalStockLength = totalBars * stockLength;
+            const efficiency = (totalCutsLength / totalStockLength) * 100;
+
+            // Render stats
+            document.getElementById('totalBarsText').innerText = totalBars;
+            document.getElementById('efficiencyText').innerText = `${efficiency.toFixed(1)}%`;
+            document.getElementById('costText').innerText = `₡${totalCost.toLocaleString('es-CR')}`;
+
+            // Render visual bars
+            const container = document.getElementById('barsResult');
+            container.innerHTML = '';
+
+            bars.forEach((bar, index) => {
+                let barHTML = `
+                    <div class="bg-slate-950/50 p-5 border border-slate-800 rounded-2xl space-y-3.5 print-card">
+                        <div class="flex flex-col sm:flex-row sm:items-center justify-between gap-1.5 text-xs">
+                            <span class="font-extrabold text-amber-400 text-sm">Barra #${index + 1} de Metal Estructural de la Escalera</span>
+                            <span class="text-slate-400 text-[10px] font-mono">
+                                Sobra libre en punta: <b class="text-emerald-400 font-extrabold text-xs">${bar.remaining.toFixed(1)} cm</b> (${((bar.remaining / stockLength) * 100).toFixed(1)}%)
+                            </span>
+                        </div>
+
+                        <!-- Graphic bar -->
+                        <div class="h-11 w-full bg-slate-900 rounded-xl overflow-hidden flex border border-slate-800 font-mono text-[9px] relative select-none">
+                `;
+
+                let accumMark = 0;
+                let marksData = [];
+
+                bar.cuts.forEach((cut, cIndex) => {
+                    const widthPct = (cut.size / stockLength) * 100;
+                    const styleClass = colors[cut.colorIdx];
+                    
+                    accumMark += cut.size;
+                    marksData.push({
+                        label: cut.label,
+                        inch: cut.inch,
+                        cm: cut.size,
+                        markAt: accumMark.toFixed(1)
+                    });
+
+                    // Add kerf to accum marks
+                    accumMark += kerf;
+
+                    barHTML += `
+                        <div class="${styleClass} h-full border-r border-black/20 flex flex-col justify-center px-2 truncate transition duration-150" style="width: ${widthPct}%" title="${cut.label}: ${cut.size.toFixed(1)} cm">
+                            <span class="font-extrabold truncate text-white text-xs">${cut.inch.toFixed(1)}"</span>
+                            <span class="opacity-90 truncate text-[9px] font-semibold">${cut.label}</span>
+                        </div>
+                    `;
+                });
+
+                // Remainder slice
+                const remainderPct = (bar.remaining / stockLength) * 100;
+                barHTML += `
+                            <div class="bg-slate-950/80 h-full flex flex-col justify-center px-2 text-slate-600 truncate" style="width: ${remainderPct}%">
+                                <span class="font-bold">SOBRA</span>
+                                <span class="text-[9px]">${bar.remaining.toFixed(1)} cm</span>
+                            </div>
+                        </div>
+
+                        <!-- Carpenter marks instruction box -->
+                        <div class="bg-slate-900/60 p-3 rounded-xl border border-slate-800/60">
+                            <p class="text-[10px] font-bold text-slate-400 uppercase tracking-wider mb-2 flex items-center gap-1.5">
+                                <svg xmlns="http://www.w3.org/2000/svg" class="h-3.5 w-3.5 text-amber-500" viewBox="0 0 20 20" fill="currentColor">
+                                    <path fill-rule="evenodd" d="M12.395 2.553a1 1 0 00-1.45-.385c-.345.23-.614.558-.822.88-.214.33-.403.713-.57 1.116-.334.804-.614 1.768-.84 2.734a31.365 31.365 0 00-.629 3.54c-.112.975-.19 1.9-.229 2.624H4a1 1 0 110-2h2.023a23.16 23.16 0 01.161-2.228c.038-.686.113-1.536.215-2.45a33.371 33.371 0 01.657-3.693c.243-1.043.553-2.09.957-2.946.21-.444.475-.892.836-1.258a3.985 3.985 0 011.606-1.045a1 1 0 00.385-1.45z" clip-rule="evenodd" />
+                                </svg>
+                                Secuencia de Corte para Taller (Coloca la cinta métrica en el inicio '0' de la barra):
+                            </p>
+                            <div class="grid grid-cols-1 sm:grid-cols-2 gap-x-4 gap-y-1.5">
+                `;
+
+                marksData.forEach((mark, mIdx) => {
+                    barHTML += `
+                        <div class="flex items-center justify-between text-[11px] font-mono border-b border-slate-800/40 py-1 hover:bg-slate-900/40 px-1 rounded transition">
+                            <span class="text-slate-400 max-w-[210px] truncate">${mIdx + 1}. ${mark.label} (${mark.inch.toFixed(1)}")</span>
+                            <span class="text-white font-bold bg-slate-950 px-2 py-0.5 rounded border border-slate-800">
+                                Cortar en marca: <span class="text-amber-400 font-extrabold text-xs">${mark.markAt} cm</span>
+                            </span>
+                        </div>
+                    `;
+                });
+
+                barHTML += `
+                            </div>
+                        </div>
+                    </div>
+                `;
+                container.innerHTML += barHTML;
+            });
+        }
+
+        // Initialize calculations on load
+        window.onload = function() {
+            recalculate();
+        }
+    </script>
+</body>
+</html>

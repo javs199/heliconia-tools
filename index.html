@@ -1,0 +1,426 @@
+<!DOCTYPE html>
+<html lang="es">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Casa Heliconia — Centro de Herramientas de Construcción</title>
+    <meta name="description" content="Centro de herramientas interactivas de optimización y despiece para el proyecto de camas búnker Casa Heliconia. Gestiona materiales, cortes y presupuestos.">
+    <!-- Tailwind CSS -->
+    <script src="https://cdn.tailwindcss.com"></script>
+    <!-- Google Fonts -->
+    <link href="https://fonts.googleapis.com/css2?family=Plus+Jakarta+Sans:wght@300;400;500;600;700;800;900&family=JetBrains+Mono:wght@400;500;600;700&display=swap" rel="stylesheet">
+    <style>
+        body {
+            font-family: 'Plus Jakarta Sans', sans-serif;
+        }
+        .mono {
+            font-family: 'JetBrains Mono', monospace;
+        }
+
+        /* Animated gradient background */
+        .bg-animated {
+            background: radial-gradient(ellipse at 20% 50%, rgba(79, 70, 229, 0.08) 0%, transparent 60%),
+                        radial-gradient(ellipse at 80% 20%, rgba(124, 58, 237, 0.06) 0%, transparent 60%),
+                        radial-gradient(ellipse at 60% 80%, rgba(16, 185, 129, 0.05) 0%, transparent 60%),
+                        #020617;
+        }
+
+        /* Card hover glow */
+        .tool-card {
+            transition: transform 0.3s cubic-bezier(0.34, 1.56, 0.64, 1), box-shadow 0.3s ease, border-color 0.3s ease;
+            position: relative;
+            overflow: hidden;
+        }
+        .tool-card::before {
+            content: '';
+            position: absolute;
+            inset: 0;
+            opacity: 0;
+            transition: opacity 0.3s ease;
+            border-radius: inherit;
+        }
+        .tool-card:hover {
+            transform: translateY(-6px) scale(1.01);
+        }
+
+        /* Glow variants */
+        .glow-indigo:hover { box-shadow: 0 20px 60px rgba(99, 102, 241, 0.25), 0 0 0 1px rgba(99, 102, 241, 0.4); border-color: rgba(99, 102, 241, 0.5) !important; }
+        .glow-violet:hover { box-shadow: 0 20px 60px rgba(139, 92, 246, 0.25), 0 0 0 1px rgba(139, 92, 246, 0.4); border-color: rgba(139, 92, 246, 0.5) !important; }
+        .glow-emerald:hover { box-shadow: 0 20px 60px rgba(16, 185, 129, 0.25), 0 0 0 1px rgba(16, 185, 129, 0.4); border-color: rgba(16, 185, 129, 0.5) !important; }
+        .glow-amber:hover { box-shadow: 0 20px 60px rgba(245, 158, 11, 0.20), 0 0 0 1px rgba(245, 158, 11, 0.4); border-color: rgba(245, 158, 11, 0.5) !important; }
+        .glow-sky:hover { box-shadow: 0 20px 60px rgba(14, 165, 233, 0.25), 0 0 0 1px rgba(14, 165, 233, 0.4); border-color: rgba(14, 165, 233, 0.5) !important; }
+        .glow-rose:hover { box-shadow: 0 20px 60px rgba(244, 63, 94, 0.20), 0 0 0 1px rgba(244, 63, 94, 0.4); border-color: rgba(244, 63, 94, 0.5) !important; }
+
+        /* Arrow icon animation */
+        .arrow-icon {
+            transition: transform 0.3s cubic-bezier(0.34, 1.56, 0.64, 1);
+        }
+        .tool-card:hover .arrow-icon {
+            transform: translate(4px, -4px);
+        }
+
+        /* Subtle grid pattern */
+        .grid-pattern {
+            background-image: 
+                linear-gradient(rgba(99, 102, 241, 0.03) 1px, transparent 1px),
+                linear-gradient(90deg, rgba(99, 102, 241, 0.03) 1px, transparent 1px);
+            background-size: 60px 60px;
+        }
+
+        /* Icon pulse ring */
+        .icon-ring {
+            animation: ringPulse 3s ease-in-out infinite;
+        }
+        @keyframes ringPulse {
+            0%, 100% { opacity: 0.4; transform: scale(1); }
+            50% { opacity: 0.8; transform: scale(1.08); }
+        }
+
+        /* Stat counter fade in */
+        @keyframes fadeInUp {
+            from { opacity: 0; transform: translateY(16px); }
+            to { opacity: 1; transform: translateY(0); }
+        }
+        .fade-in-up {
+            animation: fadeInUp 0.6s ease forwards;
+        }
+        .delay-1 { animation-delay: 0.1s; opacity: 0; }
+        .delay-2 { animation-delay: 0.2s; opacity: 0; }
+        .delay-3 { animation-delay: 0.3s; opacity: 0; }
+        .delay-4 { animation-delay: 0.4s; opacity: 0; }
+        .delay-5 { animation-delay: 0.5s; opacity: 0; }
+        .delay-6 { animation-delay: 0.6s; opacity: 0; }
+        .delay-7 { animation-delay: 0.7s; opacity: 0; }
+        .delay-8 { animation-delay: 0.8s; opacity: 0; }
+        .delay-9 { animation-delay: 0.9s; opacity: 0; }
+        .delay-10 { animation-delay: 1.0s; opacity: 0; }
+
+        /* Live dot */
+        .live-dot {
+            animation: livePulse 1.5s ease-in-out infinite;
+        }
+        @keyframes livePulse {
+            0%, 100% { opacity: 1; transform: scale(1); }
+            50% { opacity: 0.5; transform: scale(0.85); }
+        }
+
+        /* Stat bar fill */
+        .stat-bar-fill {
+            transition: width 1.2s cubic-bezier(0.25, 1, 0.5, 1);
+        }
+    </style>
+</head>
+<body class="bg-animated grid-pattern min-h-screen text-slate-100 antialiased selection:bg-indigo-500 selection:text-white">
+
+    <!-- Top Nav Bar -->
+    <nav class="border-b border-slate-800/60 bg-slate-950/70 backdrop-blur-xl sticky top-0 z-50 px-4 py-3">
+        <div class="max-w-7xl mx-auto flex items-center justify-between">
+            <div class="flex items-center gap-3">
+                <!-- Logo Icon -->
+                <div class="relative">
+                    <div class="icon-ring absolute inset-0 rounded-xl bg-gradient-to-br from-indigo-500 to-violet-600 blur-sm"></div>
+                    <div class="relative p-2 bg-gradient-to-br from-indigo-500 to-violet-700 rounded-xl text-white shadow-lg">
+                        <svg xmlns="http://www.w3.org/2000/svg" class="h-5 w-5" fill="none" viewBox="0 0 24 24" stroke="currentColor" stroke-width="2">
+                            <path stroke-linecap="round" stroke-linejoin="round" d="M19 21V5a2 2 0 00-2-2H7a2 2 0 00-2 2v16m14 0h2m-2 0h-5m-9 0H3m2 0h5M9 7h1m-1 4h1m4-4h1m-1 4h1m-5 10v-5a1 1 0 011-1h2a1 1 0 011 1v5m-4 0h4" />
+                        </svg>
+                    </div>
+                </div>
+                <div>
+                    <h1 class="text-sm font-extrabold text-white tracking-tight leading-none">Casa Heliconia</h1>
+                    <p class="text-[10px] text-slate-400 font-mono mt-0.5">Camas Búnker · Sistema de Herramientas</p>
+                </div>
+            </div>
+            <div class="flex items-center gap-2.5">
+                <span class="hidden sm:flex items-center gap-1.5 text-[11px] text-emerald-400 font-semibold bg-emerald-500/10 border border-emerald-500/20 px-3 py-1.5 rounded-lg">
+                    <span class="live-dot h-1.5 w-1.5 rounded-full bg-emerald-400 inline-block"></span>
+                    9 herramientas activas
+                </span>
+                <span class="text-[11px] text-slate-400 font-mono bg-slate-800/60 border border-slate-700/50 px-3 py-1.5 rounded-lg">v1.0</span>
+            </div>
+        </div>
+    </nav>
+
+    <main class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 py-12 lg:py-16">
+
+        <!-- Hero Section -->
+        <section class="text-center mb-14 fade-in-up delay-1">
+            <div class="inline-flex items-center gap-2 bg-indigo-500/10 border border-indigo-500/20 rounded-full px-4 py-1.5 mb-6">
+                <span class="h-2 w-2 rounded-full bg-indigo-400 live-dot"></span>
+                <span class="text-xs text-indigo-300 font-semibold">Proyecto en construcción activa</span>
+            </div>
+            <h2 class="text-4xl sm:text-5xl lg:text-6xl font-black text-white tracking-tight leading-none mb-4">
+                Centro de
+                <span class="bg-gradient-to-r from-indigo-400 via-violet-400 to-purple-400 bg-clip-text text-transparent">
+                    Optimización
+                </span>
+            </h2>
+            <p class="text-slate-400 text-base sm:text-lg max-w-2xl mx-auto leading-relaxed">
+                Todas las herramientas de despiece, optimización de materiales y planificación para las 
+                <strong class="text-slate-200">camas búnker de la Casa Heliconia</strong> en un solo lugar.
+            </p>
+        </section>
+
+        <!-- Stats Row -->
+        <section class="grid grid-cols-2 sm:grid-cols-4 gap-4 mb-12 fade-in-up delay-2">
+            <div class="bg-slate-900/60 border border-slate-800/80 rounded-2xl p-4 text-center">
+                <p class="text-2xl font-black text-indigo-400 mono">9</p>
+                <p class="text-[11px] text-slate-400 mt-1 font-semibold">Herramientas</p>
+            </div>
+            <div class="bg-slate-900/60 border border-slate-800/80 rounded-2xl p-4 text-center">
+                <p class="text-2xl font-black text-violet-400 mono">7</p>
+                <p class="text-[11px] text-slate-400 mt-1 font-semibold">Materiales</p>
+            </div>
+            <div class="bg-slate-900/60 border border-slate-800/80 rounded-2xl p-4 text-center">
+                <p class="text-2xl font-black text-emerald-400 mono">₡</p>
+                <p class="text-[11px] text-slate-400 mt-1 font-semibold">Presupuesto Live</p>
+            </div>
+            <div class="bg-slate-900/60 border border-slate-800/80 rounded-2xl p-4 text-center">
+                <p class="text-2xl font-black text-amber-400 mono">2D</p>
+                <p class="text-[11px] text-slate-400 mt-1 font-semibold">Planos visuales</p>
+            </div>
+        </section>
+
+        <!-- Category: Láminas -->
+        <section class="mb-10 fade-in-up delay-3">
+            <div class="flex items-center gap-3 mb-5">
+                <div class="h-px flex-1 bg-gradient-to-r from-transparent to-slate-800"></div>
+                <span class="text-[11px] text-slate-500 font-bold uppercase tracking-widest font-mono px-3">Materiales en Lámina</span>
+                <div class="h-px flex-1 bg-gradient-to-l from-transparent to-slate-800"></div>
+            </div>
+            <div class="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 gap-5">
+
+                <!-- Card 1: Gypsum -->
+                <a href="despiece_interactivo_gypsum.html" id="card-gypsum"
+                   class="tool-card glow-indigo bg-slate-900/70 border border-slate-800/80 rounded-2xl p-6 flex flex-col gap-4 cursor-pointer no-underline fade-in-up delay-3">
+                    <div class="flex items-start justify-between">
+                        <div class="p-3 bg-gradient-to-br from-indigo-500/20 to-indigo-700/10 rounded-xl border border-indigo-500/20">
+                            <svg xmlns="http://www.w3.org/2000/svg" class="h-6 w-6 text-indigo-400" fill="none" viewBox="0 0 24 24" stroke="currentColor" stroke-width="1.5">
+                                <path stroke-linecap="round" stroke-linejoin="round" d="M4 5a1 1 0 011-1h14a1 1 0 011 1v2a1 1 0 01-1 1H5a1 1 0 01-1-1V5zM4 13a1 1 0 011-1h6a1 1 0 011 1v6a1 1 0 01-1 1H5a1 1 0 01-1-1v-6zM16 13a1 1 0 011-1h2a1 1 0 011 1v6a1 1 0 01-1 1h-2a1 1 0 01-1-1v-6z" />
+                            </svg>
+                        </div>
+                        <svg xmlns="http://www.w3.org/2000/svg" class="h-4 w-4 text-slate-600 arrow-icon" fill="none" viewBox="0 0 24 24" stroke="currentColor" stroke-width="2">
+                            <path stroke-linecap="round" stroke-linejoin="round" d="M10 6H6a2 2 0 00-2 2v10a2 2 0 002 2h10a2 2 0 002-2v-4M14 4h6m0 0v6m0-6L10 14" />
+                        </svg>
+                    </div>
+                    <div>
+                        <div class="flex items-center gap-2 mb-1.5">
+                            <h3 class="font-extrabold text-white text-base leading-tight">Optimización Gypsum 2D</h3>
+                        </div>
+                        <p class="text-xs text-slate-400 leading-relaxed">Despiece interactivo de láminas de gypsum ½" con motor de empalme automático y distribución 2D por lámina.</p>
+                    </div>
+                    <div class="flex flex-wrap gap-2 mt-auto">
+                        <span class="text-[10px] font-mono bg-indigo-500/10 text-indigo-400 border border-indigo-500/20 px-2.5 py-1 rounded-full font-semibold">Gypsum.csv</span>
+                        <span class="text-[10px] font-mono bg-slate-800 text-slate-400 border border-slate-700 px-2.5 py-1 rounded-full">40 piezas</span>
+                        <span class="text-[10px] font-mono bg-slate-800 text-slate-400 border border-slate-700 px-2.5 py-1 rounded-full">Empalme 2D</span>
+                    </div>
+                </a>
+
+                <!-- Card 2: Plywood -->
+                <a href="despiece_interactivo_plywood.html" id="card-plywood"
+                   class="tool-card glow-emerald bg-slate-900/70 border border-slate-800/80 rounded-2xl p-6 flex flex-col gap-4 cursor-pointer no-underline fade-in-up delay-4">
+                    <div class="flex items-start justify-between">
+                        <div class="p-3 bg-gradient-to-br from-emerald-500/20 to-emerald-700/10 rounded-xl border border-emerald-500/20">
+                            <svg xmlns="http://www.w3.org/2000/svg" class="h-6 w-6 text-emerald-400" fill="none" viewBox="0 0 24 24" stroke="currentColor" stroke-width="1.5">
+                                <path stroke-linecap="round" stroke-linejoin="round" d="M9 17V7m0 10a2 2 0 01-2 2H5a2 2 0 01-2-2V7a2 2 0 012-2h2a2 2 0 012 2m0 10a2 2 0 002 2h2a2 2 0 002-2M9 7a2 2 0 012-2h2a2 2 0 012 2m0 10V7m0 10a2 2 0 002 2h2a2 2 0 002-2V7a2 2 0 00-2-2h-2a2 2 0 00-2 2" />
+                            </svg>
+                        </div>
+                        <svg xmlns="http://www.w3.org/2000/svg" class="h-4 w-4 text-slate-600 arrow-icon" fill="none" viewBox="0 0 24 24" stroke="currentColor" stroke-width="2">
+                            <path stroke-linecap="round" stroke-linejoin="round" d="M10 6H6a2 2 0 00-2 2v10a2 2 0 002 2h10a2 2 0 002-2v-4M14 4h6m0 0v6m0-6L10 14" />
+                        </svg>
+                    </div>
+                    <div>
+                        <h3 class="font-extrabold text-white text-base leading-tight mb-1.5">Despiece Interactivo Plywood</h3>
+                        <p class="text-xs text-slate-400 leading-relaxed">Optimización de cortes en láminas de plywood con visualización gráfica y cálculo de merma por lámina.</p>
+                    </div>
+                    <div class="flex flex-wrap gap-2 mt-auto">
+                        <span class="text-[10px] font-mono bg-emerald-500/10 text-emerald-400 border border-emerald-500/20 px-2.5 py-1 rounded-full font-semibold">Plywood.csv</span>
+                        <span class="text-[10px] font-mono bg-slate-800 text-slate-400 border border-slate-700 px-2.5 py-1 rounded-full">Canvas 2D</span>
+                    </div>
+                </a>
+
+                <!-- Card 3: Galvanizado 1x1 -->
+                <a href="despiece_interactivo_galvanizado_1x1.html" id="card-galv-1x1"
+                   class="tool-card glow-amber bg-slate-900/70 border border-slate-800/80 rounded-2xl p-6 flex flex-col gap-4 cursor-pointer no-underline fade-in-up delay-5">
+                    <div class="flex items-start justify-between">
+                        <div class="p-3 bg-gradient-to-br from-amber-500/20 to-amber-700/10 rounded-xl border border-amber-500/20">
+                            <svg xmlns="http://www.w3.org/2000/svg" class="h-6 w-6 text-amber-400" fill="none" viewBox="0 0 24 24" stroke="currentColor" stroke-width="1.5">
+                                <path stroke-linecap="round" stroke-linejoin="round" d="M4 6h16M4 10h16M4 14h16M4 18h16" />
+                            </svg>
+                        </div>
+                        <svg xmlns="http://www.w3.org/2000/svg" class="h-4 w-4 text-slate-600 arrow-icon" fill="none" viewBox="0 0 24 24" stroke="currentColor" stroke-width="2">
+                            <path stroke-linecap="round" stroke-linejoin="round" d="M10 6H6a2 2 0 00-2 2v10a2 2 0 002 2h10a2 2 0 002-2v-4M14 4h6m0 0v6m0-6L10 14" />
+                        </svg>
+                    </div>
+                    <div>
+                        <h3 class="font-extrabold text-white text-base leading-tight mb-1.5">Galvanizado Tubular 1×1"</h3>
+                        <p class="text-xs text-slate-400 leading-relaxed">Despiece y optimización de cortes en tubo galvanizado cuadrado de 1"×1" para estructura de camas.</p>
+                    </div>
+                    <div class="flex flex-wrap gap-2 mt-auto">
+                        <span class="text-[10px] font-mono bg-amber-500/10 text-amber-400 border border-amber-500/20 px-2.5 py-1 rounded-full font-semibold">Galvanizado 1x1.csv</span>
+                        <span class="text-[10px] font-mono bg-slate-800 text-slate-400 border border-slate-700 px-2.5 py-1 rounded-full">Tubular</span>
+                    </div>
+                </a>
+
+                <!-- Card 4: Galvanizado 2x2 -->
+                <a href="despiece_interactivo_galvanizado_2x2.html" id="card-galv-2x2"
+                   class="tool-card glow-sky bg-slate-900/70 border border-slate-800/80 rounded-2xl p-6 flex flex-col gap-4 cursor-pointer no-underline fade-in-up delay-6">
+                    <div class="flex items-start justify-between">
+                        <div class="p-3 bg-gradient-to-br from-sky-500/20 to-sky-700/10 rounded-xl border border-sky-500/20">
+                            <svg xmlns="http://www.w3.org/2000/svg" class="h-6 w-6 text-sky-400" fill="none" viewBox="0 0 24 24" stroke="currentColor" stroke-width="1.5">
+                                <path stroke-linecap="round" stroke-linejoin="round" d="M7 8h10M7 12h4m1 8l-4-4H5a2 2 0 01-2-2V6a2 2 0 012-2h14a2 2 0 012 2v8a2 2 0 01-2 2h-3l-4 4z" />
+                            </svg>
+                        </div>
+                        <svg xmlns="http://www.w3.org/2000/svg" class="h-4 w-4 text-slate-600 arrow-icon" fill="none" viewBox="0 0 24 24" stroke="currentColor" stroke-width="2">
+                            <path stroke-linecap="round" stroke-linejoin="round" d="M10 6H6a2 2 0 00-2 2v10a2 2 0 002 2h10a2 2 0 002-2v-4M14 4h6m0 0v6m0-6L10 14" />
+                        </svg>
+                    </div>
+                    <div>
+                        <h3 class="font-extrabold text-white text-base leading-tight mb-1.5">Galvanizado Tubular 2×2"</h3>
+                        <p class="text-xs text-slate-400 leading-relaxed">Optimización de cortes en tubo galvanizado cuadrado de 2"×2" para estructura principal y refuerzos.</p>
+                    </div>
+                    <div class="flex flex-wrap gap-2 mt-auto">
+                        <span class="text-[10px] font-mono bg-sky-500/10 text-sky-400 border border-sky-500/20 px-2.5 py-1 rounded-full font-semibold">Galvanizado 2x2.csv</span>
+                        <span class="text-[10px] font-mono bg-slate-800 text-slate-400 border border-slate-700 px-2.5 py-1 rounded-full">Tubular</span>
+                    </div>
+                </a>
+
+                <!-- Card 5: Studs y Tracks -->
+                <a href="optimizaci_n_studs_y_tracks.html" id="card-studs"
+                   class="tool-card glow-violet bg-slate-900/70 border border-slate-800/80 rounded-2xl p-6 flex flex-col gap-4 cursor-pointer no-underline fade-in-up delay-7">
+                    <div class="flex items-start justify-between">
+                        <div class="p-3 bg-gradient-to-br from-violet-500/20 to-violet-700/10 rounded-xl border border-violet-500/20">
+                            <svg xmlns="http://www.w3.org/2000/svg" class="h-6 w-6 text-violet-400" fill="none" viewBox="0 0 24 24" stroke="currentColor" stroke-width="1.5">
+                                <path stroke-linecap="round" stroke-linejoin="round" d="M14.121 14.121L19 19m-7-7h7m-7-7h3m-3 4h3m-12 1h.01M3 12h.01M3 12a1 1 0 112 0 1 1 0 01-2 0zm0-7a1 1 0 112 0 1 1 0 01-2 0zm0 14a1 1 0 112 0 1 1 0 01-2 0z" />
+                            </svg>
+                        </div>
+                        <svg xmlns="http://www.w3.org/2000/svg" class="h-4 w-4 text-slate-600 arrow-icon" fill="none" viewBox="0 0 24 24" stroke="currentColor" stroke-width="2">
+                            <path stroke-linecap="round" stroke-linejoin="round" d="M10 6H6a2 2 0 00-2 2v10a2 2 0 002 2h10a2 2 0 002-2v-4M14 4h6m0 0v6m0-6L10 14" />
+                        </svg>
+                    </div>
+                    <div>
+                        <h3 class="font-extrabold text-white text-base leading-tight mb-1.5">BúnkerCut — Studs & Tracks</h3>
+                        <p class="text-xs text-slate-400 leading-relaxed">Optimización de metal liviano con fusión inteligente de solapes. Clasifica y optimiza studs y tracks por separado.</p>
+                    </div>
+                    <div class="flex flex-wrap gap-2 mt-auto">
+                        <span class="text-[10px] font-mono bg-violet-500/10 text-violet-400 border border-violet-500/20 px-2.5 py-1 rounded-full font-semibold">Studs y tracks.csv</span>
+                        <span class="text-[10px] font-mono bg-slate-800 text-slate-400 border border-slate-700 px-2.5 py-1 rounded-full">110 piezas</span>
+                        <span class="text-[10px] font-mono bg-violet-800/40 text-violet-300 border border-violet-700/30 px-2.5 py-1 rounded-full">Upload CSV</span>
+                    </div>
+                </a>
+
+                <!-- Card 6: Escalera -->
+                <a href="despiece_estructural_escalera_2x2.html" id="card-escalera"
+                   class="tool-card glow-rose bg-slate-900/70 border border-slate-800/80 rounded-2xl p-6 flex flex-col gap-4 cursor-pointer no-underline fade-in-up delay-8">
+                    <div class="flex items-start justify-between">
+                        <div class="p-3 bg-gradient-to-br from-rose-500/20 to-rose-700/10 rounded-xl border border-rose-500/20">
+                            <svg xmlns="http://www.w3.org/2000/svg" class="h-6 w-6 text-rose-400" fill="none" viewBox="0 0 24 24" stroke="currentColor" stroke-width="1.5">
+                                <path stroke-linecap="round" stroke-linejoin="round" d="M3 21h4l-1-3H4a1 1 0 01-1-1V4a1 1 0 011-1h16a1 1 0 011 1v2M8 21h4l-1-3H9m4 3h4l-1-3h-2m4-3H5m16 0H5m8-6H5m0 3h16" />
+                            </svg>
+                        </div>
+                        <svg xmlns="http://www.w3.org/2000/svg" class="h-4 w-4 text-slate-600 arrow-icon" fill="none" viewBox="0 0 24 24" stroke="currentColor" stroke-width="2">
+                            <path stroke-linecap="round" stroke-linejoin="round" d="M10 6H6a2 2 0 00-2 2v10a2 2 0 002 2h10a2 2 0 002-2v-4M14 4h6m0 0v6m0-6L10 14" />
+                        </svg>
+                    </div>
+                    <div>
+                        <h3 class="font-extrabold text-white text-base leading-tight mb-1.5">Despiece Estructural Escalera 2×2"</h3>
+                        <p class="text-xs text-slate-400 leading-relaxed">Planificación completa de cortes para la escalera de acceso en tubo galvanizado 2"×2" con solapes y mermas.</p>
+                    </div>
+                    <div class="flex flex-wrap gap-2 mt-auto">
+                        <span class="text-[10px] font-mono bg-rose-500/10 text-rose-400 border border-rose-500/20 px-2.5 py-1 rounded-full font-semibold">Stairs 30.csv</span>
+                        <span class="text-[10px] font-mono bg-slate-800 text-slate-400 border border-slate-700 px-2.5 py-1 rounded-full">Estructural</span>
+                    </div>
+                </a>
+
+                <!-- Card 7: Cálculo de Tornillos Gypsum -->
+                <a href="c_lculo_de_tornillos_gypsum.html" id="card-tornillos"
+                   class="tool-card glow-emerald bg-slate-900/70 border border-slate-800/80 rounded-2xl p-6 flex flex-col gap-4 cursor-pointer no-underline fade-in-up delay-9">
+                    <div class="flex items-start justify-between">
+                        <div class="p-3 bg-gradient-to-br from-emerald-500/20 to-teal-700/10 rounded-xl border border-emerald-500/20">
+                            <svg xmlns="http://www.w3.org/2000/svg" class="h-6 w-6 text-emerald-400" fill="none" viewBox="0 0 24 24" stroke="currentColor" stroke-width="1.5">
+                                <path stroke-linecap="round" stroke-linejoin="round" d="M11 5H6a2 2 0 00-2 2v11a2 2 0 002 2h11a2 2 0 002-2v-5m-1.414-9.414a2 2 0 112.828 2.828L11.828 15H9v-2.828l8.586-8.586z" />
+                            </svg>
+                        </div>
+                        <svg xmlns="http://www.w3.org/2000/svg" class="h-4 w-4 text-slate-600 arrow-icon" fill="none" viewBox="0 0 24 24" stroke="currentColor" stroke-width="2">
+                            <path stroke-linecap="round" stroke-linejoin="round" d="M10 6H6a2 2 0 00-2 2v10a2 2 0 002 2h10a2 2 0 002-2v-4M14 4h6m0 0v6m0-6L10 14" />
+                        </svg>
+                    </div>
+                    <div>
+                        <h3 class="font-extrabold text-white text-base leading-tight mb-1.5">Cálculo de Tornillos Gypsum</h3>
+                        <p class="text-xs text-slate-400 leading-relaxed">Cálculo automático de la cantidad de tornillos necesarios para la instalación de láminas de gypsum por área y configuración.</p>
+                    </div>
+                    <div class="flex flex-wrap gap-2 mt-auto">
+                        <span class="text-[10px] font-mono bg-emerald-500/10 text-emerald-400 border border-emerald-500/20 px-2.5 py-1 rounded-full font-semibold">Gypsum</span>
+                        <span class="text-[10px] font-mono bg-slate-800 text-slate-400 border border-slate-700 px-2.5 py-1 rounded-full">Tornillería</span>
+                    </div>
+                </a>
+
+                <!-- Card 8: Esquineros y Perfil J -->
+                <a href="despiece_acabados_esquineros_y_perfil_j.html" id="card-esquineros"
+                   class="tool-card glow-amber bg-slate-900/70 border border-slate-800/80 rounded-2xl p-6 flex flex-col gap-4 cursor-pointer no-underline fade-in-up delay-10">
+                    <div class="flex items-start justify-between">
+                        <div class="p-3 bg-gradient-to-br from-amber-500/20 to-orange-700/10 rounded-xl border border-amber-500/20">
+                            <svg xmlns="http://www.w3.org/2000/svg" class="h-6 w-6 text-amber-400" fill="none" viewBox="0 0 24 24" stroke="currentColor" stroke-width="1.5">
+                                <path stroke-linecap="round" stroke-linejoin="round" d="M4 8V4m0 0h4M4 4l5 5m11-1V4m0 0h-4m4 0l-5 5M4 16v4m0 0h4m-4 0l5-5m11 5l-5-5m5 5v-4m0 4h-4" />
+                            </svg>
+                        </div>
+                        <svg xmlns="http://www.w3.org/2000/svg" class="h-4 w-4 text-slate-600 arrow-icon" fill="none" viewBox="0 0 24 24" stroke="currentColor" stroke-width="2">
+                            <path stroke-linecap="round" stroke-linejoin="round" d="M10 6H6a2 2 0 00-2 2v10a2 2 0 002 2h10a2 2 0 002-2v-4M14 4h6m0 0v6m0-6L10 14" />
+                        </svg>
+                    </div>
+                    <div>
+                        <h3 class="font-extrabold text-white text-base leading-tight mb-1.5">Acabados — Esquineros y Perfil J</h3>
+                        <p class="text-xs text-slate-400 leading-relaxed">Despiece y optimización de cortes para esquineros metálicos y perfil J de acabado en las camas búnker.</p>
+                    </div>
+                    <div class="flex flex-wrap gap-2 mt-auto">
+                        <span class="text-[10px] font-mono bg-amber-500/10 text-amber-400 border border-amber-500/20 px-2.5 py-1 rounded-full font-semibold">Esquineros y perfil J.csv</span>
+                        <span class="text-[10px] font-mono bg-slate-800 text-slate-400 border border-slate-700 px-2.5 py-1 rounded-full">Acabados</span>
+                    </div>
+                </a>
+
+                <!-- Card 9: Calculadora de Escaleras de Litera -->
+                <a href="calculadora_escaleras_litera.html" id="card-calc-escaleras"
+                   class="tool-card glow-sky bg-slate-900/70 border border-slate-800/80 rounded-2xl p-6 flex flex-col gap-4 cursor-pointer no-underline fade-in-up delay-10" style="animation-delay:1.1s">
+                    <div class="flex items-start justify-between">
+                        <div class="p-3 bg-gradient-to-br from-cyan-500/20 to-sky-700/10 rounded-xl border border-cyan-500/20">
+                            <svg xmlns="http://www.w3.org/2000/svg" class="h-6 w-6 text-cyan-400" fill="none" viewBox="0 0 24 24" stroke="currentColor" stroke-width="1.5">
+                                <path stroke-linecap="round" stroke-linejoin="round" d="M19 11H5m14 0a2 2 0 012 2v6a2 2 0 01-2 2H5a2 2 0 01-2-2v-6a2 2 0 012-2m14 0V9a2 2 0 00-2-2M5 11V9a2 2 0 012-2m0 0V5a2 2 0 012-2h6a2 2 0 012 2v2M7 7h10" />
+                            </svg>
+                        </div>
+                        <svg xmlns="http://www.w3.org/2000/svg" class="h-4 w-4 text-slate-600 arrow-icon" fill="none" viewBox="0 0 24 24" stroke="currentColor" stroke-width="2">
+                            <path stroke-linecap="round" stroke-linejoin="round" d="M10 6H6a2 2 0 00-2 2v10a2 2 0 002 2h10a2 2 0 002-2v-4M14 4h6m0 0v6m0-6L10 14" />
+                        </svg>
+                    </div>
+                    <div>
+                        <h3 class="font-extrabold text-white text-base leading-tight mb-1.5">Calculadora de Escaleras de Litera</h3>
+                        <p class="text-xs text-slate-400 leading-relaxed">Diseño geométrico interactivo con plano 2D a escala, ángulo de corte, Ley de Blondel y ajustes preestablecidos para escaleras de camas búnker.</p>
+                    </div>
+                    <div class="flex flex-wrap gap-2 mt-auto">
+                        <span class="text-[10px] font-mono bg-cyan-500/10 text-cyan-400 border border-cyan-500/20 px-2.5 py-1 rounded-full font-semibold">Plano 2D</span>
+                        <span class="text-[10px] font-mono bg-slate-800 text-slate-400 border border-slate-700 px-2.5 py-1 rounded-full">Ergonomía</span>
+                        <span class="text-[10px] font-mono bg-slate-800 text-slate-400 border border-slate-700 px-2.5 py-1 rounded-full">7 Presets</span>
+                    </div>
+                </a>
+
+            </div>
+        </section>
+
+        <!-- Footer Info -->
+        <footer class="mt-16 pt-8 border-t border-slate-800/60 fade-in-up delay-8">
+            <div class="flex flex-col sm:flex-row items-center justify-between gap-4 text-center sm:text-left">
+                <div>
+                    <p class="text-xs text-slate-500 font-mono">
+                        <span class="text-slate-400 font-semibold">Casa Heliconia</span> · Camas Búnker · Sistema de Despiece Interactivo
+                    </p>
+                    <p class="text-[11px] text-slate-600 mt-1">Todas las dimensiones en pulgadas / cm · Precios en colones costarricenses (₡)</p>
+                </div>
+                <div class="flex items-center gap-2 text-[11px] text-slate-500 font-mono">
+                    <span class="h-2 w-2 rounded-full bg-emerald-500 live-dot inline-block"></span>
+                    Herramientas locales · Sin datos enviados a servidores
+                </div>
+            </div>
+        </footer>
+
+    </main>
+
+</body>
+</html>

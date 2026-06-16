@@ -1,0 +1,397 @@
+<!DOCTYPE html>
+<html lang="es">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Despiece Protector 1x1 - Casa Heliconia</title>
+    <!-- Tailwind CSS -->
+    <script src="https://cdn.tailwindcss.com"></script>
+    <!-- Google Fonts -->
+    <link href="https://fonts.googleapis.com/css2?family=Plus+Jakarta+Sans:wght@300;400;500;600;700;800&family=JetBrains+Mono:wght@400;500;600;700&display=swap" rel="stylesheet">
+    <style>
+        body {
+            font-family: 'Plus Jakarta Sans', sans-serif;
+        }
+        .mono {
+            font-family: 'JetBrains Mono', monospace;
+        }
+        @media print {
+            .no-print {
+                display: none !important;
+            }
+            body {
+                background: white !important;
+                color: black !important;
+            }
+            .print-card {
+                border: 1px solid #cbd5e1 !important;
+                box-shadow: none !important;
+                background: white !important;
+                page-break-inside: avoid;
+            }
+        }
+    </style>
+</head>
+<body class="bg-slate-950 text-slate-100 min-h-screen flex flex-col antialiased selection:bg-indigo-500 selection:text-white">
+
+    <!-- Header Section -->
+    <header class="border-b border-slate-900 bg-slate-950/80 backdrop-blur-md sticky top-0 z-50 px-4 py-4 sm:px-6 no-print">
+        <div class="max-w-7xl mx-auto flex flex-col md:flex-row items-center justify-between gap-4">
+            <div class="flex items-center gap-3.5">
+                <div class="p-2.5 bg-gradient-to-br from-indigo-500 to-indigo-700 rounded-xl text-white shadow-lg shadow-indigo-500/20">
+                    <svg xmlns="http://www.w3.org/2000/svg" class="h-6 w-6" fill="none" viewBox="0 0 24 24" stroke="currentColor">
+                        <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M9 17v-2m3 2v-4m3 2v-6m-9-3h12a2 2 0 012 2v11a2 2 0 01-2 2H9a2 2 0 01-2-2V6a2 2 0 012-2z" />
+                    </svg>
+                </div>
+                <div>
+                    <h1 class="text-xl font-extrabold tracking-tight text-white flex items-center gap-2">
+                        Optimización Tubo 1"x1" <span class="text-xs bg-indigo-500/20 text-indigo-400 px-2.5 py-0.5 rounded-full font-mono border border-indigo-500/30">Calibre 14 / Negro</span>
+                    </h1>
+                    <p class="text-xs text-slate-400 mt-0.5">Plan de corte para las barandas protectoras superiores de la litera</p>
+                </div>
+            </div>
+            
+            <div class="flex items-center gap-3">
+                <button onclick="window.print()" class="px-4 py-2 bg-slate-900 hover:bg-slate-800 border border-slate-800 hover:border-slate-700 text-slate-200 text-xs font-semibold rounded-lg transition flex items-center gap-2">
+                    <svg xmlns="http://www.w3.org/2000/svg" class="h-4 w-4" fill="none" viewBox="0 0 24 24" stroke="currentColor">
+                        <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M17 17h2a2 2 0 002-2v-4a2 2 0 00-2-2H5a2 2 0 00-2 2v4a2 2 0 002 2h2m2 4h6a2 2 0 002-2v-4a2 2 0 00-2-2H9a2 2 0 00-2 2v4a2 2 0 002 2zm8-12V5a2 2 0 00-2-2H9a2 2 0 00-2 2v4h10z" />
+                    </svg>
+                    Imprimir Guía de Baranda
+                </button>
+                <span class="text-xs bg-emerald-500/10 text-emerald-400 border border-emerald-500/20 px-3 py-2 rounded-lg font-medium flex items-center gap-1.5">
+                    <span class="h-2 w-2 rounded-full bg-emerald-500 animate-pulse"></span>
+                    CSV 1x1 Cargado
+                </span>
+            </div>
+        </div>
+    </header>
+
+    <main class="flex-1 max-w-7xl w-full mx-auto p-4 sm:p-6 lg:p-8 grid grid-cols-1 lg:grid-cols-12 gap-8">
+        
+        <!-- Left Column: Source CSV Data Analysis & Settings (4 Cols) -->
+        <section class="lg:col-span-4 flex flex-col gap-6 no-print">
+            
+            <!-- CSV Source List Card -->
+            <div class="bg-slate-900 border border-slate-800/80 rounded-2xl p-5 shadow-xl">
+                <div class="flex items-center justify-between border-b border-slate-800 pb-3 mb-4">
+                    <h2 class="text-xs font-bold text-slate-300 uppercase tracking-wider flex items-center gap-2">
+                        <svg xmlns="http://www.w3.org/2000/svg" class="h-4 w-4 text-indigo-400" fill="none" viewBox="0 0 24 24" stroke="currentColor">
+                            <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M4 6h16M4 12h16M4 18h16" />
+                        </svg>
+                        Datos de Baranda (CSV)
+                    </h2>
+                    <span class="text-[10px] bg-slate-800 px-2 py-0.5 rounded text-indigo-400 font-mono">14 Piezas</span>
+                </div>
+                
+                <p class="text-xs text-slate-400 mb-4 leading-relaxed">
+                    Estos son los datos del archivo <code class="text-slate-200">Galvanizado 1x1.csv</code> mapeados a sus longitudes reales en centímetros:
+                </p>
+
+                <!-- Scrollable Table -->
+                <div class="overflow-y-auto max-h-[220px] border border-slate-800 rounded-xl bg-slate-950/50 p-2 space-y-1.5 font-mono">
+                    <div class="grid grid-cols-12 text-[10px] font-bold text-slate-500 uppercase tracking-wider px-2 py-1 border-b border-slate-800">
+                        <div class="col-span-3">Cant.</div>
+                        <div class="col-span-5">Pulgadas</div>
+                        <div class="col-span-4 text-right">CM aprox.</div>
+                    </div>
+                    
+                    <div class="grid grid-cols-12 text-xs py-1.5 px-2 hover:bg-slate-900 rounded transition border-b border-slate-900">
+                        <div class="col-span-3 text-indigo-400 font-bold">6x</div>
+                        <div class="col-span-5 text-slate-300">83.00"</div>
+                        <div class="col-span-4 text-right text-slate-400 font-bold">210.8 cm</div>
+                    </div>
+                    <div class="grid grid-cols-12 text-xs py-1.5 px-2 hover:bg-slate-900 rounded transition">
+                        <div class="col-span-3 text-indigo-400 font-bold">8x</div>
+                        <div class="col-span-5 text-slate-300">3.15"</div>
+                        <div class="col-span-4 text-right text-slate-400">8.0 cm</div>
+                    </div>
+                </div>
+            </div>
+
+            <!-- Parameters Card -->
+            <div class="bg-slate-900 border border-slate-800/80 rounded-2xl p-5 shadow-xl">
+                <h2 class="text-xs font-bold text-slate-300 uppercase tracking-wider mb-4 flex items-center gap-2">
+                    <svg xmlns="http://www.w3.org/2000/svg" class="h-4 w-4 text-indigo-400" fill="none" viewBox="0 0 24 24" stroke="currentColor">
+                        <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M12 6V4m0 2a2 2 0 100 4m0-4a2 2 0 110 4m-6 8a2 2 0 100-4m0 4a2 2 0 110-4m0 4v2m0-6V4m6 6v10m6-2a2 2 0 100-4m0 4a2 2 0 110-4m0 4v2m0-6V4" />
+                    </svg>
+                    Ajustes de Taller
+                </h2>
+                
+                <div class="space-y-4">
+                    <div>
+                        <label class="block text-[10px] font-bold text-slate-400 uppercase tracking-wide mb-1.5">Largo de Barra Comercial (1"x1"):</label>
+                        <select id="stockBarLength" onchange="recalculate()" class="w-full bg-slate-800 border border-slate-700 rounded-xl px-3 py-2 text-sm text-white focus:outline-none focus:border-indigo-500 font-mono">
+                            <option value="600">6.00 metros (600 cm)</option>
+                            <option value="580">5.80 metros (Ajustado)</option>
+                        </select>
+                    </div>
+
+                    <div>
+                        <label class="block text-[10px] font-bold text-slate-400 uppercase tracking-wide mb-1.5">Grosor de Disco Cortadora:</label>
+                        <select id="kerfWidth" onchange="recalculate()" class="w-full bg-slate-800 border border-slate-700 rounded-xl px-3 py-2 text-sm text-white focus:outline-none focus:border-indigo-500 font-mono">
+                            <option value="0.3">3 mm (0.3 cm) - Disco de tronzadora</option>
+                            <option value="0.15">1.5 mm (0.15 cm) - Disco fino abrasivo</option>
+                        </select>
+                    </div>
+
+                    <div>
+                        <label class="block text-[10px] font-bold text-slate-400 uppercase tracking-wide mb-1.5">Precio de Barra 1x1 (₡):</label>
+                        <input type="number" id="barPrice" value="12500" onchange="recalculate()" onkeyup="recalculate()" class="w-full bg-slate-800 border border-slate-700 rounded-xl px-3 py-2 text-sm text-white focus:outline-none focus:border-indigo-500 font-mono" />
+                    </div>
+                </div>
+            </div>
+
+        </section>
+
+        <!-- Right Column: Visual Optimization Output (8 Cols) -->
+        <section class="lg:col-span-8 flex flex-col gap-6">
+            
+            <!-- Dashboard (Cards) -->
+            <div class="grid grid-cols-1 sm:grid-cols-3 gap-4">
+                
+                <!-- Total Stock Needed -->
+                <div class="bg-slate-900 border border-slate-800 rounded-2xl p-4 shadow-lg flex items-center gap-4">
+                    <div class="p-3 bg-indigo-500/10 text-indigo-400 rounded-xl border border-indigo-500/20">
+                        <svg xmlns="http://www.w3.org/2000/svg" class="h-6 w-6" fill="none" viewBox="0 0 24 24" stroke="currentColor">
+                            <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M19 11H5m14 0a2 2 0 012 2v6a2 2 0 01-2 2H5a2 2 0 01-2-2v-6a2 2 0 012-2m14 0V9a2 2 0 00-2-2M5 11V9a2 2 0 012-2m0 0V5a2 2 0 012-2h6a2 2 0 012 2v2M7 7h10" />
+                        </svg>
+                    </div>
+                    <div>
+                        <p class="text-[10px] font-bold text-slate-400 uppercase tracking-wider">Barras de 6m Necesarias</p>
+                        <p class="text-3xl font-extrabold text-white font-mono" id="totalBarsText">3</p>
+                        <p class="text-[10px] text-indigo-400 mt-0.5 font-semibold">¡Aprovechamiento brutal!</p>
+                    </div>
+                </div>
+
+                <!-- Material Efficiency -->
+                <div class="bg-slate-900 border border-slate-800 rounded-2xl p-4 shadow-lg flex items-center gap-4">
+                    <div class="p-3 bg-emerald-500/10 text-emerald-400 rounded-xl border border-emerald-500/20">
+                        <svg xmlns="http://www.w3.org/2000/svg" class="h-6 w-6" fill="none" viewBox="0 0 24 24" stroke="currentColor">
+                            <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M13 10V3L4 14h7v7l9-11h-7z" />
+                        </svg>
+                    </div>
+                    <div>
+                        <p class="text-[10px] font-bold text-slate-400 uppercase tracking-wider">Eficiencia de Material</p>
+                        <p class="text-3xl font-extrabold text-emerald-400 font-mono" id="efficiencyText">73.8%</p>
+                        <p class="text-[10px] text-slate-400 mt-0.5">Sobrantes utilizables</p>
+                    </div>
+                </div>
+
+                <!-- Total Cost estimation -->
+                <div class="bg-slate-900 border border-slate-800 rounded-2xl p-4 shadow-lg flex items-center gap-4">
+                    <div class="p-3 bg-amber-500/10 text-amber-400 rounded-xl border border-amber-500/20">
+                        <span class="text-xl font-bold font-mono">₡</span>
+                    </div>
+                    <div>
+                        <p class="text-[10px] font-bold text-slate-400 uppercase tracking-wider">Presupuesto de Baranda</p>
+                        <p class="text-3xl font-extrabold text-white font-mono" id="costText">₡37,500</p>
+                        <p class="text-[10px] text-slate-400 mt-0.5">Tubo 1"x1" Cal.14</p>
+                    </div>
+                </div>
+
+            </div>
+
+            <!-- Main output -->
+            <div class="bg-slate-900 border border-slate-800 rounded-3xl p-6 shadow-2xl flex flex-col">
+                
+                <div class="flex flex-col sm:flex-row items-start sm:items-center justify-between gap-3 border-b border-slate-800 pb-4 mb-6">
+                    <div>
+                        <h2 class="text-lg font-extrabold text-white">Esquema de Cortes - Perfil 1"x1"</h2>
+                        <p class="text-xs text-slate-400">Distribución optimizada para los pasamanos largos y sus respectivos postes conectores:</p>
+                    </div>
+                    <span class="text-[11px] font-mono bg-indigo-500/10 text-indigo-400 px-3 py-1.5 rounded-lg border border-indigo-500/20 font-semibold no-print">
+                        Material: Metal 1"x1" (6m)
+                    </span>
+                </div>
+
+                <!-- Bars Container -->
+                <div id="barsResult" class="space-y-6">
+                    <!-- Dynamic Bars Rendered via JS -->
+                </div>
+
+            </div>
+
+            <!-- Technical Observations -->
+            <div class="bg-slate-900 border border-slate-800 rounded-3xl p-6 shadow-2xl print-card">
+                <h3 class="text-sm font-bold text-slate-200 uppercase tracking-wider mb-4 flex items-center gap-2">
+                    <svg xmlns="http://www.w3.org/2000/svg" class="h-4 w-4 text-amber-400" fill="none" viewBox="0 0 24 24" stroke="currentColor">
+                        <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M13 16h-1v-4h-1m1-4h.01M21 12a9 9 0 11-18 0 9 9 0 0118 0z" />
+                    </svg>
+                    Observaciones de Taller para la Baranda 1x1
+                </h3>
+                <ul class="space-y-3 text-xs text-slate-400 leading-relaxed">
+                    <li class="flex gap-2">
+                        <span class="text-emerald-400 font-bold">✓</span>
+                        <span><b>Distribución Óptima de Barra:</b> En cada una de las 3 barras de 6 metros, cortaremos exactamente **2 pasamanos largos de 83.0 pulgadas (210.8 cm)**. Esto nos deja una punta de descarte de aproximadamente $178\text{ cm}$ en cada barra.</span>
+                    </li>
+                    <li class="flex gap-2">
+                        <span class="text-emerald-400 font-bold">✓</span>
+                        <span><b>Aprovechamiento de Sobras:</b> Las 8 piezas pequeñas de $8.0\text{ cm}$ (3.15") se introducen sin problema dentro de los sobrantes del extremo de la Barra #1 y Barra #2, dejando las puntas restantes como material libre para futuras fijaciones o soportes esquineros de la litera.</span>
+                    </li>
+                    <li class="flex gap-2">
+                        <span class="text-amber-400 font-bold">⚠</span>
+                        <span><b>Consejo para Soldadura de Acero Dulce/Galvanizado:</b> Al soldar el tubo de 1"x1", mantén un amperaje de soldadura medio-bajo (unos 75-80 Amperios si utilizas electrodo 6013 de 3/32") ya que la pared de 1"x1" es más delgada y un exceso de calor puede perforar el tubo fácilmente.</span>
+                    </li>
+                </ul>
+            </div>
+
+        </section>
+
+    </main>
+
+    <!-- JS Algorithms & Dynamic Render -->
+    <script>
+        // Data from Galvanizado 1x1.csv
+        const csvPieces = [
+            { id: '83.0"', label: 'Pasamanos Largo Baranda', size: 210.82, qty: 6, inch: 83.0 },
+            { id: '3.15"', label: 'Poste Espaciador Corto', size: 8.00, qty: 8, inch: 3.15 }
+        ];
+
+        const colors = [
+            'bg-sky-600 hover:bg-sky-500 border-sky-700 text-sky-100',
+            'bg-amber-600 hover:bg-amber-500 border-amber-700 text-amber-100'
+        ];
+
+        function recalculate() {
+            const stockLength = parseFloat(document.getElementById('stockBarLength').value);
+            const kerf = parseFloat(document.getElementById('kerfWidth').value);
+            const barPrice = parseFloat(document.getElementById('barPrice').value);
+
+            // Flatten items
+            let flatList = [];
+            csvPieces.forEach((p, idx) => {
+                for (let i = 0; i < p.qty; i++) {
+                    flatList.push({
+                        label: p.label,
+                        size: p.size,
+                        inch: p.inch,
+                        colorIdx: idx
+                    });
+                }
+            });
+
+            // Sort FFD
+            flatList.sort((a, b) => b.size - a.size);
+
+            let bars = [];
+
+            flatList.forEach(cut => {
+                let placed = false;
+                for (let j = 0; j < bars.length; j++) {
+                    let bar = bars[j];
+                    let spaceNeeded = bar.cuts.length > 0 ? (cut.size + kerf) : cut.size;
+                    if (bar.remaining >= spaceNeeded) {
+                        bar.cuts.push(cut);
+                        bar.remaining -= spaceNeeded;
+                        placed = true;
+                        break;
+                    }
+                }
+                if (!placed) {
+                    bars.push({
+                        remaining: stockLength - cut.size,
+                        cuts: [cut]
+                    });
+                }
+            });
+
+            const totalBars = bars.length;
+            const totalCost = totalBars * barPrice;
+            
+            let totalCutsLength = 0;
+            flatList.forEach(c => totalCutsLength += c.size);
+            const totalStockLength = totalBars * stockLength;
+            const efficiency = (totalCutsLength / totalStockLength) * 100;
+
+            document.getElementById('totalBarsText').innerText = totalBars;
+            document.getElementById('efficiencyText').innerText = `${efficiency.toFixed(1)}%`;
+            document.getElementById('costText').innerText = `₡${totalCost.toLocaleString('es-CR')}`;
+
+            const container = document.getElementById('barsResult');
+            container.innerHTML = '';
+
+            bars.forEach((bar, index) => {
+                let barHTML = `
+                    <div class="bg-slate-950/50 p-5 border border-slate-800 rounded-2xl space-y-3.5 print-card">
+                        <div class="flex flex-col sm:flex-row sm:items-center justify-between gap-1.5 text-xs">
+                            <span class="font-extrabold text-indigo-400 text-sm">Barra #${index + 1} de Metal Negro 1"x1"</span>
+                            <span class="text-slate-400 text-[10px] font-mono">
+                                Sobra libre disponible: <b class="text-emerald-400 font-extrabold text-xs">${bar.remaining.toFixed(1)} cm</b> (${((bar.remaining / stockLength) * 100).toFixed(1)}%)
+                            </span>
+                        </div>
+
+                        <!-- Graphic representation -->
+                        <div class="h-11 w-full bg-slate-900 rounded-xl overflow-hidden flex border border-slate-800 font-mono text-[9px] relative select-none">
+                `;
+
+                let accumMark = 0;
+                let marksData = [];
+
+                bar.cuts.forEach((cut, cIndex) => {
+                    const widthPct = (cut.size / stockLength) * 100;
+                    const styleClass = colors[cut.colorIdx];
+                    
+                    accumMark += cut.size;
+                    marksData.push({
+                        label: cut.label,
+                        inch: cut.inch,
+                        cm: cut.size,
+                        markAt: accumMark.toFixed(1)
+                    });
+
+                    accumMark += kerf;
+
+                    barHTML += `
+                        <div class="${styleClass} h-full border-r border-black/20 flex flex-col justify-center px-2 truncate transition duration-150" style="width: ${widthPct}%" title="${cut.label}: ${cut.size.toFixed(1)} cm">
+                            <span class="font-extrabold truncate text-white text-xs">${cut.inch.toFixed(1)}"</span>
+                            <span class="opacity-90 truncate text-[9px] font-semibold">${cut.label}</span>
+                        </div>
+                    `;
+                });
+
+                // Remainder slice
+                const remainderPct = (bar.remaining / stockLength) * 100;
+                barHTML += `
+                            <div class="bg-slate-950/80 h-full flex flex-col justify-center px-2 text-slate-600 truncate" style="width: ${remainderPct}%">
+                                <span class="font-bold">SOBRA UTILIZABLE</span>
+                                <span class="text-[9px]">${bar.remaining.toFixed(1)} cm</span>
+                            </div>
+                        </div>
+
+                        <!-- Instruction box -->
+                        <div class="bg-slate-900/60 p-3 rounded-xl border border-slate-800/60 font-mono">
+                            <p class="text-[10px] font-bold text-slate-400 uppercase tracking-wider mb-2 flex items-center gap-1.5 font-sans">
+                                <svg xmlns="http://www.w3.org/2000/svg" class="h-3.5 w-3.5 text-amber-500" viewBox="0 0 20 20" fill="currentColor">
+                                    <path fill-rule="evenodd" d="M12.395 2.553a1 1 0 00-1.45-.385c-.345.23-.614.558-.822.88-.214.33-.403.713-.57 1.116-.334.804-.614 1.768-.84 2.734a31.365 31.365 0 00-.629 3.54c-.112.975-.19 1.9-.229 2.624H4a1 1 0 110-2h2.023a23.16 23.16 0 01.161-2.228c.038-.686.113-1.536.215-2.45a33.371 33.371 0 01.657-3.693c.243-1.043.553-2.09.957-2.946.21-.444.475-.892.836-1.258a3.985 3.985 0 011.606-1.045a1 1 0 00.385-1.45z" clip-rule="evenodd" />
+                                </svg>
+                                Secuencia de Marcado en Taller (Cinta métrica en '0'):
+                            </p>
+                            <div class="grid grid-cols-1 sm:grid-cols-2 gap-x-4 gap-y-1.5">
+                `;
+
+                marksData.forEach((mark, mIdx) => {
+                    barHTML += `
+                        <div class="flex items-center justify-between text-[11px] border-b border-slate-800/40 py-1 hover:bg-slate-900/40 px-1 rounded transition">
+                            <span class="text-slate-400 max-w-[210px] truncate">${mIdx + 1}. ${mark.label} (${mark.inch.toFixed(1)}")</span>
+                            <span class="text-white font-bold bg-slate-950 px-2 py-0.5 rounded border border-slate-800">
+                                Cortar en: <span class="text-amber-400 font-extrabold text-xs">${mark.markAt} cm</span>
+                            </span>
+                        </div>
+                    `;
+                });
+
+                barHTML += `
+                            </div>
+                        </div>
+                    </div>
+                `;
+                container.innerHTML += barHTML;
+            });
+        }
+
+        window.onload = function() {
+            recalculate();
+        }
+    </script>
+</body>
+</html>

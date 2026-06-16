@@ -1,0 +1,371 @@
+<!DOCTYPE html>
+<html lang="es">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Cálculo de Tornillos de Gypsum - Casa Heliconia</title>
+    <!-- Tailwind CSS -->
+    <script src="https://cdn.tailwindcss.com"></script>
+    <!-- Google Fonts -->
+    <link href="https://fonts.googleapis.com/css2?family=Plus+Jakarta+Sans:wght@300;400;500;600;700;800&family=JetBrains+Mono:wght@400;500;600;700&display=swap" rel="stylesheet">
+    <style>
+        body {
+            font-family: 'Plus Jakarta Sans', sans-serif;
+        }
+        .mono {
+            font-family: 'JetBrains Mono', monospace;
+        }
+        @media print {
+            .no-print {
+                display: none !important;
+            }
+            body {
+                background: white !important;
+                color: black !important;
+            }
+            .print-card {
+                border: 1px solid #cbd5e1 !important;
+                box-shadow: none !important;
+                background: white !important;
+                page-break-inside: avoid;
+            }
+        }
+    </style>
+</head>
+<body class="bg-slate-950 text-slate-100 min-h-screen flex flex-col antialiased selection:bg-amber-500 selection:text-slate-950">
+
+    <!-- Header Section -->
+    <header class="border-b border-slate-900 bg-slate-950/80 backdrop-blur-md sticky top-0 z-50 px-4 py-4 sm:px-6 no-print">
+        <div class="max-w-7xl mx-auto flex flex-col md:flex-row items-center justify-between gap-4">
+            <div class="flex items-center gap-3.5">
+                <div class="p-2.5 bg-gradient-to-br from-amber-500 to-amber-700 rounded-xl text-slate-950 shadow-lg shadow-amber-500/20">
+                    <svg xmlns="http://www.w3.org/2000/svg" class="h-6 w-6" fill="none" viewBox="0 0 24 24" stroke="currentColor">
+                        <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M12 6V4m0 2a2 2 0 100 4m0-4a2 2 0 110 4m-6 8a2 2 0 100-4m0 4a2 2 0 110-4m0 4v2m0-6V4m6 6v10m6-2a2 2 0 100-4m0 4a2 2 0 110-4m0 4v2m0-6V4" />
+                    </svg>
+                </div>
+                <div>
+                    <h1 class="text-xl font-extrabold tracking-tight text-white flex items-center gap-2">
+                        BúnkerScrew Gypsum <span class="text-xs bg-amber-500/20 text-amber-400 px-2.5 py-0.5 rounded-full font-mono border border-amber-500/30 font-bold">Cálculo Estructural</span>
+                    </h1>
+                    <p class="text-xs text-slate-400 mt-0.5">Cálculo milimétrico de tornillos de fijación para las 40 piezas de gypsum</p>
+                </div>
+            </div>
+            
+            <div class="flex items-center gap-3">
+                <button onclick="window.print()" class="px-4 py-2 bg-slate-900 hover:bg-slate-800 border border-slate-800 hover:border-slate-700 text-slate-200 text-xs font-semibold rounded-lg transition flex items-center gap-2">
+                    <svg xmlns="http://www.w3.org/2000/svg" class="h-4 w-4" fill="none" viewBox="0 0 24 24" stroke="currentColor">
+                        <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M17 17h2a2 2 0 002-2v-4a2 2 0 00-2-2H5a2 2 0 00-2 2v4a2 2 0 002 2h2m2 4h6a2 2 0 002-2v-4a2 2 0 00-2-2H9a2 2 0 00-2 2v4a2 2 0 002 2zm8-12V5a2 2 0 00-2-2H9a2 2 0 00-2 2v4h10z" />
+                    </svg>
+                    Imprimir Presupuesto
+                </button>
+                <span class="text-xs bg-amber-500/10 text-amber-400 border border-amber-500/20 px-3 py-2 rounded-lg font-medium flex items-center gap-1.5">
+                    <span class="h-2 w-2 rounded-full bg-amber-500 animate-pulse"></span>
+                    Análisis de Gypsum.csv
+                </span>
+            </div>
+        </div>
+    </header>
+
+    <main class="flex-1 max-w-7xl w-full mx-auto p-4 sm:p-6 lg:p-8 grid grid-cols-1 lg:grid-cols-12 gap-8">
+        
+        <!-- Left Column: Variable Sliders & Purchase Assistant (5 Cols) -->
+        <section class="lg:col-span-5 flex flex-col gap-6 no-print">
+            
+            <!-- Spacing and Margin Settings -->
+            <div class="bg-gradient-to-br from-slate-900 to-slate-950 border border-slate-800/80 rounded-2xl p-5 shadow-xl">
+                <h2 class="text-xs font-bold text-amber-400 uppercase tracking-wider mb-4 flex items-center gap-2">
+                    <svg xmlns="http://www.w3.org/2000/svg" class="h-4.5 w-4.5" fill="none" viewBox="0 0 24 24" stroke="currentColor">
+                        <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M10.325 4.317c.426-1.756 2.924-1.756 3.35 0a1.724 1.724 0 002.573 1.066c1.543-.94 3.31.826 2.37 2.37a1.724 1.724 0 001.065 2.572c1.756.426 1.756 2.924 0 3.35a1.724 1.724 0 00-1.066 2.573c.94 1.543-.826 3.31-2.37 2.37a1.724 1.724 0 00-2.572 1.065c-.426 1.756-2.924 1.756-3.35 0a1.724 1.724 0 00-2.573-1.066c-1.543.94-3.31-.826-2.37-2.37a1.724 1.724 0 00-1.065-2.572c-1.756-.426-1.756-2.924 0-3.35a1.724 1.724 0 001.066-2.573c-.94-1.543.826-3.31 2.37-2.37.996.608 2.296.07 2.572-1.065z" />
+                        <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M15 12a3 3 0 11-6 0 3 3 0 016 0z" />
+                    </svg>
+                    Ajustes de Instalación
+                </h2>
+                
+                <div class="space-y-5">
+                    <!-- Spacing Slider -->
+                    <div>
+                        <div class="flex justify-between items-center mb-1">
+                            <label class="text-xs font-bold text-slate-300 uppercase tracking-wide">Separación entre Tornillos:</label>
+                            <span class="text-sm font-extrabold text-amber-400 font-mono" id="valSpacing">15 cm</span>
+                        </div>
+                        <input type="range" id="spacingRange" min="10" max="30" value="15" step="1" oninput="updateValues()" class="w-full h-1.5 bg-slate-800 rounded-lg appearance-none cursor-pointer accent-amber-500" />
+                        <div class="flex justify-between text-[9px] text-slate-500 font-bold mt-1 uppercase">
+                            <span>10 cm (Muy denso)</span>
+                            <span>15 cm (Norma)</span>
+                            <span>30 cm (Cielo raso)</span>
+                        </div>
+                    </div>
+
+                    <!-- Safety Margin Slider -->
+                    <div>
+                        <div class="flex justify-between items-center mb-1">
+                            <label class="text-xs font-bold text-slate-300 uppercase tracking-wide">Margen de Desperdicio (Merma):</label>
+                            <span class="text-sm font-extrabold text-amber-400 font-mono" id="valMargin">15%</span>
+                        </div>
+                        <input type="range" id="marginRange" min="0" max="30" value="15" step="5" oninput="updateValues()" class="w-full h-1.5 bg-slate-800 rounded-lg appearance-none cursor-pointer accent-amber-500" />
+                        <div class="flex justify-between text-[9px] text-slate-500 font-bold mt-1 uppercase">
+                            <span>0% (Teórico)</span>
+                            <span>15% (Recomendado)</span>
+                            <span>30% (Principiante)</span>
+                        </div>
+                    </div>
+
+                    <!-- Standard Stud Spacing -->
+                    <div>
+                        <label class="block text-[10px] font-bold text-slate-400 uppercase tracking-wide mb-1.5">Espaciamiento de Studs de Soporte:</label>
+                        <select id="studSpacing" onchange="updateValues()" class="w-full bg-slate-950 border border-slate-800 rounded-xl px-3 py-2 text-xs text-white focus:outline-none">
+                            <option value="40">Cada 40 cm (Estándar Costa Rica - Mayor rigidez)</option>
+                            <option value="61">Cada 61 cm (Económico - Luces de cielo)</option>
+                        </select>
+                    </div>
+                </div>
+            </div>
+
+            <!-- Box Purchase Assistant -->
+            <div class="bg-slate-900 border border-slate-800/80 rounded-2xl p-5 shadow-xl flex-1 flex flex-col justify-between">
+                <div>
+                    <h2 class="text-xs font-bold text-slate-300 uppercase tracking-wider mb-3.5 flex items-center gap-2 border-b border-slate-800 pb-2">
+                        <svg xmlns="http://www.w3.org/2000/svg" class="h-4 w-4 text-amber-400" viewBox="0 0 20 20" fill="currentColor">
+                            <path d="M4 3a2 2 0 00-2 2v10a2 2 0 002 2h12a2 2 0 002-2V5a2 2 0 00-2-2H4zm12 12H4l4-8 3 6 2-4 3 6z" />
+                        </svg>
+                        Asistente de Compra (Ferretería)
+                    </h2>
+                    
+                    <div class="space-y-4">
+                        <div>
+                            <label class="block text-[10px] font-bold text-slate-400 uppercase tracking-wide mb-1.5">Formato de empaque preferido:</label>
+                            <select id="boxSize" onchange="updateValues()" class="w-full bg-slate-950 border border-slate-800 rounded-xl px-3 py-2 text-xs text-white focus:outline-none">
+                                <option value="100">Caja pequeña de 100 unidades (₡1,200 aprox)</option>
+                                <option value="500" selected>Caja mediana de 500 unidades (₡4,500 aprox)</option>
+                                <option value="1000">Caja grande de 1000 unidades (₡7,800 aprox)</option>
+                            </select>
+                        </div>
+
+                        <!-- Results Card -->
+                        <div class="bg-slate-950/60 p-4 rounded-xl border border-slate-800/80 space-y-3 font-mono text-xs">
+                            <div class="flex justify-between items-center border-b border-slate-850 pb-2">
+                                <span class="text-slate-400">Tornillos Teóricos:</span>
+                                <span class="text-white font-bold" id="txtTheoretical">1,160 uds</span>
+                            </div>
+                            <div class="flex justify-between items-center border-b border-slate-850 pb-2">
+                                <span class="text-slate-400">Tornillos + Margen:</span>
+                                <span class="text-amber-400 font-bold" id="txtTotalWithMargin">1,334 uds</span>
+                            </div>
+                            <div class="flex justify-between items-center border-b border-slate-850 pb-2 text-sm">
+                                <span class="text-slate-300 font-sans font-bold">Cajas a comprar:</span>
+                                <span class="text-emerald-400 font-bold" id="txtBoxesToBuy">3 cajas</span>
+                            </div>
+                            <div class="flex justify-between items-center pt-1 text-sm">
+                                <span class="text-slate-300 font-sans font-bold">Costo Estimado:</span>
+                                <span class="text-white font-extrabold" id="txtEstimatedCost">₡13,500</span>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+
+                <div class="pt-4 text-[10px] text-slate-500 leading-relaxed font-sans border-t border-slate-800 mt-4">
+                    * Estimación basada en tornillos de cabeza de trompeta fosfatados negros de 1" punta fina para perfiles calibre 20.
+                </div>
+            </div>
+
+        </section>
+
+        <!-- Right Column: Piece-by-Piece Detailed Breakdown Table (7 Cols) -->
+        <section class="lg:col-span-7 flex flex-col gap-6">
+            
+            <!-- Summary Dashboard Card -->
+            <div class="grid grid-cols-1 sm:grid-cols-2 gap-4 no-print">
+                <div class="bg-slate-900 border border-slate-800 rounded-2xl p-4 flex items-center gap-4">
+                    <div class="p-3 bg-amber-500/10 text-amber-400 rounded-xl border border-amber-500/20">
+                        <span class="text-xl font-bold font-mono">#</span>
+                    </div>
+                    <div>
+                        <p class="text-[10px] font-bold text-slate-400 uppercase tracking-wider">Total de Piezas Forradas</p>
+                        <p class="text-2xl font-black text-white font-mono">40 piezas</p>
+                        <p class="text-[10px] text-slate-400 mt-0.5">Analizadas del Gypsum.csv</p>
+                    </div>
+                </div>
+
+                <div class="bg-slate-900 border border-slate-800 rounded-2xl p-4 flex items-center gap-4">
+                    <div class="p-3 bg-emerald-500/10 text-emerald-400 rounded-xl border border-emerald-500/20">
+                        <svg xmlns="http://www.w3.org/2000/svg" class="h-6 w-6" fill="none" viewBox="0 0 24 24" stroke="currentColor">
+                            <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M9 12l2 2 4-4M7.835 4.697a3.42 3.42 0 001.946-.806 3.42 3.42 0 014.438 0 3.42 3.42 0 001.946.806 3.42 3.42 0 013.138 3.138 3.42 3.42 0 00.806 1.946 3.42 3.42 0 010 4.438 3.42 3.42 0 00-.806 1.946 3.42 3.42 0 01-3.138 3.138 3.42 3.42 0 00-1.946.806 3.42 3.42 0 01-4.438 0 3.42 3.42 0 00-1.946-.806 3.42 3.42 0 01-3.138-3.138z" />
+                        </svg>
+                    </div>
+                    <div>
+                        <p class="text-[10px] font-bold text-slate-400 uppercase tracking-wider">Espaciamiento Recomendado</p>
+                        <p class="text-2xl font-black text-emerald-400 font-mono">15 cm (Norma)</p>
+                        <p class="text-[10px] text-slate-400 mt-0.5">Máxima resistencia mecánica</p>
+                    </div>
+                </div>
+            </div>
+
+            <!-- Detailed Breakdown Table -->
+            <div class="bg-slate-900 border border-slate-800 rounded-3xl p-6 shadow-2xl flex flex-col">
+                <div class="border-b border-slate-800 pb-4 mb-4">
+                    <h2 class="text-base font-extrabold text-white">Desglose de Tornillos por Categoría de Pieza</h2>
+                    <p class="text-xs text-slate-400 mt-0.5">Cálculos específicos basados en las dimensiones de cada corte del CSV:</p>
+                </div>
+
+                <!-- Table Container -->
+                <div class="overflow-x-auto">
+                    <table class="w-full text-left text-xs font-mono border-collapse">
+                        <thead>
+                            <tr class="border-b border-slate-800 text-slate-500 font-bold uppercase text-[9px] tracking-wider">
+                                <th class="py-2.5">Código / Descripción</th>
+                                <th class="py-2.5 text-center">Cant</th>
+                                <th class="py-2.5">Dimensiones (in)</th>
+                                <th class="py-2.5 text-center">Studs</th>
+                                <th class="py-2.5 text-center">Torn./Pza</th>
+                                <th class="py-2.5 text-right">Subtotal</th>
+                            </tr>
+                        </thead>
+                        <tbody id="tblBreakdown" class="divide-y divide-slate-850">
+                            <!-- Dynamic rows loaded here via JS -->
+                        </tbody>
+                        <tfoot>
+                            <tr class="border-t-2 border-slate-800 font-bold text-white text-xs">
+                                <td class="py-3 font-sans" colspan="4">Total de Tornillos Teóricos Requeridos:</td>
+                                <td class="py-3 text-right text-amber-400 font-extrabold text-sm" colspan="2" id="tdGrandTotal">1,160 uds</td>
+                            </tr>
+                        </tfoot>
+                    </table>
+                </div>
+
+                <!-- Splicing impact disclaimer -->
+                <div class="mt-4 pt-3 border-t border-slate-800 flex items-center gap-2 text-[10px] text-slate-500">
+                    <span class="inline-block h-2 w-2 rounded-full bg-amber-400"></span>
+                    <span>Las tiras de menos de $30\text{ cm}$ de ancho se calculan con soporte vertical simplificado de dos studs perimetrales.</span>
+                </div>
+            </div>
+
+        </section>
+
+    </main>
+
+    <!-- JS Logic -->
+    <script>
+        // Exact dataset from Gypsum.csv
+        const gypsumPieces = [
+            { id: 'A', label: 'Panel Cabezal Principal A', l: 75.43, w: 64.00, qty: 2, type: 'Panel' },
+            { id: 'B', label: 'Tiras Estructurales B', l: 51.77, w: 6.00, qty: 8, type: 'TiraV' },
+            { id: 'C', label: 'Frente Nicho Bajo C', l: 63.50, w: 58.63, qty: 2, type: 'Panel' },
+            { id: 'D', label: 'Tiras Horizontales D', l: 64.00, w: 6.00, qty: 2, type: 'TiraH' },
+            { id: 'E', label: 'Forros Internos Nicho E', l: 52.00, w: 5.90, qty: 2, type: 'TiraV' },
+            { id: 'F', label: 'Cierres de Columna F', l: 51.57, w: 5.00, qty: 4, type: 'TiraV' },
+            { id: 'G', label: 'Cierres Laterales G', l: 53.00, w: 6.00, qty: 2, type: 'TiraV' },
+            { id: 'H', label: 'Forro Columna Techo H (Largo)', l: 133.00, w: 5.50, qty: 2, type: 'TiraV' },
+            { id: 'I', label: 'Tiras de Ajuste I', l: 51.77, w: 5.50, qty: 4, type: 'TiraV' },
+            { id: 'J', label: 'Cierres Superiores J', l: 53.00, w: 5.00, qty: 2, type: 'TiraV' },
+            { id: 'K', label: 'Frente Escalera Lateral K', l: 83.00, w: 14.00, qty: 2, type: 'TiraV' },
+            { id: 'L', label: 'Fondo de Nicho Auxiliar L', l: 63.50, w: 29.00, qty: 2, type: 'Panel' },
+            { id: 'M', label: 'Respaldo Cama Superior M', l: 83.50, w: 64.00, qty: 2, type: 'Panel' },
+            { id: 'N', label: 'Tiras de Remate N', l: 29.36, w: 5.50, qty: 4, type: 'TiraV' }
+        ];
+
+        function toggleUnits(unit) {
+            displayUnits = unit;
+            const btnInches = document.getElementById('btnInches');
+            const btnMetric = document.getElementById('btnMetric');
+            if (unit === 'in') {
+                btnInches.className = "px-2 py-0.5 bg-amber-500 rounded text-slate-950 font-mono font-bold text-[10px]";
+                btnMetric.className = "px-2 py-0.5 bg-slate-800 rounded text-slate-400 font-mono font-bold text-[10px]";
+            } else {
+                btnInches.className = "px-2 py-0.5 bg-slate-800 rounded text-slate-400 font-mono font-bold text-[10px]";
+                btnMetric.className = "px-2 py-0.5 bg-amber-500 rounded text-slate-950 font-mono font-bold text-[10px]";
+            }
+            updateValues();
+        }
+
+        let displayUnits = 'in';
+
+        function updateValues() {
+            const spacing = parseFloat(document.getElementById('spacingRange').value);
+            const marginPct = parseFloat(document.getElementById('marginRange').value);
+            const studSpacingVal = parseFloat(document.getElementById('studSpacing').value);
+            const boxSizeVal = parseInt(document.getElementById('boxSize').value);
+
+            // Cost of boxes in Costa Rica (estimations)
+            const boxPrices = {
+                100: 1200,
+                500: 4500,
+                1000: 7800
+            };
+
+            document.getElementById('valSpacing').innerText = `${spacing} cm`;
+            document.getElementById('valMargin').innerText = `${marginPct}%`;
+
+            let grandTotalTheoretical = 0;
+            const tableBody = document.getElementById('tblBreakdown');
+            tableBody.innerHTML = '';
+
+            gypsumPieces.forEach(p => {
+                const lenCm = p.l * 2.54;
+                const widCm = p.w * 2.54;
+                
+                let studsCount = 0;
+                let screwsPerPiece = 0;
+
+                if (p.type === 'Panel') {
+                    // Standard panel: Vertical studs spaced every X cm
+                    studsCount = Math.max(2, Math.ceil(widCm / studSpacingVal) + 1);
+                    // Screws along each stud vertical line
+                    const screwsPerLine = Math.ceil(lenCm / spacing) + 1;
+                    screwsPerPiece = studsCount * screwsPerLine;
+                } else if (p.type === 'TiraV') {
+                    // Vertical narrow strip: Supported along 2 outer edge studs only
+                    studsCount = 2;
+                    const screwsPerLine = Math.ceil(lenCm / spacing) + 1;
+                    screwsPerPiece = studsCount * screwsPerLine;
+                } else if (p.type === 'TiraH') {
+                    // Horizontal narrow strip: Spans across vertical studs
+                    studsCount = Math.ceil(lenCm / studSpacingVal) + 1;
+                    // For narrow horizontal strips, typically 2 screws per crossed stud (top & bottom of the strip)
+                    screwsPerPiece = studsCount * 2;
+                }
+
+                const subtotal = screwsPerPiece * p.qty;
+                grandTotalTheoretical += subtotal;
+
+                // Format row
+                const dimStr = displayUnits === 'in' ? 
+                    `${p.l.toFixed(1)}" x ${p.w.toFixed(1)}"` : 
+                    `${lenCm.toFixed(0)}x${widCm.toFixed(0)} cm`;
+
+                tableBody.innerHTML += `
+                    <tr class="hover:bg-slate-900/40 border-b border-slate-900/60 transition">
+                        <td class="py-2.5 font-sans font-semibold text-slate-300">
+                            ${p.id}. ${p.label}
+                        </td>
+                        <td class="py-2.5 text-center font-bold text-indigo-400">${p.qty}x</td>
+                        <td class="py-2.5 text-slate-400">${dimStr}</td>
+                        <td class="py-2.5 text-center text-slate-400">${studsCount}</td>
+                        <td class="py-2.5 text-center text-slate-300 font-bold">${screwsPerPiece}</td>
+                        <td class="py-2.5 text-right font-extrabold text-white">${subtotal}</td>
+                    </tr>
+                `;
+            });
+
+            // Recalculate totals
+            const marginFactor = 1 + (marginPct / 100);
+            const grandTotalWithMargin = Math.ceil(grandTotalTheoretical * marginFactor);
+            const boxesNeeded = Math.ceil(grandTotalWithMargin / boxSizeVal);
+            const totalCost = boxesNeeded * boxPrices[boxSizeVal];
+
+            // Render stats
+            document.getElementById('tdGrandTotal').innerText = `${grandTotalTheoretical.toLocaleString()} uds`;
+            document.getElementById('txtTheoretical').innerText = `${grandTotalTheoretical.toLocaleString()} uds`;
+            document.getElementById('txtTotalWithMargin').innerText = `${grandTotalWithMargin.toLocaleString()} uds`;
+            document.getElementById('txtBoxesToBuy').innerText = `${boxesNeeded} ${boxesNeeded === 1 ? 'caja' : 'cajas'} de ${boxSizeVal}`;
+            document.getElementById('txtEstimatedCost').innerText = `₡${totalCost.toLocaleString('es-CR')}`;
+            
+            // Fix: Removed the duplicate buggy line reference to non-existent 'totalSheetsText'
+            document.getElementById('savedMoneyText').innerText = `Equivale a: ${boxesNeeded} ${boxesNeeded === 1 ? 'caja' : 'cajas'} de empaque`;
+        }
+
+        window.onload = function() {
+            updateValues();
+        }
+    </script>
+</body>
+</html>

@@ -1,0 +1,691 @@
+<!DOCTYPE html>
+<html lang="es">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Súper-Despiece Studs & Tracks - Casa Heliconia</title>
+    <!-- Tailwind CSS -->
+    <script src="https://cdn.tailwindcss.com"></script>
+    <!-- Google Fonts -->
+    <link href="https://fonts.googleapis.com/css2?family=Plus+Jakarta+Sans:wght@300;400;500;600;700;800&family=JetBrains+Mono:wght@400;500;600;700&display=swap" rel="stylesheet">
+    <style>
+        body {
+            font-family: 'Plus Jakarta Sans', sans-serif;
+        }
+        .mono {
+            font-family: 'JetBrains Mono', monospace;
+        }
+        @media print {
+            .no-print {
+                display: none !important;
+            }
+            body {
+                background: white !important;
+                color: black !important;
+            }
+            .print-card {
+                border: 1px solid #cbd5e1 !important;
+                box-shadow: none !important;
+                background: white !important;
+                page-break-inside: avoid;
+            }
+        }
+    </style>
+</head>
+<body class="bg-slate-950 text-slate-100 min-h-screen flex flex-col antialiased selection:bg-violet-500 selection:text-white">
+
+    <!-- Header Section -->
+    <header class="border-b border-slate-900 bg-slate-950/80 backdrop-blur-md sticky top-0 z-50 px-4 py-4 sm:px-6 no-print">
+        <div class="max-w-7xl mx-auto flex flex-col md:flex-row items-center justify-between gap-4">
+            <div class="flex items-center gap-3.5">
+                <div class="p-2.5 bg-gradient-to-br from-violet-600 to-indigo-700 rounded-xl text-white shadow-lg shadow-violet-500/20">
+                    <svg xmlns="http://www.w3.org/2000/svg" class="h-6 w-6" fill="none" viewBox="0 0 24 24" stroke="currentColor">
+                        <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M14.121 14.121L19 19m-7-7h7m-7-7h3m-3 4h3m-12 1h.01M3 12h.01M3 12a1 1 0 112 0 1 1 0 01-2 0zm0-7a1 1 0 112 0 1 1 0 01-2 0zm0 14a1 1 0 112 0 1 1 0 01-2 0z" />
+                    </svg>
+                </div>
+                <div>
+                    <h1 class="text-xl font-extrabold tracking-tight text-white flex items-center gap-2">
+                        BúnkerCut Metal Liviano <span class="text-xs bg-violet-500/20 text-violet-400 px-2.5 py-0.5 rounded-full font-mono border border-violet-500/30 font-bold">Fusión & Solape de 20cm</span>
+                    </h1>
+                    <p class="text-xs text-slate-400 mt-0.5">Optimización extrema de Studs y Tracks con penalización de junta para desperdicio mínimo</p>
+                </div>
+            </div>
+            
+            <div class="flex items-center gap-3">
+                <button onclick="window.print()" class="px-4 py-2 bg-slate-900 hover:bg-slate-800 border border-slate-800 hover:border-slate-700 text-slate-200 text-xs font-semibold rounded-lg transition flex items-center gap-2">
+                    <svg xmlns="http://www.w3.org/2000/svg" class="h-4 w-4" fill="none" viewBox="0 0 24 24" stroke="currentColor">
+                        <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M17 17h2a2 2 0 002-2v-4a2 2 0 00-2-2H5a2 2 0 00-2 2v4a2 2 0 002 2h2m2 4h6a2 2 0 002-2v-4a2 2 0 00-2-2H9a2 2 0 00-2 2v4a2 2 0 002 2zm8-12V5a2 2 0 00-2-2H9a2 2 0 00-2 2v4h10z" />
+                    </svg>
+                    Imprimir Guía de Cortes
+                </button>
+                <span class="text-xs bg-violet-500/10 text-violet-400 border border-violet-500/20 px-3 py-2 rounded-lg font-medium flex items-center gap-1.5">
+                    <span class="h-2 w-2 rounded-full bg-violet-500 animate-pulse"></span>
+                    Clasificación Activa (Stud vs Track)
+                </span>
+            </div>
+        </div>
+    </header>
+
+    <main class="flex-1 max-w-7xl w-full mx-auto p-4 sm:p-6 lg:p-8 grid grid-cols-1 lg:grid-cols-12 gap-8">
+        
+        <!-- Left Column: Settings, Custom Solape & CSV reader (4 Cols) -->
+        <section class="lg:col-span-4 flex flex-col gap-6 no-print">
+            
+            <!-- Drag & Drop CSV Uploader -->
+            <div class="bg-gradient-to-br from-slate-900 via-slate-900 to-violet-950/20 border border-slate-800/80 rounded-2xl p-5 shadow-xl">
+                <h2 class="text-xs font-bold text-violet-400 uppercase tracking-wider mb-3 flex items-center gap-2">
+                    <svg xmlns="http://www.w3.org/2000/svg" class="h-4 w-4 text-violet-400" fill="none" viewBox="0 0 24 24" stroke="currentColor">
+                        <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M7 16a4 4 0 01-.88-7.903A5 5 0 1115.9 6L16 6a5 5 0 011 9.9M15 13l-3-3m0 0l-3 3m3-3v12" />
+                    </svg>
+                    Actualizar Lista desde CSV
+                </h2>
+                <div id="dropzone" class="border-2 border-dashed border-slate-800 hover:border-violet-500/50 rounded-xl p-4 text-center cursor-pointer transition bg-slate-950/40 hover:bg-slate-950/80">
+                    <input type="file" id="csvFileInput" accept=".csv" class="hidden" onchange="handleFileSelect(event)" />
+                    <p class="text-[11px] text-slate-400">Arrastra tu archivo <strong class="text-slate-200">Studs y tracks.csv</strong> aquí o haz clic para buscarlo.</p>
+                </div>
+            </div>
+
+            <!-- Parametrizador de Solape y Corte -->
+            <div class="bg-slate-900 border border-slate-800/80 rounded-2xl p-5 shadow-xl">
+                <h2 class="text-xs font-bold text-slate-300 uppercase tracking-wider mb-4 flex items-center gap-2">
+                    <svg xmlns="http://www.w3.org/2000/svg" class="h-4 w-4 text-violet-400" fill="none" viewBox="0 0 24 24" stroke="currentColor">
+                        <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M12 6V4m0 2a2 2 0 100 4m0-4a2 2 0 110 4m-6 8a2 2 0 100-4m0 4a2 2 0 110-4m0 4v2m0-6V4m6 6v10m6-2a2 2 0 100-4m0 4a2 2 0 110-4m0 4v2m0-6V4" />
+                    </svg>
+                    Parámetros de Junta (Solape)
+                </h2>
+                
+                <div class="space-y-4">
+                    <div>
+                        <label class="block text-[10px] font-bold text-slate-400 uppercase tracking-wide mb-1">Medida de Solape Requerida:</label>
+                        <div class="flex gap-2">
+                            <input type="number" id="solapeLength" value="20" onchange="recalculate()" onkeyup="recalculate()" class="w-full bg-slate-800 border border-slate-700 rounded-xl px-3 py-2 text-sm text-white font-mono focus:outline-none focus:border-violet-500" />
+                            <span class="bg-slate-800 border border-slate-700 px-3 py-2 rounded-xl text-xs text-slate-400 font-bold flex items-center">cm</span>
+                        </div>
+                        <span class="text-[10px] text-slate-500 mt-1 block">Pérdida por cada punto de unión o traslape.</span>
+                    </div>
+
+                    <div>
+                        <label class="block text-[10px] font-bold text-slate-400 uppercase tracking-wide mb-1.5">Largo de Perfil Comercial (Stock):</label>
+                        <select id="stockLength" onchange="recalculate()" class="w-full bg-slate-800 border border-slate-700 rounded-xl px-3 py-2 text-xs text-white focus:outline-none font-mono">
+                            <option value="300">3.00 metros ($300\text{ cm}$ / $118.11''$)</option>
+                            <option value="366">3.66 metros ($366\text{ cm}$ / $144.00''$)</option>
+                        </select>
+                    </div>
+
+                    <div>
+                        <label class="block text-[10px] font-bold text-slate-400 uppercase tracking-wide mb-1.5">Grosor de Disco (Kerf):</label>
+                        <select id="kerfWidth" onchange="recalculate()" class="w-full bg-slate-800 border border-slate-700 rounded-xl px-3 py-2 text-xs text-white focus:outline-none font-mono">
+                            <option value="0.2">2 mm ($0.2 \text{ cm}$) - Disco de metal fino</option>
+                            <option value="0.0">Cero holgura (Cortes perfectos marcados)</option>
+                        </select>
+                    </div>
+
+                    <div>
+                        <label class="block text-[10px] font-bold text-slate-400 uppercase tracking-wide mb-1.5">Precio de Perfil de 3m (₡):</label>
+                        <input type="number" id="perfilPrice" value="4200" onchange="recalculate()" onkeyup="recalculate()" class="w-full bg-slate-800 border border-slate-700 rounded-xl px-3 py-2 text-xs text-white focus:outline-none font-mono" />
+                    </div>
+
+                    <div class="border-t border-slate-800 pt-3 flex justify-between text-xs">
+                        <span class="text-slate-400">Ver dimensiones en:</span>
+                        <div class="flex gap-2">
+                            <button id="btnInches" onclick="toggleUnits('in')" class="px-2 py-0.5 bg-violet-600 rounded text-white font-mono font-bold text-[10px]">Pulgadas</button>
+                            <button id="btnMetric" onclick="toggleUnits('cm')" class="px-2 py-0.5 bg-slate-800 rounded text-slate-400 font-mono font-bold text-[10px]">Métrico (cm)</button>
+                        </div>
+                    </div>
+                </div>
+            </div>
+
+            <!-- Prepopulated inventory database of Studs y tracks.csv -->
+            <div class="bg-slate-900 border border-slate-800/80 rounded-2xl p-5 shadow-xl">
+                <div class="flex items-center justify-between border-b border-slate-800 pb-2 mb-3">
+                    <h3 class="text-xs font-bold text-slate-300 uppercase tracking-wider flex items-center gap-1.5">
+                        <svg xmlns="http://www.w3.org/2000/svg" class="h-4 w-4 text-violet-400" viewBox="0 0 20 20" fill="currentColor">
+                            <path d="M7 3a1 1 0 000 2h6a1 1 0 100-2H7zM4 7a1 1 0 011-1h10a1 1 0 110 2H5a1 1 0 01-1-1zM2 11a2 2 0 012-2h12a2 2 0 012 2v4a2 2 0 01-2 2H4a2 2 0 01-2 2H4a2 2 0 01-2-2v-4z" />
+                        </svg>
+                        Inventario en Carga
+                    </h3>
+                    <span id="csvCountBadge" class="text-[10px] bg-violet-500/10 text-violet-400 px-2 rounded-full font-mono font-bold">110 Piezas</span>
+                </div>
+                <div class="overflow-y-auto max-h-[180px] space-y-1 bg-slate-950/40 p-2 rounded-xl text-[10px] font-mono" id="originalCutsList">
+                    <!-- Loaded dynamically in JS on load -->
+                </div>
+            </div>
+
+        </section>
+
+        <!-- Right Column: Visual Optimization Output (8 Cols) -->
+        <section class="lg:col-span-8 flex flex-col gap-6">
+            
+            <!-- Dynamic Dashboard Cards (UPDATED WITH EXPLICIT PURCHASE TOTALS) -->
+            <div class="grid grid-cols-1 sm:grid-cols-4 gap-4 animate-fade-in">
+                
+                <!-- STUDS TO PURCHASE -->
+                <div class="bg-slate-900 border border-violet-900/30 rounded-2xl p-4 shadow-lg flex items-center gap-4">
+                    <div class="p-3 bg-violet-500/10 text-violet-400 rounded-xl border border-violet-500/20">
+                        <span class="text-lg font-black font-mono">C</span>
+                    </div>
+                    <div>
+                        <p class="text-[10px] font-bold text-slate-400 uppercase tracking-wider">Studs (Montantes)</p>
+                        <p class="text-2xl font-black text-violet-400 font-mono" id="totalStudsText">0 pza</p>
+                        <p class="text-[10px] text-slate-400 mt-0.5">A comprar (3.0m)</p>
+                    </div>
+                </div>
+
+                <!-- TRACKS TO PURCHASE -->
+                <div class="bg-slate-900 border border-indigo-900/30 rounded-2xl p-4 shadow-lg flex items-center gap-4">
+                    <div class="p-3 bg-indigo-500/10 text-indigo-400 rounded-xl border border-indigo-500/20">
+                        <span class="text-lg font-black font-mono">U</span>
+                    </div>
+                    <div>
+                        <p class="text-[10px] font-bold text-slate-400 uppercase tracking-wider">Tracks (Canales)</p>
+                        <p class="text-2xl font-black text-indigo-400 font-mono" id="totalTracksText">0 pza</p>
+                        <p class="text-[10px] text-slate-400 mt-0.5">A comprar (3.0m)</p>
+                    </div>
+                </div>
+
+                <!-- COMBINED MATERIAL EFFICIENCY -->
+                <div class="bg-slate-900 border border-slate-800 rounded-2xl p-4 shadow-lg flex items-center gap-4">
+                    <div class="p-3 bg-emerald-500/10 text-emerald-400 rounded-xl border border-emerald-500/20">
+                        <svg xmlns="http://www.w3.org/2000/svg" class="h-5 w-5" fill="none" viewBox="0 0 24 24" stroke="currentColor">
+                            <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M9 19v-6a2 2 0 00-2-2H5a2 2 0 00-2 2v6a2 2 0 002 2h2a2 2 0 002-2zm0 0V9a2 2 0 012-2h2a2 2 0 012 2v10m-6 0a2 2 0 002 2h2a2 2 0 002-2m0 0V5a2 2 0 012-2h2a2 2 0 012 2v14a2 2 0 01-2 2h-2a2 2 0 01-2-2z" />
+                        </svg>
+                    </div>
+                    <div>
+                        <p class="text-[10px] font-bold text-slate-400 uppercase tracking-wider">Aprovechamiento</p>
+                        <p class="text-2xl font-black text-emerald-400 font-mono" id="efficiencyText">0.0%</p>
+                        <p class="text-[10px] text-slate-400 mt-0.5" id="totalSplicesSpan">0 Fusiones activas</p>
+                    </div>
+                </div>
+
+                <!-- TOTAL PURCHASE COST -->
+                <div class="bg-slate-900 border border-slate-800 rounded-2xl p-4 shadow-lg flex items-center gap-4">
+                    <div class="p-3 bg-amber-500/10 text-amber-400 rounded-xl border border-amber-500/20">
+                        <span class="text-lg font-bold font-mono">₡</span>
+                    </div>
+                    <div>
+                        <p class="text-[10px] font-bold text-slate-400 uppercase tracking-wider">Costo de Compra</p>
+                        <p class="text-2xl font-black text-white font-mono" id="costText">₡0</p>
+                        <p class="text-[10px] text-slate-400 mt-0.5" id="savedMoneyText">Total: 0 perfiles</p>
+                    </div>
+                </div>
+
+            </div>
+
+            <!-- Main Map Output -->
+            <div class="bg-slate-900 border border-slate-800 rounded-3xl p-6 shadow-2xl flex flex-col">
+                
+                <div class="flex flex-col sm:flex-row items-start sm:items-center justify-between gap-3 border-b border-slate-800 pb-4 mb-6">
+                    <div>
+                        <h2 class="text-lg font-extrabold text-white flex items-center gap-2">
+                            <span>Guía Clasificada de Cortes y Solapes</span>
+                            <span class="text-xs bg-purple-500/20 text-purple-400 px-2 py-0.5 rounded font-mono border border-purple-500/30">Cortes Separados</span>
+                        </h2>
+                        <p class="text-xs text-slate-400">Cada tipo de perfil metálico se optimiza por separado para evitar errores en la obra:</p>
+                    </div>
+                    <span class="text-[11px] font-mono bg-indigo-500/10 text-indigo-400 px-3 py-1.5 rounded-lg border border-indigo-500/20 font-semibold no-print" id="perfilSizeBadge">
+                        Perfil: 3.00 m (300 cm)
+                    </span>
+                </div>
+
+                <!-- Sheets/Bars Visualization Area -->
+                <div id="sheetsResult" class="space-y-8">
+                    <!-- Dynamic bars drawn here by JS grouped in Studs vs Tracks sections -->
+                </div>
+
+            </div>
+
+            <!-- Technical Instructions -->
+            <div class="bg-slate-900 border border-slate-800 rounded-3xl p-6 shadow-2xl print-card">
+                <h3 class="text-sm font-bold text-violet-400 uppercase tracking-wider mb-4 flex items-center gap-2">
+                    <svg xmlns="http://www.w3.org/2000/svg" class="h-4 w-4 text-amber-400" fill="none" viewBox="0 0 24 24" stroke="currentColor">
+                        <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M13 16h-1v-4h-1m1-4h.01M21 12a9 9 0 11-18 0 9 9 0 0118 0z" />
+                    </svg>
+                    Manual de Solape y Estabilidad de Perfiles Livianos
+                </h3>
+                <ul class="space-y-3 text-xs text-slate-400 leading-relaxed">
+                    <li class="flex gap-2">
+                        <span class="text-violet-400 font-bold">1.</span>
+                        <span><b>El Método de Encofrado (Caja sobre Caja):</b> Para hacer los empalmes marcados como <b>"Fusión [F]"</b> de forma correcta, introduce un stud de metal dentro del otro. Como la forma del stud es en "C" con pestañas hacia adentro, para traslaparlos debes recortar $0.5\text{ cm}$ de las pestañas a lo largo de los **$20\text{ cm}$** de la punta del stud que va adentro. Esto permite que entren como un telescopio de forma perfecta.</span>
+                    </li>
+                    <li class="flex gap-2">
+                        <span class="text-violet-400 font-bold">2.</span>
+                        <span><b>Fijación de Solape con Tornillos Framer:</b> En la costura del traslape de **$20\text{ cm}$**, coloca mínimo **4 tornillos tipo framer** (punta de broca extra-planos) de $\frac{1}{2}''$: dos por cada lado del lomo plano de la "U" para bloquear la pieza y evitar el pandeo rotacional.</span>
+                    </li>
+                    <li class="flex gap-2">
+                        <span class="text-violet-400 font-bold">3.</span>
+                        <span><b>Tratamiento del Track de Solape:</b> Los tracks (canales) no tienen pestañas internas, por lo que empalmarlos con un solape de $20\text{ cm}$ es sumamente sencillo. Solo los deslizas uno sobre el otro y los atornillas directamente sobre el piso de travertino o la viga estructural.</span>
+                    </li>
+                </ul>
+            </div>
+
+        </section>
+
+    </main>
+
+    <script>
+        // Prepopulated raw data extracted directly from "Studs y tracks.csv"
+        // 1 inch = 2.54 cm. Let's list all 110 pieces from the CSV!
+        let csvPieces = [
+            { id: 1, type: 'Stud', label: 'Stud Principal', qty: 24, inch: 62.88, size: 159.71 },
+            { id: 2, type: 'Stud', label: 'Stud Corto', qty: 8, inch: 52.07, size: 132.26 },
+            { id: 3, type: 'Stud', label: 'Stud Escalera', qty: 2, inch: 59.36, size: 150.77 },
+            { id: 4, type: 'Stud', label: 'Stud Soporte Gavetas', qty: 4, inch: 57.34, size: 145.64 },
+            { id: 5, type: 'Stud', label: 'Stud Forro Lateral', qty: 18, inch: 63.50, size: 161.29 },
+            { id: 6, type: 'Stud', label: 'Stud Refuerzo', qty: 2, inch: 62.12, size: 157.78 },
+            { id: 7, type: 'Stud', label: 'Stud Largo Columnas', qty: 4, inch: 90.50, size: 229.87 },
+            { id: 8, type: 'Stud', label: 'Stud Cierre', qty: 2, inch: 60.24, size: 153.01 },
+            { id: 9, type: 'Stud', label: 'Stud Divisiones', qty: 4, inch: 60.68, size: 154.13 },
+            { id: 10, type: 'Stud', label: 'Stud Cama Queen', qty: 18, inch: 59.50, size: 151.13 },
+            { id: 11, type: 'Stud', label: 'Stud Corto Nicho', qty: 4, inch: 26.70, size: 67.82 },
+            { id: 12, type: 'Stud', label: 'Stud Soporte Altillo', qty: 4, inch: 53.00, size: 134.62 },
+            { id: 13, type: 'Stud', label: 'Stud Ajuste', qty: 2, inch: 59.93, size: 152.22 },
+            // Tracks
+            { id: 14, type: 'Track', label: 'Track Guía Base', qty: 6, inch: 90.50, size: 229.87 },
+            { id: 15, type: 'Track', label: 'Track Cierre', qty: 10, inch: 59.50, size: 151.13 }
+        ];
+
+        let displayUnits = 'in'; // Toggle standard inches and metric
+
+        // Visual coloring for items
+        const colors = [
+            'bg-violet-600 hover:bg-violet-500 border-violet-700 text-violet-100',
+            'bg-indigo-600 hover:bg-indigo-500 border-indigo-700 text-indigo-100',
+            'bg-sky-600 hover:bg-sky-500 border-sky-700 text-sky-100',
+            'bg-emerald-600 hover:bg-emerald-500 border-emerald-700 text-emerald-100',
+            'bg-amber-600 hover:bg-amber-500 border-amber-700 text-amber-100',
+            'bg-pink-600 hover:bg-pink-500 border-pink-700 text-pink-100',
+            'bg-fuchsia-600 hover:bg-fuchsia-500 border-fuchsia-700 text-fuchsia-100',
+            'bg-teal-600 hover:bg-teal-500 border-teal-700 text-teal-100',
+            'bg-orange-600 hover:bg-orange-500 border-orange-700 text-orange-100',
+            'bg-cyan-600 hover:bg-cyan-500 border-cyan-700 text-cyan-100'
+        ];
+
+        // Drag and drop setup for CSV upload
+        const dropzone = document.getElementById('dropzone');
+        dropzone.addEventListener('dragover', (e) => {
+            e.preventDefault();
+            dropzone.classList.add('border-violet-500', 'bg-slate-900/60');
+        });
+        dropzone.addEventListener('dragleave', () => {
+            dropzone.classList.remove('border-violet-500', 'bg-slate-900/60');
+        });
+        dropzone.addEventListener('drop', (e) => {
+            e.preventDefault();
+            dropzone.classList.remove('border-violet-500', 'bg-slate-900/60');
+            const file = e.dataTransfer.files[0];
+            if (file) {
+                parseCSV(file);
+            }
+        });
+        dropzone.addEventListener('click', () => {
+            document.getElementById('csvFileInput').click();
+        });
+
+        function handleFileSelect(e) {
+            const file = e.target.files[0];
+            if (file) {
+                parseCSV(file);
+            }
+        }
+
+        // CSV parsing directly inside client browser
+        function parseCSV(file) {
+            const reader = new FileReader();
+            reader.onload = function(event) {
+                const text = event.target.result;
+                const lines = text.split(/\r?\n/);
+                let newCuts = [];
+                let idCounter = 1;
+
+                for (let i = 1; i < lines.length; i++) {
+                    const row = lines[i].split(',');
+                    if (row.length >= 4) {
+                        const typeRaw = row[1].replace(/['"]/g, "").trim();
+                        // Capitalize Stud or Track
+                        const type = typeRaw.charAt(0).toUpperCase() + typeRaw.slice(1).toLowerCase();
+                        const qty = parseInt(row[2].replace(/['"]/g, "").trim());
+                        const inch = parseFloat(row[3].replace(/['"]/g, "").trim());
+                        
+                        if (!isNaN(qty) && !isNaN(inch) && qty > 0 && inch > 0) {
+                            newCuts.push({
+                                id: idCounter++,
+                                type: type,
+                                label: `${type} ${inch}"`,
+                                qty: qty,
+                                inch: inch,
+                                size: inch * 2.54
+                            });
+                        }
+                    }
+                }
+
+                if (newCuts.length > 0) {
+                    csvPieces = newCuts;
+                    renderOriginalCutsList();
+                    recalculate();
+                } else {
+                    alert("No se pudieron extraer datos válidos del CSV. Verifique el formato.");
+                }
+            };
+            reader.readAsText(file);
+        }
+
+        function toggleUnits(unit) {
+            displayUnits = unit;
+            const btnInches = document.getElementById('btnInches');
+            const btnMetric = document.getElementById('btnMetric');
+            if (unit === 'in') {
+                btnInches.className = "px-2 py-0.5 bg-violet-600 rounded text-white font-mono font-bold text-[10px]";
+                btnMetric.className = "px-2 py-0.5 bg-slate-800 rounded text-slate-400 font-mono font-bold text-[10px]";
+            } else {
+                btnInches.className = "px-2 py-0.5 bg-slate-800 rounded text-slate-400 font-mono font-bold text-[10px]";
+                btnMetric.className = "px-2 py-0.5 bg-violet-600 rounded text-white font-mono font-bold text-[10px]";
+            }
+            renderOriginalCutsList();
+            recalculate();
+        }
+
+        function renderOriginalCutsList() {
+            const container = document.getElementById('originalCutsList');
+            let totalPieces = 0;
+            container.innerHTML = `
+                <div class="grid grid-cols-12 text-slate-500 font-bold border-b border-slate-800 pb-1 uppercase text-[9px]">
+                    <div class="col-span-3">Cant.</div>
+                    <div class="col-span-5">Pulgadas</div>
+                    <div class="col-span-4 text-right">Métrico (cm)</div>
+                </div>
+            `;
+
+            csvPieces.forEach(p => {
+                totalPieces += p.qty;
+                const sizeStr = displayUnits === 'in' ? `${p.inch.toFixed(2)}"` : `${p.size.toFixed(1)} cm`;
+                container.innerHTML += `
+                    <div class="flex justify-between py-1 border-b border-slate-900 text-slate-300">
+                        <span class="truncate max-w-[150px]">${p.qty}x de ${p.inch.toFixed(2)}" (${p.type})</span>
+                        <span class="text-violet-400">${p.size.toFixed(1)} cm</span>
+                    </div>
+                `;
+            });
+            document.getElementById('csvCountBadge').innerText = `${totalPieces} Piezas`;
+        }
+
+        // HEURISTIC BIN PACKING ALGORITHM WITH SEPARATE CHANNELS FOR STUD AND TRACKS
+        function recalculate() {
+            const stockLength = parseFloat(document.getElementById('stockLength').value);
+            const kerf = parseFloat(document.getElementById('kerfWidth').value);
+            const solape = parseFloat(document.getElementById('solapeLength').value);
+            const price = parseFloat(document.getElementById('perfilPrice').value);
+
+            document.getElementById('perfilSizeBadge').innerText = `Perfil: ${(stockLength/100).toFixed(2)} m (${stockLength} cm)`;
+
+            // Helper function to optimize a specific category (Studs or Tracks) independently
+            function optimizeCategory(pieces, typeFilter) {
+                let flatList = [];
+                pieces.filter(p => p.type.toLowerCase() === typeFilter.toLowerCase()).forEach((p, idx) => {
+                    for (let i = 0; i < p.qty; i++) {
+                        flatList.push({
+                            label: p.label,
+                            size: p.size,
+                            inch: p.inch,
+                            colorIdx: idx % colors.length,
+                            isSpliced: false,
+                            components: []
+                        });
+                    }
+                });
+
+                // Sort FFD (First Fit Decreasing) descending size
+                flatList.sort((a, b) => b.size - a.size);
+
+                let bars = [];
+                let splices = 0;
+
+                flatList.forEach(cut => {
+                    let placed = false;
+
+                    // 1. Try to place directly into an existing bar of this category
+                    for (let j = 0; j < bars.length; j++) {
+                        let bar = bars[j];
+                        let spaceNeeded = bar.cuts.length > 0 ? (cut.size + kerf) : cut.size;
+                        if (bar.remaining >= spaceNeeded) {
+                            bar.cuts.push(cut);
+                            bar.remaining -= spaceNeeded;
+                            placed = true;
+                            break;
+                        }
+                    }
+
+                    // 2. SÚPER-EMPALME: Try to compose from scraps of this category only
+                    if (!placed) {
+                        for (let j = 0; j < bars.length; j++) {
+                            let bar1 = bars[j];
+                            if (bar1.remaining >= 15) {
+                                for (let k = j + 1; k < bars.length; k++) {
+                                    let bar2 = bars[k];
+                                    if (bar2.remaining >= 15) {
+                                        const totalUsableWaste = bar1.remaining + bar2.remaining;
+                                        const requiredWithJoint = cut.size + solape;
+
+                                        if (totalUsableWaste >= requiredWithJoint) {
+                                            splices++;
+                                            
+                                            let portion1 = Math.min(bar1.remaining, requiredWithJoint - 15);
+                                            let portion2 = requiredWithJoint - portion1;
+
+                                            bar1.remaining -= portion1;
+                                            bar2.remaining -= portion2;
+
+                                            cut.isSpliced = true;
+                                            cut.components = [
+                                                { barIndex: j + 1, len: portion1 },
+                                                { barIndex: k + 1, len: portion2 }
+                                            ];
+
+                                            bar1.cuts.push({
+                                                label: `${cut.label} [Solape ${solape}cm - Parte A]`,
+                                                size: portion1,
+                                                inch: portion1 / 2.54,
+                                                colorIdx: cut.colorIdx,
+                                                isSliceMarker: true,
+                                                parentSpliced: cut
+                                            });
+
+                                            bar2.cuts.push({
+                                                label: `${cut.label} [Solape ${solape}cm - Parte B]`,
+                                                size: portion2,
+                                                inch: portion2 / 2.54,
+                                                colorIdx: cut.colorIdx,
+                                                isSliceMarker: true,
+                                                parentSpliced: cut
+                                            });
+
+                                            placed = true;
+                                            break;
+                                        }
+                                    }
+                                }
+                            }
+                            if (placed) break;
+                        }
+                    }
+
+                    // 3. Open a brand new bar of this category
+                    if (!placed) {
+                        bars.push({
+                            remaining: stockLength - cut.size,
+                            cuts: [cut]
+                        });
+                    }
+                });
+
+                return { bars, splices };
+            }
+
+            // Run separate optimizations
+            const studResult = optimizeCategory(csvPieces, 'stud');
+            const trackResult = optimizeCategory(csvPieces, 'track');
+
+            const totalStuds = studResult.bars.length;
+            const totalTracks = trackResult.bars.length;
+            const totalBarsCombined = totalStuds + totalTracks;
+            const totalCost = totalBarsCombined * price;
+            const totalSplices = studResult.splices + trackResult.splices;
+
+            // Combined efficiency
+            let totalCutsLength = 0;
+            csvPieces.forEach(p => {
+                totalCutsLength += p.size * p.qty;
+            });
+            const totalStockLength = totalBarsCombined * stockLength;
+            const efficiency = totalStockLength > 0 ? (totalCutsLength / totalStockLength) * 100 : 0;
+
+            // Render stats cards in Spanish
+            document.getElementById('totalStudsText').innerText = `${totalStuds} barras`;
+            document.getElementById('totalTracksText').innerText = `${totalTracks} barras`;
+            document.getElementById('efficiencyText').innerText = `${efficiency.toFixed(1)}%`;
+            document.getElementById('totalSplicesSpan').innerText = `${totalSplices} Uniones de retazos`;
+            document.getElementById('costText').innerText = `₡${totalCost.toLocaleString('es-CR')}`;
+            document.getElementById('savedMoneyText').innerText = `Total: ${totalBarsCombined} perfiles de stock`;
+
+            // Render visual bars grouped separately
+            const container = document.getElementById('sheetsResult');
+            container.innerHTML = '';
+
+            // Draw STUDS Section
+            let html = `
+                <div class="border-b border-violet-900/50 pb-2 mb-4">
+                    <h3 class="text-md font-black text-violet-400 flex items-center gap-2">
+                        <span class="inline-block h-3 w-3 rounded-full bg-violet-500"></span>
+                        STUDS (Montantes en "C") — Total a Comprar: <span class="text-white">${totalStuds} unidades</span>
+                    </h3>
+                    <p class="text-[10px] text-slate-400 mt-0.5">Barras comerciales optimizadas de forma segura para la perfilería vertical de soporte.</p>
+                </div>
+            `;
+            html += generateBarsHTML(studResult.bars, 'Stud', stockLength, kerf, solape);
+
+            // Draw TRACKS Section
+            html += `
+                <div class="border-b border-indigo-900/50 pb-2 mb-4 mt-8">
+                    <h3 class="text-md font-black text-indigo-400 flex items-center gap-2">
+                        <span class="inline-block h-3 w-3 rounded-full bg-indigo-500"></span>
+                        TRACKS (Canales en "U") — Total a Comprar: <span class="text-white">${totalTracks} unidades</span>
+                    </h3>
+                    <p class="text-[10px] text-slate-400 mt-0.5">Barras comerciales optimizadas de forma segura para guías horizontales de suelo y techos.</p>
+                </div>
+            `;
+            html += generateBarsHTML(trackResult.bars, 'Track', stockLength, kerf, solape);
+
+            container.innerHTML = html;
+        }
+
+        // Helper function to build visual structures for both profiles
+        function generateBarsHTML(bars, labelPrefix, stockLength, kerf, solape) {
+            let containerHTML = '';
+            
+            if (bars.length === 0) {
+                return `<p class="text-xs text-slate-500 py-4 font-mono">No se detectaron piezas cargadas para esta categoría.</p>`;
+            }
+
+            bars.forEach((bar, index) => {
+                let barHTML = `
+                    <div class="bg-slate-950/50 p-5 border border-slate-800 rounded-2xl space-y-3.5 mb-4 print-card">
+                        <div class="flex flex-col sm:flex-row sm:items-center justify-between gap-1.5 text-xs">
+                            <span class="font-extrabold text-slate-200 text-xs">Barra de ${labelPrefix} #${index + 1}</span>
+                            <span class="text-slate-400 text-[10px] font-mono">
+                                Sobra libre disponible: <b class="text-emerald-400 font-extrabold text-xs">${bar.remaining.toFixed(1)} cm</b> (${((bar.remaining / stockLength) * 100).toFixed(1)}%)
+                            </span>
+                        </div>
+
+                        <!-- Visual representation bar -->
+                        <div class="h-11 w-full bg-slate-900 rounded-xl overflow-hidden flex border border-slate-800 font-mono text-[9px] relative select-none">
+                `;
+
+                let accumMark = 0;
+                let marksData = [];
+
+                bar.cuts.forEach((cut, cIndex) => {
+                    const widthPct = (cut.size / stockLength) * 100;
+                    const styleClass = colors[cut.colorIdx];
+                    
+                    accumMark += cut.size;
+                    marksData.push({
+                        label: cut.label,
+                        inch: cut.inch,
+                        cm: cut.size,
+                        markAt: accumMark.toFixed(1),
+                        isSliceMarker: cut.isSliceMarker
+                    });
+
+                    accumMark += kerf;
+
+                    const sliceStyle = cut.isSliceMarker ? 'repeating-linear-stripes border-dashed border-purple-500/50' : '';
+
+                    barHTML += `
+                        <div class="${styleClass} h-full border-r border-black/20 flex flex-col justify-center px-2 truncate transition duration-150 ${sliceStyle}" style="width: ${widthPct}%" title="${cut.label}: ${cut.size.toFixed(1)} cm">
+                            <span class="font-extrabold truncate text-white text-xs">${cut.inch.toFixed(1)}"</span>
+                            <span class="opacity-90 truncate text-[9px] font-semibold">${cut.label}</span>
+                        </div>
+                    `;
+                });
+
+                const remainderPct = (bar.remaining / stockLength) * 100;
+                barHTML += `
+                            <div class="bg-slate-950/80 h-full flex flex-col justify-center px-2 text-slate-600 truncate" style="width: ${remainderPct}%">
+                                <span class="font-bold">SOBRA</span>
+                                <span class="text-[9px]">${bar.remaining.toFixed(1)} cm</span>
+                            </div>
+                        </div>
+
+                        <!-- Carpenter marks instruction box -->
+                        <div class="bg-slate-900/60 p-3 rounded-xl border border-slate-800/60 font-mono">
+                            <p class="text-[10px] font-bold text-slate-400 uppercase tracking-wider mb-2 flex items-center gap-1.5 font-sans">
+                                <svg xmlns="http://www.w3.org/2000/svg" class="h-3.5 w-3.5 text-amber-500" viewBox="0 0 20 20" fill="currentColor">
+                                    <path fill-rule="evenodd" d="M12.395 2.553a1 1 0 00-1.45-.385c-.345.23-.614.558-.822.88-.214.33-.403.713-.57 1.116-.334.804-.614 1.768-.84 2.734a31.365 31.365 0 00-.629 3.54c-.112.975-.19 1.9-.229 2.624H4a1 1 0 110-2h2.023a23.16 23.16 0 01.161-2.228c.038-.686.113-1.536.215-2.45a33.371 33.371 0 01.657-3.693c.243-1.043.553-2.09.957-2.946.21-.444.475-.892.836-1.258a3.985 3.985 0 011.606-1.045a1 1 0 00.385-1.45z" clip-rule="evenodd" />
+                                </svg>
+                                Secuencia de Marcado (Cinta en extremo '0'):
+                            </p>
+                            <div class="grid grid-cols-1 sm:grid-cols-2 gap-x-4 gap-y-1.5">
+                `;
+
+                marksData.forEach((mark, mIdx) => {
+                    const highlightClass = mark.isSliceMarker ? 'text-purple-300 font-bold border-purple-900 bg-purple-950/20' : 'text-slate-400 border-slate-800';
+                    const lengthVal = displayUnits === 'in' ? `${mark.inch.toFixed(2)}"` : `${mark.cm.toFixed(1)} cm`;
+                    barHTML += `
+                        <div class="flex items-center justify-between text-[11px] border-b border-slate-800/40 py-1 hover:bg-slate-900/40 px-1.5 rounded transition ${highlightClass}">
+                            <span class="max-w-[190px] truncate">${mIdx + 1}. ${mark.label} (${lengthVal})</span>
+                            <span class="text-white font-bold bg-slate-950 px-2 py-0.5 rounded border border-slate-800">
+                                Cortar en: <span class="text-amber-400 font-extrabold text-xs">${mark.markAt} cm</span>
+                            </span>
+                        </div>
+                    `;
+                });
+
+                barHTML += `
+                            </div>
+                        </div>
+                    </div>
+                `;
+                containerHTML += barHTML;
+            });
+
+            return containerHTML;
+        }
+
+        window.onload = function() {
+            renderOriginalCutsList();
+            recalculate();
+        }
+    </script>
+    <style>
+        .repeating-linear-stripes {
+            background-image: repeating-linear-gradient(
+                45deg,
+                rgba(168, 85, 247, 0.15),
+                rgba(168, 85, 247, 0.15) 10px,
+                rgba(0, 0, 0, 0) 10px,
+                rgba(0, 0, 0, 0) 20px
+            );
+        }
+    </style>
+</body>
+</html>
