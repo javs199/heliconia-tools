@@ -16,21 +16,70 @@
             font-family: 'JetBrains Mono', monospace;
         }
         @media print {
-            .no-print {
-                display: none !important;
-            }
-            body {
-                background: white !important;
-                color: black !important;
-            }
-            .print-card {
-                border: 1px solid #cbd5e1 !important;
+            @page { margin: 1cm; }
+            .no-print, header, footer { display: none !important; }
+            body, html { background: white !important; color: black !important; }
+            
+            * {
                 box-shadow: none !important;
-                background: white !important;
-                page-break-inside: avoid;
+                text-shadow: none !important;
+                -webkit-print-color-adjust: exact !important;
+                print-color-adjust: exact !important;
+            }
+
+            [class*="bg-slate-9"], [class*="bg-slate-8"], [class*="bg-slate-950/50"], [class*="bg-slate-900/60"] {
+                background-color: transparent !important;
+            }
+
+            [class*="border-slate-8"], [class*="border-slate-7"], [class*="border-slate-9"] {
+                border-color: #cbd5e1 !important;
+            }
+
+            [class*="text-slate-1"], [class*="text-slate-2"], [class*="text-slate-3"], [class*="text-slate-4"], .text-white {
+                color: #1e293b !important;
+            }
+
+            .h-full .text-white, .h-full [class*="text-white"], .bg-slate-950\/80 span {
+                color: #ffffff !important;
+            }
+            .bg-slate-950\/80 {
+                background-color: #f1f5f9 !important; 
+            }
+            .bg-slate-950\/80 span {
+                color: #64748b !important;
+            }
+
+            [class*="overflow-"], [class*="max-h-"] {
+                overflow: visible !important;
+                max-height: none !important;
+            }
+
+            .print-card, tr {
+                page-break-inside: avoid !important;
+                break-inside: avoid !important;
             }
         }
+
+
     </style>
+    <script>
+        window.currentUnit = 'in';
+        function setUnit(u) {
+            window.currentUnit = u;
+            const btnIn = document.getElementById('btn-unit-in');
+            const btnCm = document.getElementById('btn-unit-cm');
+            if (btnIn && btnCm) {
+                btnIn.className = u === 'in' ? 'px-3 py-1.5 rounded-lg text-xs font-bold bg-amber-500 text-slate-900 shadow-lg transition' : 'px-3 py-1.5 rounded-lg text-xs font-semibold text-slate-400 hover:text-slate-200 hover:bg-slate-800 transition';
+                btnCm.className = u === 'cm' ? 'px-3 py-1.5 rounded-lg text-xs font-bold bg-amber-500 text-slate-900 shadow-lg transition' : 'px-3 py-1.5 rounded-lg text-xs font-semibold text-slate-400 hover:text-slate-200 hover:bg-slate-800 transition';
+            }
+            if (typeof renderList === 'function') renderList();
+            if (typeof recalculate === 'function') recalculate();
+        }
+        function fmtSize(cm, inch) {
+            if (inch !== undefined && window.currentUnit === 'in') return inch.toFixed(2) + '"';
+            return window.currentUnit === 'in' ? (cm / 2.54).toFixed(1) + '"' : cm.toFixed(1) + ' cm';
+        }
+    </script>
 </head>
 <body class="bg-slate-950 text-slate-100 min-h-screen flex flex-col antialiased selection:bg-amber-500 selection:text-slate-950">
 
@@ -45,28 +94,32 @@
                 </div>
                 <div>
                     <h1 class="text-xl font-extrabold tracking-tight text-white flex items-center gap-2">
-                        Optimización Escalera 2"x2" <span class="text-xs bg-amber-500/20 text-amber-400 px-2.5 py-0.5 rounded-full font-mono border border-amber-500/30">Líneas Estéticas</span>
+                        Optimización Escalera 2"x2" <span class="text-xs bg-amber-500/20 text-amber-400 px-2.5 py-0.5 rounded-full font-mono border border-amber-500/30">Líneas Estéticas (Actualizado)</span>
                     </h1>
                     <p class="text-xs text-slate-400 mt-0.5">Plan de corte para la herrería en zigzag de la escalera de acceso</p>
                 </div>
             </div>
             
             <div class="flex items-center gap-3">
+                <div class="flex items-center gap-1 bg-slate-900 p-1 rounded-xl border border-slate-800 mr-2">
+                    <button id="btn-unit-in" onclick="setUnit('in')" class="px-3 py-1.5 rounded-lg text-xs font-bold bg-amber-500 text-slate-900 shadow-lg transition">IN</button>
+                    <button id="btn-unit-cm" onclick="setUnit('cm')" class="px-3 py-1.5 rounded-lg text-xs font-semibold text-slate-400 hover:text-slate-200 hover:bg-slate-800 transition">CM</button>
+                </div>
                 <button onclick="window.print()" class="px-4 py-2 bg-slate-900 hover:bg-slate-800 border border-slate-800 hover:border-slate-700 text-slate-200 text-xs font-semibold rounded-lg transition flex items-center gap-2">
                     <svg xmlns="http://www.w3.org/2000/svg" class="h-4 w-4" fill="none" viewBox="0 0 24 24" stroke="currentColor">
                         <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M17 17h2a2 2 0 002-2v-4a2 2 0 00-2-2H5a2 2 0 00-2 2v4a2 2 0 002 2h2m2 4h6a2 2 0 002-2v-4a2 2 0 00-2-2H9a2 2 0 00-2 2v4a2 2 0 002 2zm8-12V5a2 2 0 00-2-2H9a2 2 0 00-2 2v4h10z" />
                     </svg>
                     Imprimir Guía de Escalera
                 </button>
-                <span class="text-xs bg-amber-500/10 text-amber-400 border border-amber-500/20 px-3 py-2 rounded-lg font-medium flex items-center gap-1.5">
-                    <span class="h-2 w-2 rounded-full bg-amber-500 animate-pulse"></span>
-                    Stairs 30.csv Activo
+                <span class="text-xs bg-emerald-500/10 text-emerald-400 border border-emerald-500/20 px-3 py-2 rounded-lg font-medium flex items-center gap-1.5">
+                    <span class="h-2 w-2 rounded-full bg-emerald-500 animate-pulse"></span>
+                    Nuevos Ajustes (56 pzas)
                 </span>
             </div>
         </div>
     </header>
 
-    <main class="flex-1 max-w-7xl w-full mx-auto p-4 sm:p-6 lg:p-8 grid grid-cols-1 lg:grid-cols-12 gap-8">
+    <main class="flex-1 max-w-7xl w-full mx-auto p-4 sm:p-6 lg:p-8 grid grid-cols-1 lg:grid-cols-12 gap-8 min-w-[350px]">
         
         <!-- Left Column: Source CSV Data Analysis & Settings (4 Cols) -->
         <section class="lg:col-span-4 flex flex-col gap-6 no-print">
@@ -78,68 +131,17 @@
                         <svg xmlns="http://www.w3.org/2000/svg" class="h-4 w-4 text-amber-400" fill="none" viewBox="0 0 24 24" stroke="currentColor">
                             <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M4 6h16M4 12h16M4 18h16" />
                         </svg>
-                        Datos de la Escalera (CSV)
+                        Datos Actualizados de Escalera
                     </h2>
                     <span class="text-[10px] bg-slate-800 px-2 py-0.5 rounded text-amber-400 font-mono">56 Piezas</span>
                 </div>
                 
                 <p class="text-xs text-slate-400 mb-4 leading-relaxed">
-                    Estos son los cortes de metal de **2x2"** necesarios para armar el zigzag, huellas y largueros de la escalera:
+                    Estos son los cortes de metal de **2x2"** modificados para armar el zigzag y los soportes de la escalera:
                 </p>
 
                 <!-- Scrollable Table -->
-                <div class="overflow-y-auto max-h-[350px] border border-slate-800 rounded-xl bg-slate-950/50 p-2 space-y-1.5 font-mono">
-                    <div class="grid grid-cols-12 text-[10px] font-bold text-slate-500 uppercase tracking-wider px-2 py-1 border-b border-slate-800">
-                        <div class="col-span-3">Cant.</div>
-                        <div class="col-span-5">Pulgadas</div>
-                        <div class="col-span-4 text-right">cm aprox</div>
-                    </div>
-                    
-                    <div class="grid grid-cols-12 text-xs py-1 px-2 hover:bg-slate-900 rounded transition border-b border-slate-900">
-                        <div class="col-span-3 text-amber-400 font-bold">2x</div>
-                        <div class="col-span-5 text-slate-300">68.32"</div>
-                        <div class="col-span-4 text-right text-slate-400">173.5 cm</div>
-                    </div>
-                    <div class="grid grid-cols-12 text-xs py-1 px-2 hover:bg-slate-900 rounded transition border-b border-slate-900">
-                        <div class="col-span-3 text-amber-400 font-bold">2x</div>
-                        <div class="col-span-5 text-slate-300">41.88"</div>
-                        <div class="col-span-4 text-right text-slate-400">106.4 cm</div>
-                    </div>
-                    <div class="grid grid-cols-12 text-xs py-1 px-2 hover:bg-slate-900 rounded transition border-b border-slate-900">
-                        <div class="col-span-3 text-amber-400 font-bold">2x</div>
-                        <div class="col-span-5 text-slate-300">30.00"</div>
-                        <div class="col-span-4 text-right text-slate-400">76.2 cm</div>
-                    </div>
-                    <div class="grid grid-cols-12 text-xs py-1 px-2 hover:bg-slate-900 rounded transition border-b border-slate-900">
-                        <div class="col-span-3 text-amber-400 font-bold">2x</div>
-                        <div class="col-span-5 text-slate-300">27.22"</div>
-                        <div class="col-span-4 text-right text-slate-400">69.1 cm</div>
-                    </div>
-                    <div class="grid grid-cols-12 text-xs py-1 px-2 hover:bg-slate-900 rounded transition border-b border-slate-900">
-                        <div class="col-span-3 text-amber-400 font-bold">10x</div>
-                        <div class="col-span-5 text-slate-300">25.20"</div>
-                        <div class="col-span-4 text-right text-slate-400">64.0 cm</div>
-                    </div>
-                    <div class="grid grid-cols-12 text-xs py-1 px-2 hover:bg-slate-900 rounded transition border-b border-slate-900">
-                        <div class="col-span-3 text-amber-400 font-bold">16x</div>
-                        <div class="col-span-5 text-slate-300">9.11"</div>
-                        <div class="col-span-4 text-right text-slate-400">23.1 cm</div>
-                    </div>
-                    <div class="grid grid-cols-12 text-xs py-1 px-2 hover:bg-slate-900 rounded transition border-b border-slate-900">
-                        <div class="col-span-3 text-amber-400 font-bold">2x</div>
-                        <div class="col-span-5 text-slate-300">6.33"</div>
-                        <div class="col-span-4 text-right text-slate-400">16.1 cm</div>
-                    </div>
-                    <div class="grid grid-cols-12 text-xs py-1 px-2 hover:bg-slate-900 rounded transition border-b border-slate-900">
-                        <div class="col-span-3 text-amber-400 font-bold">18x</div>
-                        <div class="col-span-5 text-slate-300">4.40"</div>
-                        <div class="col-span-4 text-right text-slate-400">11.2 cm</div>
-                    </div>
-                    <div class="grid grid-cols-12 text-xs py-1 px-2 hover:bg-slate-900 rounded transition">
-                        <div class="col-span-3 text-amber-400 font-bold">2x</div>
-                        <div class="col-span-5 text-slate-300">3.62"</div>
-                        <div class="col-span-4 text-right text-slate-400">9.2 cm</div>
-                    </div>
+                <div class="overflow-x-auto overflow-y-auto max-h-[350px] border border-slate-800 rounded-xl bg-slate-950/50 p-2 space-y-1.5 font-mono" id="originalCutsList">
                 </div>
             </div>
 
@@ -192,8 +194,8 @@
                     </div>
                     <div>
                         <p class="text-[10px] font-bold text-slate-400 uppercase tracking-wider">Barras de 6m Necesarias</p>
-                        <p class="text-3xl font-extrabold text-white font-mono" id="totalBarsText">4</p>
-                        <p class="text-[10px] text-amber-400 mt-0.5 font-semibold">¡Ajuste perfecto de barras!</p>
+                        <p class="text-3xl font-extrabold text-white font-mono" id="totalBarsText">5</p>
+                        <p class="text-[10px] text-amber-400 mt-0.5 font-semibold">Tiradas ajustadas</p>
                     </div>
                 </div>
 
@@ -206,7 +208,7 @@
                     </div>
                     <div>
                         <p class="text-[10px] font-bold text-slate-400 uppercase tracking-wider">Eficiencia de Material</p>
-                        <p class="text-3xl font-extrabold text-emerald-400 font-mono" id="efficiencyText">88.0%</p>
+                        <p class="text-3xl font-extrabold text-emerald-400 font-mono" id="efficiencyText">82.3%</p>
                         <p class="text-[10px] text-slate-400 mt-0.5">Sobrantes mínimos en puntas</p>
                     </div>
                 </div>
@@ -218,7 +220,7 @@
                     </div>
                     <div>
                         <p class="text-[10px] font-bold text-slate-400 uppercase tracking-wider">Presupuesto de Escalera</p>
-                        <p class="text-3xl font-extrabold text-white font-mono" id="costText">₡98,000</p>
+                        <p class="text-3xl font-extrabold text-white font-mono" id="costText">₡122,500</p>
                         <p class="text-[10px] text-slate-400 mt-0.5">Tubo 2"x2" Cal.14</p>
                     </div>
                 </div>
@@ -230,8 +232,8 @@
                 
                 <div class="flex flex-col sm:flex-row items-start sm:items-center justify-between gap-3 border-b border-slate-800 pb-4 mb-6">
                     <div>
-                        <h2 class="text-lg font-extrabold text-white">Mapa de Cortes Secuenciales - Escalera 2"x2"</h2>
-                        <p class="text-xs text-slate-400">Colocación exacta de las piezas de la escalera dentro de las 4 barras comerciales de 6m:</p>
+                        <h2 class="text-lg font-extrabold text-white">Mapa de Cortes Secuenciales - Escalera 2"x2" (Actualizada)</h2>
+                        <p class="text-xs text-slate-400">Colocación exacta de las piezas de la escalera dentro de las barras comerciales de 6m:</p>
                     </div>
                     <span class="text-[11px] font-mono bg-amber-500/10 text-amber-400 px-3 py-1.5 rounded-lg border border-amber-500/20 font-semibold no-print">
                         Material: Metal 2"x2" (6m)
@@ -239,14 +241,14 @@
                 </div>
 
                 <!-- Bars Container -->
-                <div id="barsResult" class="space-y-6">
+                <div id="barsResult" class="space-y-6 overflow-x-auto">
                     <!-- Dynamic Bars Rendered via JS -->
                 </div>
 
             </div>
 
             <!-- Technical Observations -->
-            <div class="bg-slate-900 border border-slate-800 rounded-3xl p-6 shadow-2xl print-card">
+            <div class="bg-slate-900 border border-slate-800 rounded-3xl p-6 shadow-2xl print-card min-w-[500px]">
                 <h3 class="text-sm font-bold text-slate-200 uppercase tracking-wider mb-4 flex items-center gap-2">
                     <svg xmlns="http://www.w3.org/2000/svg" class="h-4 w-4 text-amber-400" fill="none" viewBox="0 0 24 24" stroke="currentColor">
                         <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M13 16h-1v-4h-1m1-4h.01M21 12a9 9 0 11-18 0 9 9 0 0118 0z" />
@@ -256,15 +258,15 @@
                 <ul class="space-y-3 text-xs text-slate-400 leading-relaxed">
                     <li class="flex gap-2">
                         <span class="text-emerald-400 font-bold">✓</span>
-                        <span><b>Distribución Óptima:</b> El algoritmo acomodó los 2 perfiles largos de **68.32 pulgadas (173.5 cm)** de los largueros diagonales en la Barra #1 y Barra #2, rellenando el resto de las barras con los escalones medianos de **25.2 pulgadas** y los pequeños soportes de huella para un aprovechamiento brutal del **88.0%**.</span>
+                        <span><b>Distribución Óptima:</b> Al incrementar la longitud de las diagonales a **71.11"** y **63.68"** y la sumatoria lineal de los escalones, el total de piezas ahora requiere la compra de **5 barras** de 6 metros, permitiendo distribuir las huellas y contrahuellas con mucha holgura de seguridad para la cortadora.</span>
                     </li>
                     <li class="flex gap-2">
                         <span class="text-emerald-400 font-bold">✓</span>
-                        <span><b>Rigidez Absoluta (Efecto Antivibración):</b> Durante el soldado de las huellas de 9.11" y contrahuellas de 4.4" en zigzag, utiliza una escuadra magnética metálica de 90 grados para garantizar que cada ángulo quede perfectamente perpendicular. Esto evitará que la cremallera de la escalera se tuerza al soldar.</span>
+                        <span><b>Rigidez Absoluta (Efecto Antivibración):</b> Durante el soldado de las huellas y contrahuellas pequeñas en zigzag, utiliza una escuadra magnética metálica de 90 grados para garantizar que cada ángulo quede perfectamente perpendicular. Esto evitará que la cremallera de la escalera se tuerza al soldar.</span>
                     </li>
                     <li class="flex gap-2">
                         <span class="text-amber-400 font-bold">⚠</span>
-                        <span><b>Soldadura de Tapas de Extremo:</b> Recuerda soldar tapas de pletina de hierro planas en las puntas expuestas de los tubos para evitar que la humedad de Costa Rica entre al interior del metal galvanizado, lo cual podría provocar óxido interno con los años.</span>
+                        <span><b>Soldadura de Tapas de Extremo:</b> Recuerda soldar tapas de pletina de hierro planas en las puntas expuestas de los tubos para evitar que la humedad de Costa Rica entre al interior del metal galvanizado.</span>
                     </li>
                 </ul>
             </div>
@@ -275,17 +277,18 @@
 
     <!-- JS Algorithms & Dynamic Render -->
     <script>
-        // Exact raw data extracted from "Stairs 30_20260614_204822.csv"
+        // Exact raw data extracted from the updated "Stairs 30_20260614_204822.csv"
         const csvPieces = [
-            { id: '68.32"', label: 'Larguero Diagonal Principal', size: 173.53, qty: 2, inch: 68.32 },
-            { id: '41.88"', label: 'Estructura Soporte Superior', size: 106.38, qty: 2, inch: 41.88 },
-            { id: '30.00"', label: 'Base Nivelador de Escalera', size: 76.20, qty: 2, inch: 30.00 },
-            { id: '27.22"', label: 'Soporte de Piso Intermedio', size: 69.14, qty: 2, inch: 27.22 },
-            { id: '25.20"', label: 'Travesaño Ancho Escalón', size: 64.01, qty: 10, inch: 25.20 },
-            { id: '9.11"', label: 'Soporte Horizontal Huella', size: 23.14, qty: 16, inch: 9.11 },
-            { id: '6.33"', label: 'Cierre de Nivel Extremo', size: 16.08, qty: 2, inch: 6.33 },
-            { id: '4.40"', label: 'Soporte Vertical Contrahuella', size: 11.18, qty: 18, inch: 4.40 },
-            { id: '3.62"', label: 'Refuerzo de Unión Corto', size: 9.19, qty: 2, inch: 3.62 }
+            { id: '71.11"', label: 'Larguero Diagonal A', size: 180.62, qty: 2, inch: 71.11 },
+            { id: '63.68"', label: 'Larguero Diagonal B', size: 161.75, qty: 2, inch: 63.68 },
+            { id: '47.8"', label: 'Soporte Sup/Intermedio', size: 121.41, qty: 2, inch: 47.8 },
+            { id: '27.44"', label: 'Soporte Base', size: 69.70, qty: 2, inch: 27.44 },
+            { id: '25"', label: 'Travesaño Escalón', size: 63.50, qty: 10, inch: 25.00 },
+            { id: '16.08"', label: 'Cierre/Refuerzo', size: 40.84, qty: 2, inch: 16.08 },
+            { id: '10.9"', label: 'Soporte Huella Largo', size: 27.69, qty: 2, inch: 10.9 },
+            { id: '10.43"', label: 'Soporte Huella Std', size: 26.49, qty: 12, inch: 10.43 },
+            { id: '5.54"', label: 'Soporte Contrahuella', size: 14.07, qty: 18, inch: 5.54 },
+            { id: '3.65"', label: 'Refuerzo Corto', size: 9.27, qty: 2, inch: 3.65 }
         ];
 
         // Color palette for the visual blocks
@@ -298,8 +301,31 @@
             'bg-purple-600 hover:bg-purple-500 border-purple-700 text-purple-100',
             'bg-teal-600 hover:bg-teal-500 border-teal-700 text-teal-100',
             'bg-orange-600 hover:bg-orange-500 border-orange-700 text-orange-100',
-            'bg-fuchsia-600 hover:bg-fuchsia-500 border-fuchsia-700 text-fuchsia-100'
+            'bg-fuchsia-600 hover:bg-fuchsia-500 border-fuchsia-700 text-fuchsia-100',
+            'bg-cyan-600 hover:bg-cyan-500 border-cyan-700 text-cyan-100'
         ];
+
+        function renderList() {
+            const container = document.getElementById('originalCutsList');
+            if (!container) return;
+            container.innerHTML = `
+                <div class="grid grid-cols-12 text-[10px] font-bold text-slate-500 uppercase tracking-wider px-2 py-1 border-b border-slate-800 min-w-[350px]">
+                    <div class="col-span-3">Cant.</div>
+                    <div class="col-span-5">Descripción</div>
+                    <div class="col-span-4 text-right">Corte</div>
+                </div>
+            `;
+            
+            csvPieces.forEach(p => {
+                container.innerHTML += `
+                    <div class="grid grid-cols-12 text-xs py-1 px-2 hover:bg-slate-900 rounded transition border-b border-slate-900 min-w-[350px]">
+                        <div class="col-span-3 text-amber-400 font-bold">${p.qty}x</div>
+                        <div class="col-span-5 text-slate-300 truncate pr-2" title="${p.label}">${p.label}</div>
+                        <div class="col-span-4 text-right text-slate-400 font-mono">${fmtSize(p.size, p.inch)}</div>
+                    </div>
+                `;
+            });
+        }
 
         function recalculate() {
             const stockLength = parseFloat(document.getElementById('stockBarLength').value);
@@ -364,11 +390,11 @@
 
             bars.forEach((bar, index) => {
                 let barHTML = `
-                    <div class="bg-slate-950/50 p-5 border border-slate-800 rounded-2xl space-y-3.5 print-card">
+                    <div class="bg-slate-950/50 p-5 border border-slate-800 rounded-2xl space-y-3.5 print-card min-w-[500px]">
                         <div class="flex flex-col sm:flex-row sm:items-center justify-between gap-1.5 text-xs">
                             <span class="font-extrabold text-amber-400 text-sm">Barra #${index + 1} de Metal Estructural de la Escalera</span>
                             <span class="text-slate-400 text-[10px] font-mono">
-                                Sobra libre en punta: <b class="text-emerald-400 font-extrabold text-xs">${bar.remaining.toFixed(1)} cm</b> (${((bar.remaining / stockLength) * 100).toFixed(1)}%)
+                                Sobra libre en punta: <b class="text-emerald-400 font-extrabold text-xs">${fmtSize(bar.remaining)}</b> (${((bar.remaining / stockLength) * 100).toFixed(1)}%)
                             </span>
                         </div>
 
@@ -395,9 +421,9 @@
                     accumMark += kerf;
 
                     barHTML += `
-                        <div class="${styleClass} h-full border-r border-black/20 flex flex-col justify-center px-2 truncate transition duration-150" style="width: ${widthPct}%" title="${cut.label}: ${cut.size.toFixed(1)} cm">
-                            <span class="font-extrabold truncate text-white text-xs">${cut.inch.toFixed(1)}"</span>
-                            <span class="opacity-90 truncate text-[9px] font-semibold">${cut.label}</span>
+                        <div class="${styleClass} h-full border-r border-black/20 flex flex-col items-center justify-center text-center px-1.5 sm:px-2 truncate transition duration-150" style="width: ${widthPct}%" title="${cut.label}: ${cut.size.toFixed(1)} cm">
+                            <span class="font-extrabold truncate text-white text-[10px] sm:text-xs">${fmtSize(cut.size, cut.inch)}</span>
+                            <span class="opacity-90 truncate text-[8px] sm:text-[9px] font-semibold">${cut.label}</span>
                         </div>
                     `;
                 });
@@ -405,9 +431,9 @@
                 // Remainder slice
                 const remainderPct = (bar.remaining / stockLength) * 100;
                 barHTML += `
-                            <div class="bg-slate-950/80 h-full flex flex-col justify-center px-2 text-slate-600 truncate" style="width: ${remainderPct}%">
+                            <div class="bg-slate-950/80 h-full flex flex-col items-center justify-center text-center px-2 text-slate-600 truncate" style="width: ${remainderPct}%">
                                 <span class="font-bold">SOBRA</span>
-                                <span class="text-[9px]">${bar.remaining.toFixed(1)} cm</span>
+                                <span class="text-[9px]">${fmtSize(bar.remaining)}</span>
                             </div>
                         </div>
 
@@ -419,15 +445,18 @@
                                 </svg>
                                 Secuencia de Corte para Taller (Coloca la cinta métrica en el inicio '0' de la barra):
                             </p>
-                            <div class="grid grid-cols-1 sm:grid-cols-2 gap-x-4 gap-y-1.5">
+                            <div class="flex flex-col gap-y-1.5">
                 `;
 
                 marksData.forEach((mark, mIdx) => {
                     barHTML += `
                         <div class="flex items-center justify-between text-[11px] font-mono border-b border-slate-800/40 py-1 hover:bg-slate-900/40 px-1 rounded transition">
-                            <span class="text-slate-400 max-w-[210px] truncate">${mIdx + 1}. ${mark.label} (${mark.inch.toFixed(1)}")</span>
-                            <span class="text-white font-bold bg-slate-950 px-2 py-0.5 rounded border border-slate-800">
-                                Cortar en marca: <span class="text-amber-400 font-extrabold text-xs">${mark.markAt} cm</span>
+                            <span class="text-slate-400 truncate pr-4" title="${mark.label}">
+                                ${mIdx + 1}. ${mark.label} <span class="text-slate-500 font-normal">(${fmtSize(mark.cm, mark.inch)})</span>
+                            </span>
+                            <span class="text-white font-bold bg-slate-950 px-2 py-0.5 rounded border border-slate-800 flex items-center gap-1">
+                                <span class="text-[9px] text-slate-400 font-normal">Marca:</span>
+                                <span class="text-amber-400 font-extrabold text-xs">${fmtSize(parseFloat(mark.markAt))}</span>
                             </span>
                         </div>
                     `;
@@ -444,6 +473,7 @@
 
         // Initialize calculations on load
         window.onload = function() {
+            renderList();
             recalculate();
         }
     </script>

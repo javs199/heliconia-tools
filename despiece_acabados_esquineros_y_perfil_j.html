@@ -16,29 +16,51 @@
             font-family: 'JetBrains Mono', monospace;
         }
         @media print {
-            .no-print {
-                display: none !important;
-            }
-            body {
-                background: white !important;
-                color: black !important;
-            }
-            .print-card {
-                border: 1px solid #cbd5e1 !important;
+            @page { margin: 1cm; }
+            .no-print, header, footer { display: none !important; }
+            body, html { background: white !important; color: black !important; }
+            
+            * {
                 box-shadow: none !important;
-                background: white !important;
-                page-break-inside: avoid;
+                text-shadow: none !important;
+                -webkit-print-color-adjust: exact !important;
+                print-color-adjust: exact !important;
+            }
+
+            [class*="bg-slate-9"], [class*="bg-slate-8"], [class*="bg-slate-950/50"], [class*="bg-slate-900/60"] {
+                background-color: transparent !important;
+            }
+
+            [class*="border-slate-8"], [class*="border-slate-7"], [class*="border-slate-9"] {
+                border-color: #cbd5e1 !important;
+            }
+
+            [class*="text-slate-1"], [class*="text-slate-2"], [class*="text-slate-3"], [class*="text-slate-4"], .text-white {
+                color: #1e293b !important;
+            }
+
+            .h-full .text-white, .h-full [class*="text-white"], .bg-slate-950\/80 span {
+                color: #ffffff !important;
+            }
+            .bg-slate-950\/80 {
+                background-color: #f1f5f9 !important; 
+            }
+            .bg-slate-950\/80 span {
+                color: #64748b !important;
+            }
+
+            [class*="overflow-"], [class*="max-h-"] {
+                overflow: visible !important;
+                max-height: none !important;
+            }
+
+            .print-card, tr {
+                page-break-inside: avoid !important;
+                break-inside: avoid !important;
             }
         }
-        .repeating-linear-stripes {
-            background-image: repeating-linear-gradient(
-                45deg,
-                rgba(245, 158, 11, 0.15),
-                rgba(245, 158, 11, 0.15) 10px,
-                rgba(0, 0, 0, 0) 10px,
-                rgba(0, 0, 0, 0) 20px
-            );
-        }
+
+
     </style>
 </head>
 <body class="bg-slate-950 text-slate-100 min-h-screen flex flex-col antialiased selection:bg-amber-500 selection:text-slate-950">
@@ -61,6 +83,10 @@
             </div>
             
             <div class="flex items-center gap-3">
+                <div class="flex items-center gap-1 bg-slate-900 p-1 rounded-xl border border-slate-800 mr-2">
+                    <button id="btn-unit-in" onclick="toggleUnits('in')" class="px-3 py-1.5 rounded-lg text-xs font-bold bg-amber-500 text-slate-900 shadow-lg transition">IN</button>
+                    <button id="btn-unit-cm" onclick="toggleUnits('cm')" class="px-3 py-1.5 rounded-lg text-xs font-semibold text-slate-400 hover:text-slate-200 hover:bg-slate-800 transition">CM</button>
+                </div>
                 <button onclick="window.print()" class="px-4 py-2 bg-slate-900 hover:bg-slate-800 border border-slate-800 hover:border-slate-700 text-slate-200 text-xs font-semibold rounded-lg transition flex items-center gap-2">
                     <svg xmlns="http://www.w3.org/2000/svg" class="h-4 w-4" fill="none" viewBox="0 0 24 24" stroke="currentColor">
                         <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M17 17h2a2 2 0 002-2v-4a2 2 0 00-2-2H5a2 2 0 00-2 2v4a2 2 0 002 2h2m2 4h6a2 2 0 002-2v-4a2 2 0 00-2-2H9a2 2 0 00-2 2v4a2 2 0 002 2zm8-12V5a2 2 0 00-2-2H9a2 2 0 00-2 2v4h10z" />
@@ -75,7 +101,7 @@
         </div>
     </header>
 
-    <main class="flex-1 max-w-7xl w-full mx-auto p-4 sm:p-6 lg:p-8 grid grid-cols-1 lg:grid-cols-12 gap-8">
+    <main class="flex-1 max-w-7xl w-full mx-auto p-4 sm:p-6 lg:p-8 grid grid-cols-1 lg:grid-cols-12 gap-8 min-w-[350px]">
         
         <!-- Left Column: Settings, Custom Solape & CSV reader (4 Cols) -->
         <section class="lg:col-span-4 flex flex-col gap-6 no-print">
@@ -135,7 +161,7 @@
                         <input type="number" id="perfilPrice" value="2100" onchange="recalculate()" onkeyup="recalculate()" class="w-full bg-slate-800 border border-slate-700 rounded-xl px-3 py-2 text-xs text-white focus:outline-none font-mono" />
                     </div>
 
-                    <div class="border-t border-slate-800 pt-3 flex justify-between text-xs">
+                    <div class="border-t border-slate-800 pt-3 flex justify-between text-xs hidden">
                         <span class="text-slate-400">Ver dimensiones en:</span>
                         <div class="flex gap-2">
                             <button id="btnInches" onclick="toggleUnits('in')" class="px-2 py-0.5 bg-amber-500 rounded text-slate-950 font-mono font-bold text-[10px]">Pulgadas</button>
@@ -156,7 +182,7 @@
                     </h3>
                     <span id="csvCountBadge" class="text-[10px] bg-amber-500/10 text-amber-400 px-2 rounded-full font-mono font-bold">56 Piezas</span>
                 </div>
-                <div class="overflow-y-auto max-h-[180px] space-y-1 bg-slate-950/40 p-2 rounded-xl text-[10px] font-mono" id="originalCutsList">
+                <div class="overflow-x-auto overflow-y-auto max-h-[180px] space-y-1 bg-slate-950/40 p-2 rounded-xl text-[10px] font-mono" id="originalCutsList">
                     <!-- Loaded dynamically in JS on load -->
                 </div>
             </div>
@@ -259,7 +285,7 @@
             </div>
 
             <!-- Technical Instructions -->
-            <div class="bg-slate-900 border border-slate-800 rounded-3xl p-6 shadow-2xl print-card">
+            <div class="bg-slate-900 border border-slate-800 rounded-3xl p-6 shadow-2xl print-card min-w-[500px]">
                 <h3 class="text-sm font-bold text-amber-400 uppercase tracking-wider mb-4 flex items-center gap-2">
                     <svg xmlns="http://www.w3.org/2000/svg" class="h-4 w-4 text-amber-400" fill="none" viewBox="0 0 24 24" stroke="currentColor">
                         <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M13 16h-1v-4h-1m1-4h.01M21 12a9 9 0 11-18 0 9 9 0 0118 0z" />
@@ -387,24 +413,26 @@
 
         function toggleUnits(unit) {
             displayUnits = unit;
-            const btnInches = document.getElementById('btnInches');
-            const btnMetric = document.getElementById('btnMetric');
-            if (unit === 'in') {
-                btnInches.className = "px-2 py-0.5 bg-amber-500 rounded text-slate-950 font-mono font-bold text-[10px]";
-                btnMetric.className = "px-2 py-0.5 bg-slate-800 rounded text-slate-400 font-mono font-bold text-[10px]";
-            } else {
-                btnInches.className = "px-2 py-0.5 bg-slate-800 rounded text-slate-400 font-mono font-bold text-[10px]";
-                btnMetric.className = "px-2 py-0.5 bg-amber-500 rounded text-slate-950 font-mono font-bold text-[10px]";
+            const btnIn = document.getElementById('btn-unit-in');
+            const btnCm = document.getElementById('btn-unit-cm');
+            if (btnIn && btnCm) {
+                btnIn.className = unit === 'in' ? 'px-3 py-1.5 rounded-lg text-xs font-bold bg-amber-500 text-slate-900 shadow-lg transition' : 'px-3 py-1.5 rounded-lg text-xs font-semibold text-slate-400 hover:text-slate-200 hover:bg-slate-800 transition';
+                btnCm.className = unit === 'cm' ? 'px-3 py-1.5 rounded-lg text-xs font-bold bg-amber-500 text-slate-900 shadow-lg transition' : 'px-3 py-1.5 rounded-lg text-xs font-semibold text-slate-400 hover:text-slate-200 hover:bg-slate-800 transition';
             }
             renderOriginalCutsList();
             recalculate();
+        }
+
+        function fmtSize(cm, inch) {
+            if (inch !== undefined && displayUnits === 'in') return inch.toFixed(2) + '"';
+            return displayUnits === 'in' ? (cm / 2.54).toFixed(1) + '"' : cm.toFixed(1) + ' cm';
         }
 
         function renderOriginalCutsList() {
             const container = document.getElementById('originalCutsList');
             let totalPieces = 0;
             container.innerHTML = `
-                <div class="grid grid-cols-12 text-slate-500 font-bold border-b border-slate-800 pb-1 uppercase text-[9px]">
+                <div class="grid grid-cols-12 text-slate-500 font-bold border-b border-slate-800 pb-1 uppercase text-[9px] min-w-[350px]">
                     <div class="col-span-3">Cant.</div>
                     <div class="col-span-5">Pulgadas</div>
                     <div class="col-span-4 text-right">Métrico (cm)</div>
@@ -660,14 +688,14 @@
                 const warningTitle = bar.exceedsLimit ? `<span class="text-red-400 font-extrabold text-[10px] uppercase ml-2 bg-red-500/20 px-2 py-0.5 rounded border border-red-500/30">Excede Límite</span>` : '';
 
                 let barHTML = `
-                    <div class="p-5 border rounded-2xl space-y-3.5 mb-4 print-card transition duration-150 ${exceedsStyle}">
+                    <div class="p-5 border rounded-2xl space-y-3.5 mb-4 print-card transition duration-150 ${exceedsStyle} min-w-[500px]">
                         <div class="flex flex-col sm:flex-row sm:items-center justify-between gap-1.5 text-xs">
                             <span class="font-extrabold text-slate-200 text-xs flex items-center">
                                 Tira de ${labelPrefix} #${index + 1}
                                 ${warningTitle}
                             </span>
                             <span class="text-slate-400 text-[10px] font-mono">
-                                Sobra libre disponible: <b class="text-emerald-400 font-extrabold text-xs">${bar.remaining.toFixed(1)} cm</b> (${((bar.remaining / stockLength) * 100).toFixed(1)}%)
+                                Sobra libre disponible: <b class="text-emerald-400 font-extrabold text-xs">${fmtSize(bar.remaining)}</b> (${((bar.remaining / stockLength) * 100).toFixed(1)}%)
                             </span>
                         </div>
 
@@ -696,9 +724,9 @@
                     const sliceStyle = cut.isSliceMarker ? 'repeating-linear-stripes border-dashed border-amber-500/40' : '';
 
                     barHTML += `
-                        <div class="${styleClass} h-full border-r border-black/20 flex flex-col justify-center px-2 truncate transition duration-150 ${sliceStyle}" style="width: ${widthPct}%" title="${cut.label}: ${cut.size.toFixed(1)} cm">
-                            <span class="font-extrabold truncate text-white text-xs">${cut.inch.toFixed(1)}"</span>
-                            <span class="opacity-90 truncate text-[9px] font-semibold">${cut.label}</span>
+                        <div class="${styleClass} h-full border-r border-black/20 flex flex-col items-center justify-center text-center px-1.5 sm:px-2 truncate transition duration-150 ${sliceStyle}" style="width: ${widthPct}%" title="${cut.label}: ${cut.size.toFixed(1)} cm">
+                            <span class="font-extrabold truncate text-white text-[10px] sm:text-xs">${fmtSize(cut.size, cut.inch)}</span>
+                            <span class="opacity-90 truncate text-[8px] sm:text-[9px] font-semibold">${cut.label}</span>
                         </div>
                     `;
                 });
@@ -706,9 +734,9 @@
                 const remainderPct = (bar.remaining / stockLength) * 105; // Slightly offset to visual remainder
                 const remainderPctCalculated = (bar.remaining / stockLength) * 100;
                 barHTML += `
-                            <div class="bg-slate-950/80 h-full flex flex-col justify-center px-2 text-slate-600 truncate" style="width: ${remainderPctCalculated}%">
+                            <div class="bg-slate-950/80 h-full flex flex-col items-center justify-center text-center px-2 text-slate-600 truncate" style="width: ${remainderPctCalculated}%">
                                 <span class="font-bold">SOBRA</span>
-                                <span class="text-[9px]">${bar.remaining.toFixed(1)} cm</span>
+                                <span class="text-[9px]">${fmtSize(bar.remaining)}</span>
                             </div>
                         </div>
 
@@ -720,7 +748,7 @@
                                 </svg>
                                 Secuencia de Marcado (Cinta en extremo '0'):
                             </p>
-                            <div class="grid grid-cols-1 sm:grid-cols-2 gap-x-4 gap-y-1.5">
+                            <div class="flex flex-col gap-y-1.5">
                 `;
 
                 marksData.forEach((mark, mIdx) => {
@@ -728,9 +756,12 @@
                     const lengthVal = displayUnits === 'in' ? `${mark.inch.toFixed(2)}"` : `${mark.cm.toFixed(1)} cm`;
                     barHTML += `
                         <div class="flex items-center justify-between text-[11px] border-b border-slate-800/40 py-1 hover:bg-slate-900/40 px-1.5 rounded transition ${highlightClass}">
-                            <span class="max-w-[190px] truncate">${mIdx + 1}. ${mark.label} (${lengthVal})</span>
-                            <span class="text-white font-bold bg-slate-950 px-2 py-0.5 rounded border border-slate-800">
-                                Cortar en: <span class="text-amber-400 font-extrabold text-xs">${mark.markAt} cm</span>
+                            <span class="max-w-[190px] truncate" title="${mark.label}">
+                                ${mIdx + 1}. ${mark.label} <span class="text-slate-500 font-normal">(${lengthVal})</span>
+                            </span>
+                            <span class="text-white font-bold bg-slate-950 px-2 py-0.5 rounded border border-slate-800 flex items-center gap-1">
+                                <span class="text-[9px] text-slate-400 font-normal">Marca:</span>
+                                <span class="text-amber-400 font-extrabold text-xs">${fmtSize(parseFloat(mark.markAt))}</span>
                             </span>
                         </div>
                     `;

@@ -17,6 +17,51 @@
         body { font-family: 'Plus Jakarta Sans', sans-serif; }
         .mono { font-family: 'JetBrains Mono', monospace; }
         input[type=range]::-webkit-slider-thumb { cursor: pointer; }
+        @media print {
+            @page { margin: 1cm; }
+            .no-print, header, footer { display: none !important; }
+            body, html { background: white !important; color: black !important; }
+            
+            * {
+                box-shadow: none !important;
+                text-shadow: none !important;
+                -webkit-print-color-adjust: exact !important;
+                print-color-adjust: exact !important;
+            }
+
+            [class*="bg-slate-9"], [class*="bg-slate-8"], [class*="bg-slate-950/50"], [class*="bg-slate-900/60"] {
+                background-color: transparent !important;
+            }
+
+            [class*="border-slate-8"], [class*="border-slate-7"], [class*="border-slate-9"] {
+                border-color: #cbd5e1 !important;
+            }
+
+            [class*="text-slate-1"], [class*="text-slate-2"], [class*="text-slate-3"], [class*="text-slate-4"], .text-white {
+                color: #1e293b !important;
+            }
+
+            .h-full .text-white, .h-full [class*="text-white"], .bg-slate-950\/80 span {
+                color: #ffffff !important;
+            }
+            .bg-slate-950\/80 {
+                background-color: #f1f5f9 !important; 
+            }
+            .bg-slate-950\/80 span {
+                color: #64748b !important;
+            }
+
+            [class*="overflow-"], [class*="max-h-"] {
+                overflow: visible !important;
+                max-height: none !important;
+            }
+
+            .print-card, tr {
+                page-break-inside: avoid !important;
+                break-inside: avoid !important;
+            }
+        }
+
     </style>
 </head>
 <body class="bg-slate-950 text-slate-100 min-h-screen antialiased">

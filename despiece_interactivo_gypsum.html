@@ -3,7 +3,7 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Súper-Despiece Gypsum 2D con Reuso de Sobras</title>
+    <title>Súper-Despiece Gypsum 2D - Casa Heliconia</title>
     <!-- Tailwind CSS -->
     <script src="https://cdn.tailwindcss.com"></script>
     <!-- Google Fonts -->
@@ -15,52 +15,106 @@
         .mono {
             font-family: 'JetBrains Mono', monospace;
         }
+
         @media print {
-            .no-print {
-                display: none !important;
-            }
-            body {
-                background: white !important;
-                color: black !important;
-            }
-            .print-card {
-                border: 1px solid #cbd5e1 !important;
+            @page { margin: 1cm; }
+            .no-print, header, footer { display: none !important; }
+            body, html { background: white !important; color: black !important; }
+            
+            * {
                 box-shadow: none !important;
-                background: white !important;
-                page-break-inside: avoid;
+                text-shadow: none !important;
+                -webkit-print-color-adjust: exact !important;
+                print-color-adjust: exact !important;
+            }
+
+            [class*="bg-slate-9"], [class*="bg-slate-8"], [class*="bg-slate-950/50"], [class*="bg-slate-900/60"] {
+                background-color: transparent !important;
+            }
+
+            [class*="border-slate-8"], [class*="border-slate-7"], [class*="border-slate-9"] {
+                border-color: #cbd5e1 !important;
+            }
+
+            [class*="text-slate-1"], [class*="text-slate-2"], [class*="text-slate-3"], [class*="text-slate-4"], .text-white {
+                color: #1e293b !important;
+            }
+
+            .h-full .text-white, .h-full [class*="text-white"], .bg-slate-950\/80 span {
+                color: #ffffff !important;
+            }
+            .bg-slate-950\/80 {
+                background-color: #f1f5f9 !important; 
+            }
+            .bg-slate-950\/80 span {
+                color: #64748b !important;
+            }
+
+            [class*="overflow-"], [class*="max-h-"] {
+                overflow: visible !important;
+                max-height: none !important;
+            }
+
+            .print-card, tr {
+                page-break-inside: avoid !important;
+                break-inside: avoid !important;
             }
         }
     </style>
+
+    <script>
+        window.currentUnit = 'in';
+        function setUnit(u) {
+            window.currentUnit = u;
+            const btnIn = document.getElementById('btn-unit-in');
+            const btnCm = document.getElementById('btn-unit-cm');
+            if (btnIn && btnCm) {
+                btnIn.className = u === 'in' ? 'px-3 py-1.5 rounded-lg text-xs font-bold bg-purple-600 text-white shadow-lg transition' : 'px-3 py-1.5 rounded-lg text-xs font-semibold text-slate-400 hover:text-slate-200 hover:bg-slate-800 transition';
+                btnCm.className = u === 'cm' ? 'px-3 py-1.5 rounded-lg text-xs font-bold bg-purple-600 text-white shadow-lg transition' : 'px-3 py-1.5 rounded-lg text-xs font-semibold text-slate-400 hover:text-slate-200 hover:bg-slate-800 transition';
+            }
+            if (typeof renderOriginalCutsList === 'function') renderOriginalCutsList();
+            if (typeof recalculate === 'function') recalculate();
+        }
+        function fmtSize(cm, inch) {
+            if (inch !== undefined && window.currentUnit === 'in') return inch.toFixed(1) + '"';
+            return window.currentUnit === 'in' ? (cm / 2.54).toFixed(1) + '"' : cm.toFixed(1) + ' cm';
+        }
+    </script>
 </head>
-<body class="bg-slate-950 text-slate-100 min-h-screen flex flex-col antialiased selection:bg-indigo-500 selection:text-white">
+<body class="bg-slate-950 text-slate-100 min-h-screen flex flex-col antialiased selection:bg-purple-500 selection:text-white">
 
     <!-- Header Section -->
     <header class="border-b border-slate-900 bg-slate-950/80 backdrop-blur-md sticky top-0 z-50 px-4 py-4 sm:px-6 no-print">
         <div class="max-w-7xl mx-auto flex flex-col md:flex-row items-center justify-between gap-4">
             <div class="flex items-center gap-3.5">
-                <div class="p-2.5 bg-gradient-to-br from-indigo-500 to-purple-700 rounded-xl text-white shadow-lg shadow-indigo-500/20">
+                <div class="p-2.5 bg-gradient-to-br from-purple-500 to-indigo-700 rounded-xl text-white shadow-lg shadow-purple-500/20">
                     <svg xmlns="http://www.w3.org/2000/svg" class="h-6 w-6" fill="none" viewBox="0 0 24 24" stroke="currentColor">
-                        <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M19 11H5m14 0a2 2 0 012 2v6a2 2 0 01-2 2H5a2 2 0 01-2-2v-6a2 2 0 012-2m14 0V9a2 2 0 00-2-2M5 11V9a2 2 0 012-2m0 0V5a2 2 0 012-2h6a2 2 0 012 2v2M7 7h10" />
+                        <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M4 5a1 1 0 011-1h14a1 1 0 011 1v2a1 1 0 01-1 1H5a1 1 0 01-1 1V5zM4 13a1 1 0 011-1h6a1 1 0 011 1v6a1 1 0 01-1 1H5a1 1 0 01-1-1v-6z" />
                     </svg>
                 </div>
                 <div>
                     <h1 class="text-xl font-extrabold tracking-tight text-white flex items-center gap-2">
-                        BúnkerCut Gypsum <span class="text-xs bg-purple-500/20 text-purple-400 px-2.5 py-0.5 rounded-full font-mono border border-purple-500/30 font-bold">Motor Súper-Empalme v2.0</span>
+                        BúnkerCut Gypsum <span class="text-xs bg-purple-500/20 text-purple-400 px-2.5 py-0.5 rounded-full font-mono border border-purple-500/30 font-bold">Motor 2D + Divisor Inteligente</span>
                     </h1>
-                    <p class="text-xs text-slate-400 mt-0.5">Optimización 2D extrema con reuso de retazos para desperdicio mínimo en obra</p>
+                    <p class="text-xs text-slate-400 mt-0.5">Optimización extrema de paneles y tiras con división automática de piezas sobredimensionadas</p>
                 </div>
             </div>
             
             <div class="flex items-center gap-3">
+                
+                <div class="flex items-center gap-1 bg-slate-900 p-1 rounded-xl border border-slate-800 mr-2">
+                    <button id="btn-unit-in" onclick="setUnit('in')" class="px-3 py-1.5 rounded-lg text-xs font-bold bg-purple-600 text-white shadow-lg transition">IN</button>
+                    <button id="btn-unit-cm" onclick="setUnit('cm')" class="px-3 py-1.5 rounded-lg text-xs font-semibold text-slate-400 hover:text-slate-200 hover:bg-slate-800 transition">CM</button>
+                </div>
                 <button onclick="window.print()" class="px-4 py-2 bg-slate-900 hover:bg-slate-800 border border-slate-800 hover:border-slate-700 text-slate-200 text-xs font-semibold rounded-lg transition flex items-center gap-2">
                     <svg xmlns="http://www.w3.org/2000/svg" class="h-4 w-4" fill="none" viewBox="0 0 24 24" stroke="currentColor">
                         <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M17 17h2a2 2 0 002-2v-4a2 2 0 00-2-2H5a2 2 0 00-2 2v4a2 2 0 002 2h2m2 4h6a2 2 0 002-2v-4a2 2 0 00-2-2H9a2 2 0 00-2 2v4a2 2 0 002 2zm8-12V5a2 2 0 00-2-2H9a2 2 0 00-2 2v4h10z" />
                     </svg>
-                    Imprimir Planos de Fusión
+                    Imprimir Planos 2D
                 </button>
                 <span class="text-xs bg-purple-500/10 text-purple-400 border border-purple-500/20 px-3 py-2 rounded-lg font-medium flex items-center gap-1.5">
                     <span class="h-2 w-2 rounded-full bg-purple-500 animate-pulse"></span>
-                    Modo Eco-Ahorro Activo
+                    Gypsum.csv Actualizado
                 </span>
             </div>
         </div>
@@ -68,72 +122,54 @@
 
     <main class="flex-1 max-w-7xl w-full mx-auto p-4 sm:p-6 lg:p-8 grid grid-cols-1 lg:grid-cols-12 gap-8">
         
-        <!-- Left Column: Settings and Rules (4 Cols) -->
+        <!-- Left Column: Settings and Uploader (4 Cols) -->
         <section class="lg:col-span-4 flex flex-col gap-6 no-print">
             
-            <!-- Super Splicing Control Panel -->
-            <div class="bg-gradient-to-br from-slate-900 via-slate-900 to-purple-950/30 border border-slate-800/80 rounded-2xl p-5 shadow-xl">
-                <h2 class="text-xs font-bold text-purple-400 uppercase tracking-wider mb-3.5 flex items-center gap-2">
-                    <svg xmlns="http://www.w3.org/2000/svg" class="h-4.5 w-4.5" fill="none" viewBox="0 0 24 24" stroke="currentColor">
-                        <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M12 6V4m0 2a2 2 0 100 4m0-4a2 2 0 110 4m-6 8a2 2 0 100-4m0 4a2 2 0 110-4m0 4v2m0-6V4m6 6v10m6-2a2 2 0 100-4m0 4a2 2 0 110-4m0 4v2m0-6V4" />
+            <!-- Drag & Drop CSV Uploader -->
+            <div class="bg-gradient-to-br from-slate-900 via-slate-900 to-purple-950/20 border border-slate-800/80 rounded-2xl p-5 shadow-xl">
+                <h2 class="text-xs font-bold text-purple-400 uppercase tracking-wider mb-3 flex items-center gap-2">
+                    <svg xmlns="http://www.w3.org/2000/svg" class="h-4 w-4 text-purple-400" fill="none" viewBox="0 0 24 24" stroke="currentColor">
+                        <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M7 16a4 4 0 01-.88-7.903A5 5 0 1115.9 6L16 6a5 5 0 011 9.9M15 13l-3-3m0 0l-3 3m3-3v12" />
                     </svg>
-                    Configuración de Súper-Empalme
+                    Cargar Archivo Gypsum.csv
                 </h2>
-                <p class="text-xs text-slate-300 leading-relaxed mb-4">
-                    Al activar el **Reuso de Retazos**, el sistema cortará las piezas más pequeñas de las sobras que van quedando en las esquinas de las láminas principales, evitando abrir láminas nuevas innecesariamente.
-                </p>
-                
-                <div class="space-y-4">
-                    <label class="flex items-center gap-2.5 text-xs text-slate-200 cursor-pointer bg-slate-950/60 p-3 rounded-xl border border-slate-800 hover:border-purple-500/40 transition">
-                        <input type="checkbox" id="enableSuperSplicing" checked onchange="recalculate()" class="h-4.5 w-4.5 rounded border-slate-700 text-purple-600 bg-slate-800 focus:ring-purple-500" />
-                        <div>
-                            <span class="font-bold block text-white">Reuso Agresivo de Sobras</span>
-                            <span class="text-[10px] text-slate-400 block mt-0.5">Fusiona y recorta retazos de forma automática</span>
-                        </div>
-                    </label>
-
-                    <div>
-                        <label class="block text-[10px] font-bold text-slate-400 uppercase tracking-wide mb-1.5">Permitir divisiones de pieza en:</label>
-                        <select id="maxSplits" onchange="recalculate()" class="w-full bg-slate-950 border border-slate-800 rounded-xl px-3 py-2 text-xs text-white focus:outline-none">
-                            <option value="2">Máximo 2 partes por pieza (Recomendado para juntas estables)</option>
-                            <option value="3">Hasta 3 partes por pieza (Ahorro máximo de material)</option>
-                            <option value="1">Cero divisiones extras (Solo empalmes de piezas gigantes)</option>
-                        </select>
-                    </div>
+                <div id="dropzone" class="border-2 border-dashed border-slate-800 hover:border-purple-500/50 rounded-xl p-4 text-center cursor-pointer transition bg-slate-950/40 hover:bg-slate-950/80">
+                    <input type="file" id="csvFileInput" accept=".csv" class="hidden" onchange="handleFileSelect(event)" />
+                    <p class="text-[11px] text-slate-400">Arrastra tu archivo <strong class="text-slate-200">Gypsum.csv</strong> aquí o haz clic para buscarlo.</p>
                 </div>
             </div>
 
             <!-- Parameters Card -->
             <div class="bg-slate-900 border border-slate-800/80 rounded-2xl p-5 shadow-xl">
                 <h2 class="text-xs font-bold text-slate-300 uppercase tracking-wider mb-4 flex items-center gap-2">
-                    <svg xmlns="http://www.w3.org/2000/svg" class="h-4 w-4 text-indigo-400" fill="none" viewBox="0 0 24 24" stroke="currentColor">
+                    <svg xmlns="http://www.w3.org/2000/svg" class="h-4 w-4 text-purple-400" fill="none" viewBox="0 0 24 24" stroke="currentColor">
                         <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M10.325 4.317c.426-1.756 2.924-1.756 3.35 0a1.724 1.724 0 002.573 1.066c1.543-.94 3.31.826 2.37 2.37a1.724 1.724 0 001.065 2.572c1.756.426 1.756 2.924 0 3.35a1.724 1.724 0 00-1.066 2.573c.94 1.543-.826 3.31-2.37 2.37a1.724 1.724 0 00-2.572 1.065c-.426 1.756-2.924 1.756-3.35 0a1.724 1.724 0 00-2.573-1.066c-1.543.94-3.31-.826-2.37-2.37a1.724 1.724 0 00-1.065-2.572c-1.756-.426-1.756-2.924 0-3.35a1.724 1.724 0 001.066-2.573c-.94-1.543.826-3.31 2.37-2.37.996.608 2.296.07 2.572-1.065z" />
-                        <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M15 12a3 3 0 11-6 0 3 3 0 016 0z" />
                     </svg>
-                    Ficha Técnica de Compra
+                    Configuración de Planchas
                 </h2>
                 
                 <div class="space-y-4">
                     <div>
-                        <label class="block text-[10px] font-bold text-slate-400 uppercase tracking-wide mb-1.5">Tamaño de Lámina de Stock:</label>
+                        <label class="block text-[10px] font-bold text-slate-400 uppercase tracking-wide mb-1.5">Tamaño de Lámina Estándar:</label>
                         <select id="sheetSize" onchange="recalculate()" class="w-full bg-slate-800 border border-slate-700 rounded-xl px-3 py-2 text-xs text-white focus:outline-none font-mono">
-                            <option value="48x96">Estándar 4x8 pies ($48'' \times 96''$ o $1.22 \times 2.44$m)</option>
-                            <option value="48x120">Jumbo 4x10 pies ($48'' \times 120''$ o $1.22 \times 3.05$m)</option>
+                            <option value="48x96">4x8 pies ($48'' \times 96''$ o $1.22 \times 2.44$m)</option>
                         </select>
                     </div>
+                    
+                    <label class="flex items-center gap-2.5 text-xs text-slate-200 cursor-pointer bg-slate-950/60 p-3 rounded-xl border border-slate-800 hover:border-purple-500/40 transition">
+                        <input type="checkbox" id="enableSuperSplicing" checked onchange="recalculate()" class="h-4.5 w-4.5 rounded border-slate-700 text-purple-600 bg-slate-800 focus:ring-purple-500" />
+                        <div>
+                            <span class="font-bold block text-white">Divisor de Piezas Gigantes</span>
+                            <span class="text-[10px] text-slate-400 block mt-0.5">Fracciona partes mayores a 48" de ancho automáticamente</span>
+                        </div>
+                    </label>
 
                     <div>
-                        <label class="block text-[10px] font-bold text-slate-400 uppercase tracking-wide mb-1.5">Precio promedio por lámina (₡):</label>
+                        <label class="block text-[10px] font-bold text-slate-400 uppercase tracking-wide mb-1.5">Precio promedio por lámina de 1/2" (₡):</label>
                         <input type="number" id="sheetPrice" value="6800" onchange="recalculate()" onkeyup="recalculate()" class="w-full bg-slate-800 border border-slate-700 rounded-xl px-3 py-2 text-xs text-white focus:outline-none font-mono" />
                     </div>
 
-                    <div class="border-t border-slate-800 pt-3 flex justify-between text-xs">
-                        <span class="text-slate-400">Ver dimensiones en:</span>
-                        <div class="flex gap-2">
-                            <button id="btnInches" onclick="toggleUnits('in')" class="px-2 py-0.5 bg-indigo-600 rounded text-white font-mono font-bold text-[10px]">Pulgadas</button>
-                            <button id="btnMetric" onclick="toggleUnits('cm')" class="px-2 py-0.5 bg-slate-800 rounded text-slate-400 font-mono font-bold text-[10px]">Métrico (cm)</button>
-                        </div>
-                    </div>
+
                 </div>
             </div>
 
@@ -141,56 +177,15 @@
             <div class="bg-slate-900 border border-slate-800/80 rounded-2xl p-5 shadow-xl">
                 <div class="flex items-center justify-between border-b border-slate-800 pb-2 mb-3">
                     <h3 class="text-xs font-bold text-slate-300 uppercase tracking-wider flex items-center gap-1.5">
-                        <svg xmlns="http://www.w3.org/2000/svg" class="h-4 w-4 text-indigo-400" viewBox="0 0 20 20" fill="currentColor">
-                            <path d="M7 3a1 1 0 000 2h6a1 1 0 100-2H7zM4 7a1 1 0 011-1h10a1 1 0 110 2H5a1 1 0 01-1-1zM2 11a2 2 0 012-2h12a2 2 0 012 2v4a2 2 0 01-2 2H4a2 2 0 01-2-2v-4z" />
+                        <svg xmlns="http://www.w3.org/2000/svg" class="h-4 w-4 text-purple-400" viewBox="0 0 20 20" fill="currentColor">
+                            <path d="M7 3a1 1 0 000 2h6a1 1 0 100-2H7zM4 7a1 1 0 011-1h10a1 1 0 110 2H5a1 1 0 01-1-1zM2 11a2 2 0 012-2h12a2 2 0 012 2v4a2 2 0 01-2 2H4a2 2 0 01-2-2H4a2 2 0 01-2-2v-4z" />
                         </svg>
-                        Listado Original de Piezas
+                        Inventario del CSV
                     </h3>
-                    <span class="text-[10px] bg-indigo-500/10 text-indigo-400 px-2 rounded-full font-mono font-bold">40 Piezas</span>
+                    <span id="csvCountBadge" class="text-[10px] bg-purple-500/10 text-purple-400 px-2 rounded-full font-mono font-bold">Cargando...</span>
                 </div>
-                <div class="overflow-y-auto max-h-[180px] space-y-1 bg-slate-950/40 p-2 rounded-xl text-[10px] font-mono">
-                    <div class="flex justify-between py-1 border-b border-slate-900 text-slate-300">
-                        <span>2x de 75.43" x 64.00"</span><span class="text-indigo-400">Panel Cabezal A</span>
-                    </div>
-                    <div class="flex justify-between py-1 border-b border-slate-900 text-slate-300">
-                        <span>8x de 51.77" x 6.00"</span><span class="text-indigo-400">Tiras Estructurales B</span>
-                    </div>
-                    <div class="flex justify-between py-1 border-b border-slate-900 text-slate-300">
-                        <span>2x de 63.50" x 58.63"</span><span class="text-indigo-400">Frente Nicho C</span>
-                    </div>
-                    <div class="flex justify-between py-1 border-b border-slate-900 text-slate-300">
-                        <span>2x de 64.00" x 6.00"</span><span class="text-indigo-400">Tiras Horizontales D</span>
-                    </div>
-                    <div class="flex justify-between py-1 border-b border-slate-900 text-slate-300">
-                        <span>2x de 52.00" x 5.90"</span><span class="text-indigo-400">Forros Internos E</span>
-                    </div>
-                    <div class="flex justify-between py-1 border-b border-slate-900 text-slate-300">
-                        <span>4x de 51.57" x 5.00"</span><span class="text-indigo-400">Cierres Columna F</span>
-                    </div>
-                    <div class="flex justify-between py-1 border-b border-slate-900 text-slate-300">
-                        <span>2x de 53.00" x 6.00"</span><span class="text-indigo-400">Cierres Laterales G</span>
-                    </div>
-                    <div class="flex justify-between py-1 border-b border-slate-900 text-amber-400 font-bold">
-                        <span>2x de 133.0" x 5.50"</span><span>Forro Columna Techo H</span>
-                    </div>
-                    <div class="flex justify-between py-1 border-b border-slate-900 text-slate-300">
-                        <span>4x de 51.77" x 5.50"</span><span class="text-indigo-400">Tiras de Ajuste J</span>
-                    </div>
-                    <div class="flex justify-between py-1 border-b border-slate-900 text-slate-300">
-                        <span>2x de 53.00" x 5.00"</span><span class="text-indigo-400">Cierres Superiores K</span>
-                    </div>
-                    <div class="flex justify-between py-1 border-b border-slate-900 text-slate-300">
-                        <span>2x de 83.00" x 14.00"</span><span class="text-indigo-400">Frente Escalera L</span>
-                    </div>
-                    <div class="flex justify-between py-1 border-b border-slate-900 text-slate-300">
-                        <span>2x de 63.50" x 29.00"</span><span class="text-indigo-400">Fondo Nicho M</span>
-                    </div>
-                    <div class="flex justify-between py-1 border-b border-slate-900 text-slate-300">
-                        <span>2x de 83.50" x 64.00"</span><span class="text-indigo-400">Respaldo Superior N</span>
-                    </div>
-                    <div class="flex justify-between py-1 text-slate-300">
-                        <span>4x de 29.36" x 5.50"</span><span class="text-indigo-400">Tiras de Remate P</span>
-                    </div>
+                <div class="overflow-y-auto max-h-[220px] space-y-1 bg-slate-950/40 p-2 rounded-xl text-[10px] font-mono" id="originalCutsList">
+                    <!-- Loaded dynamically in JS on load -->
                 </div>
             </div>
 
@@ -200,7 +195,7 @@
         <section class="lg:col-span-8 flex flex-col gap-6">
             
             <!-- Dynamic Dashboard Cards -->
-            <div class="grid grid-cols-1 sm:grid-cols-4 gap-4">
+            <div class="grid grid-cols-1 sm:grid-cols-4 gap-4 animate-fade-in">
                 
                 <div class="bg-slate-900 border border-slate-800 rounded-2xl p-4 shadow-lg flex items-center gap-4">
                     <div class="p-3 bg-purple-500/10 text-purple-400 rounded-xl border border-purple-500/20">
@@ -210,8 +205,8 @@
                     </div>
                     <div>
                         <p class="text-[10px] font-bold text-slate-400 uppercase tracking-wider">Láminas de Gypsum</p>
-                        <p class="text-3xl font-black text-purple-400 font-mono" id="totalSheetsText">10</p>
-                        <p class="text-[10px] text-purple-300 mt-0.5 font-bold">¡Ahorraste 2 Láminas!</p>
+                        <p class="text-3xl font-black text-white font-mono" id="totalSheetsText">0</p>
+                        <p class="text-[10px] text-purple-400 mt-0.5 font-bold">Optimizadas</p>
                     </div>
                 </div>
 
@@ -222,9 +217,9 @@
                         </svg>
                     </div>
                     <div>
-                        <p class="text-[10px] font-bold text-slate-400 uppercase tracking-wider">Eficiencia de Área</p>
-                        <p class="text-3xl font-black text-emerald-400 font-mono" id="efficiencyText">85.3%</p>
-                        <p class="text-[10px] text-slate-400 mt-0.5">Mermas reducidas al 14%</p>
+                        <p class="text-[10px] font-bold text-slate-400 uppercase tracking-wider">Aprovechamiento</p>
+                        <p class="text-3xl font-black text-emerald-400 font-mono" id="efficiencyText">0.0%</p>
+                        <p class="text-[10px] text-slate-400 mt-0.5">Área útil de yeso</p>
                     </div>
                 </div>
 
@@ -235,9 +230,9 @@
                         </svg>
                     </div>
                     <div>
-                        <p class="text-[10px] font-bold text-slate-400 uppercase tracking-wider">Piezas Fusionadas</p>
-                        <p class="text-3xl font-black text-indigo-400 font-mono" id="totalSplicesText">14</p>
-                        <p class="text-[10px] text-slate-400 mt-0.5">Empalmes de retazos</p>
+                        <p class="text-[10px] font-bold text-slate-400 uppercase tracking-wider">Sub-Divisiones</p>
+                        <p class="text-3xl font-black text-indigo-400 font-mono" id="totalSplicesText">0</p>
+                        <p class="text-[10px] text-slate-400 mt-0.5">Uniones necesarias en obra</p>
                     </div>
                 </div>
 
@@ -246,9 +241,9 @@
                         <span class="text-lg font-bold font-mono">₡</span>
                     </div>
                     <div>
-                        <p class="text-[10px] font-bold text-slate-400 uppercase tracking-wider">Presupuesto Estimado</p>
-                        <p class="text-3xl font-black text-white font-mono" id="costText">₡68,000</p>
-                        <p class="text-[10px] text-slate-400 mt-0.5">Ahorraste: ₡13,600</p>
+                        <p class="text-[10px] font-bold text-slate-400 uppercase tracking-wider">Presupuesto Gypsum</p>
+                        <p class="text-3xl font-black text-white font-mono" id="costText">₡0</p>
+                        <p class="text-[10px] text-slate-400 mt-0.5">Estimado Ferretería</p>
                     </div>
                 </div>
 
@@ -261,11 +256,10 @@
                     <div>
                         <h2 class="text-lg font-extrabold text-white flex items-center gap-2">
                             <span>Plano de Distribución y Recorte 2D</span>
-                            <span class="text-xs bg-purple-500/20 text-purple-400 px-2 py-0.5 rounded font-mono border border-purple-500/30">Cortes Híbridos</span>
                         </h2>
-                        <p class="text-xs text-slate-400">Las líneas punteadas rojas indican empalmes manuales que debes hacer sobre los studs metálicos:</p>
+                        <p class="text-xs text-slate-400">Distribución automática de paneles y tiras en láminas estándar 4x8 pies:</p>
                     </div>
-                    <span class="text-[11px] font-mono bg-indigo-500/10 text-indigo-400 px-3 py-1.5 rounded-lg border border-indigo-500/20 font-semibold no-print" id="sheetSizeBadge">
+                    <span class="text-[11px] font-mono bg-purple-500/10 text-purple-400 px-3 py-1.5 rounded-lg border border-purple-500/20 font-semibold no-print" id="sheetSizeBadge">
                         Lámina de Stock: 4x8 pies
                     </span>
                 </div>
@@ -283,24 +277,20 @@
                     <svg xmlns="http://www.w3.org/2000/svg" class="h-4 w-4 text-amber-400" fill="none" viewBox="0 0 24 24" stroke="currentColor">
                         <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M13 16h-1v-4h-1m1-4h.01M21 12a9 9 0 11-18 0 9 9 0 0118 0z" />
                     </svg>
-                    Guía Práctica para Unir y Reusar Retazos
+                    Guía Práctica para Uniones (Empalmes de Gypsum)
                 </h3>
                 <ul class="space-y-3.5 text-xs text-slate-400 leading-relaxed">
                     <li class="flex gap-2">
                         <span class="text-purple-400 font-bold">1.</span>
-                        <span><b>Identificar las Piezas de Fusión (Marcadas con [F]):</b> En el mapa de arriba, verás piezas etiquetadas con la letra <b>"[F]"</b> (ej: <i>"Panel Cabezal A [F-1]"</i>). Significa que esa pieza está compuesta por la unión de dos o más retazos distribuidos en las láminas. Júntalos en obra siguiendo el número de fusión.</span>
+                        <span><b>Piezas Marcadas con Línea Punteada Roja [F]:</b> En el mapa de arriba, las piezas con contornos punteados y la letra <b>"[F]"</b> son paneles gigantes que el algoritmo dividió automáticamente porque superaban los 48" o 96" de la lámina de stock. Debes unir estas fracciones (Ej: F-1A y F-1B) directamente en la pared.</span>
                     </li>
                     <li class="flex gap-2">
                         <span class="text-purple-400 font-bold">2.</span>
-                        <span><b>Soporte Estructural Trasero en la Junta:</b> Cuando coloques dos retazos juntos para formar una sola pared, la costura o junta de unión **debe quedar asentada a la mitad de un stud de metal calibre 20**. Atornilla el borde de ambos retazos al mismo metal con tornillos para gypsum de 1" espaciados cada 15 cm.</span>
+                        <span><b>Soporte Estructural Trasero en la Junta:</b> Toda unión de dos pedazos de gypsum **debe asentar obligatoriamente a la mitad de un stud de metal calibre 20**. Fija los filos de ambos retazos al mismo metal usando tornillos de punta fina espaciados cada 15 cm. Nunca dejes una unión flotando en el aire.</span>
                     </li>
                     <li class="flex gap-2">
                         <span class="text-purple-400 font-bold">3.</span>
-                        <span><b>Tratamiento Químico con Intaco:</b> Limpia el polvo del yeso en la junta, aplica una mano delgada de **Masilla en pasta Intaco**, coloca de inmediato la **cinta de fibra de vidrio** (o malla de juntas) centrada sobre la unión, y asienta con espátula de 6". Aplica dos manos de masilla cruzadas lijando suavemente entre capas para lograr la unión invisible.</span>
-                    </li>
-                    <li class="flex gap-2">
-                        <span class="text-amber-400 font-bold">⚠</span>
-                        <span><b>Zonas Recomendadas para Colocar los Retazos Fusionados:</b> Utiliza preferiblemente los retazos unidos en las paredes interiores de los nichos (detrás de las almohadas) o en las divisiones inferiores que van tapadas por las gavetas del mueblero. En las caras exteriores más visibles, intenta usar las piezas completas que la herramienta te guardó en las láminas #1, #2 y #3.</span>
+                        <span><b>Acabado Invisible:</b> Para esconder la grieta del empalme, aplica cinta de fibra de vidrio (malla) y **Mortero para Juntas Intaco**. Extiende la masilla con espátulas cada vez más anchas (hasta 10") difuminando los bordes para lograr una pared perfectamente plana.</span>
                     </li>
                 </ul>
             </div>
@@ -311,25 +301,34 @@
 
     <!-- JS Core Splicing & Row Packing Algorithms -->
     <script>
-        // Data parsed directly from Gypsum.csv
-        const initialPieces = [
-            { label: 'Panel Cabezal Principal A', l: 75.43, w: 64.00, qty: 2 },
-            { label: 'Tiras Estructurales B', l: 51.77, w: 6.00, qty: 8 },
-            { label: 'Frente Nicho Bajo C', l: 63.50, w: 58.63, qty: 2 },
-            { label: 'Tiras Horizontales D', l: 64.00, w: 6.00, qty: 2 },
-            { label: 'Forros Internos Nicho E', l: 52.00, w: 5.90, qty: 2 },
-            { label: 'Cierres de Columna F', l: 51.57, w: 5.00, qty: 4 },
-            { label: 'Cierres Laterales G', l: 53.00, w: 6.00, qty: 2 },
-            { label: 'Forro Columna Techo H (Largo)', l: 133.00, w: 5.50, qty: 2 },
-            { label: 'Tiras de Ajuste I', l: 51.77, w: 5.50, qty: 4 },
-            { label: 'Cierres Superiores J', l: 53.00, w: 5.00, qty: 2 },
-            { label: 'Frente Escalera Lateral K', l: 83.00, w: 14.00, qty: 2 },
-            { label: 'Fondo de Nicho Auxiliar L', l: 63.50, w: 29.00, qty: 2 },
-            { label: 'Respaldo Cama Superior M', l: 83.50, w: 64.00, qty: 2 },
-            { label: 'Tiras de Remate N', l: 29.36, w: 5.50, qty: 4 }
+        // Data parsed precisely from the user's latest Gypsum.csv
+        let csvPieces = [
+            { label: 'Panel 75.2x62', l: 75.23, w: 62.00, qty: 1 },
+            { label: 'Panel 63x58.4', l: 63.00, w: 58.43, qty: 1 },
+            { label: 'Tira 52.9x5.5', l: 52.93, w: 5.50, qty: 1 },
+            { label: 'Tira 52.9x6', l: 52.93, w: 6.00, qty: 1 },
+            { label: 'Panel Gigante 83.4x73.5', l: 83.40, w: 73.50, qty: 1 }, // Exceeds width
+            { label: 'Tira 83x5', l: 83.00, w: 5.00, qty: 1 },
+            { label: 'Tira 83x6', l: 83.00, w: 6.00, qty: 2 },
+            { label: 'Tira 83x5.5', l: 83.00, w: 5.50, qty: 1 },
+            { label: 'Tira 83.4x6', l: 83.40, w: 6.00, qty: 1 },
+            { label: 'Columna Larga 133x6', l: 133.00, w: 6.00, qty: 3 }, // Exceeds length
+            { label: 'Columna Larga 133x5.5', l: 133.00, w: 5.50, qty: 2 }, // Exceeds length
+            { label: 'Panel Medio 82.9x19.3', l: 82.90, w: 19.30, qty: 1 },
+            { label: 'Tira Ancha 83x10', l: 83.00, w: 10.00, qty: 1 },
+            { label: 'Tira 83.6x5', l: 83.60, w: 5.00, qty: 1 },
+            { label: 'Panel Medio 62x28.7', l: 62.00, w: 28.77, qty: 1 },
+            { label: 'Tira 83.5x6', l: 83.50, w: 6.00, qty: 3 },
+            { label: 'Tira 62x5.9', l: 62.00, w: 5.90, qty: 1 },
+            { label: 'Tira 62x6', l: 62.00, w: 6.00, qty: 1 },
+            { label: 'Tira 63x6', l: 63.00, w: 6.00, qty: 1 },
+            { label: 'Tira 84x5', l: 84.00, w: 5.00, qty: 1 },
+            { label: 'Tira 63x5', l: 63.00, w: 5.00, qty: 1 },
+            { label: 'Tira 84x5.5', l: 84.00, w: 5.50, qty: 1 },
+            { label: 'Tira 51.7x5', l: 51.77, w: 5.00, qty: 2 }
         ];
 
-        let displayUnits = 'in'; // 'in' or 'cm'
+        
 
         const colors = [
             '#4f46e5', // indigo-600
@@ -346,32 +345,114 @@
             '#84cc16'  // lime-500
         ];
 
-        function toggleUnits(unit) {
-            displayUnits = unit;
-            
-            // Toggle active classes on buttons
-            const btnInches = document.getElementById('btnInches');
-            const btnMetric = document.getElementById('btnMetric');
-            if (unit === 'in') {
-                btnInches.className = "px-2 py-0.5 bg-indigo-600 rounded text-white font-mono font-bold text-[10px]";
-                btnMetric.className = "px-2 py-0.5 bg-slate-800 rounded text-slate-400 font-mono font-bold text-[10px]";
-            } else {
-                btnInches.className = "px-2 py-0.5 bg-slate-800 rounded text-slate-400 font-mono font-bold text-[10px]";
-                btnMetric.className = "px-2 py-0.5 bg-indigo-600 rounded text-white font-mono font-bold text-[10px]";
+        // Drag & Drop reader
+        const dropzone = document.getElementById('dropzone');
+        dropzone.addEventListener('dragover', (e) => {
+            e.preventDefault();
+            dropzone.classList.add('border-purple-500', 'bg-slate-900/60');
+        });
+        dropzone.addEventListener('dragleave', () => {
+            dropzone.classList.remove('border-purple-500', 'bg-slate-900/60');
+        });
+        dropzone.addEventListener('drop', (e) => {
+            e.preventDefault();
+            dropzone.classList.remove('border-purple-500', 'bg-slate-900/60');
+            const file = e.dataTransfer.files[0];
+            if (file) {
+                parseCSV(file);
             }
+        });
+        dropzone.addEventListener('click', () => {
+            document.getElementById('csvFileInput').click();
+        });
 
-            recalculate();
+        function handleFileSelect(e) {
+            const file = e.target.files[0];
+            if (file) {
+                parseCSV(file);
+            }
+        }
+
+        function parseCSV(file) {
+            const reader = new FileReader();
+            reader.onload = function(event) {
+                const text = event.target.result;
+                const lines = text.split(/\r?\n/);
+                let newCuts = [];
+
+                // Typical CSV format from the prompt snippet:
+                // "Grupo","Pieza","Cantidad","Largo(inch)","Ancho(inch)","Grosor(inch)","Material"
+                for (let i = 1; i < lines.length; i++) {
+                    const row = lines[i].split(',');
+                    if (row.length >= 5) {
+                        const qty = parseInt(row[2].replace(/['"]/g, "").trim());
+                        let l = parseFloat(row[3].replace(/['"]/g, "").trim());
+                        let w = parseFloat(row[4].replace(/['"]/g, "").trim());
+                        
+                        if (!isNaN(qty) && !isNaN(l) && !isNaN(w) && qty > 0) {
+                            // Ensure L is always the longest side for consistency
+                            const maxDim = Math.max(l, w);
+                            const minDim = Math.min(l, w);
+                            const labelType = (minDim > 12) ? 'Panel' : 'Tira';
+                            
+                            newCuts.push({
+                                label: `${labelType} ${maxDim.toFixed(1)}x${minDim.toFixed(1)}`,
+                                l: maxDim,
+                                w: minDim,
+                                qty: qty
+                            });
+                        }
+                    }
+                }
+
+                if (newCuts.length > 0) {
+                    csvPieces = newCuts;
+                    renderOriginalCutsList();
+                    recalculate();
+                } else {
+                    alert("No se pudieron procesar datos del archivo CSV 2D. Verifique las columnas (Cantidad, Largo, Ancho).");
+                }
+            };
+            reader.readAsText(file);
+        }
+
+
+        
+
+        function renderOriginalCutsList() {
+            const container = document.getElementById('originalCutsList');
+            let totalPieces = 0;
+            container.innerHTML = `
+                <div class="grid grid-cols-12 text-[10px] font-bold text-slate-500 uppercase tracking-wider px-1 py-1 border-b border-slate-800 sticky top-0 bg-slate-950/90 backdrop-blur">
+                    <div class="col-span-3">Cant.</div>
+                    <div class="col-span-9">Descripción y Medidas</div>
+                </div>
+            `;
+            
+            csvPieces.forEach(p => {
+                totalPieces += p.qty;
+                const lVal = window.currentUnit === 'in' ? `${p.l.toFixed(1)}"` : `${(p.l * 2.54).toFixed(1)} cm`;
+                const wVal = window.currentUnit === 'in' ? `${p.w.toFixed(1)}"` : `${(p.w * 2.54).toFixed(1)} cm`;
+                
+                container.innerHTML += `
+                    <div class="grid grid-cols-12 text-[11px] py-1.5 px-1 hover:bg-slate-900 rounded transition border-b border-slate-900">
+                        <div class="col-span-3 text-purple-400 font-bold">${p.qty}x</div>
+                        <div class="col-span-9 text-slate-300 truncate font-mono" title="${p.label}">
+                            ${lVal} x ${wVal}
+                        </div>
+                    </div>
+                `;
+            });
+            document.getElementById('csvCountBadge').innerText = `${totalPieces} Piezas`;
         }
 
         function recalculate() {
             const sheetSizeKey = document.getElementById('sheetSize').value;
             const enableSuperSplicing = document.getElementById('enableSuperSplicing').checked;
-            const maxSplits = parseInt(document.getElementById('maxSplits').value);
             const sheetPrice = parseFloat(document.getElementById('sheetPrice').value);
 
             let sheetW = 48.0;
             let sheetL = 96.0;
-            if (sheetSizeKey === '48x120') sheetL = 120.0;
 
             document.getElementById('sheetSizeBadge').innerText = `Lámina de Stock: ${sheetW}" x ${sheetL}" (${(sheetW*2.54).toFixed(0)}x${(sheetL*2.54).toFixed(0)} cm)`;
 
@@ -379,7 +460,7 @@
             let processedPieces = [];
             let totalSplices = 0;
 
-            initialPieces.forEach((p, idx) => {
+            csvPieces.forEach((p, idx) => {
                 let individualItems = [];
                 for (let i = 0; i < p.qty; i++) {
                     individualItems.push({
@@ -396,47 +477,30 @@
                     let fitsDirect = (item.l <= sheetL && item.w <= sheetW);
                     let fitsRotated = (item.w <= sheetL && item.l <= sheetW);
 
-                    // If it exceeds dimensions OR aggressive is active and it's a large piece
-                    // We split large panels proactively to allow they fit into small scraps!
-                    const area = item.l * item.w;
                     const exceedsMax = (!fitsDirect && !fitsRotated);
-                    const shouldAggressivelySplit = (enableSuperSplicing && area > 1200 && maxSplits > 1);
 
-                    if (exceedsMax || shouldAggressivelySplit) {
+                    // If it physically cannot fit the 48x96 board, we MUST divide it
+                    if (exceedsMax && enableSuperSplicing) {
                         totalSplices++;
                         const currentSpliceNum = totalSplices;
 
-                        // Split along the longest side
-                        if (item.l >= item.w) {
-                            let partL1, partL2;
-                            if (maxSplits === 3 && item.l > 100) {
-                                partL1 = item.l * 0.4;
-                                partL2 = item.l * 0.3;
-                                let partL3 = item.l - partL1 - partL2;
-                                processedPieces.push({ label: `${item.label} [F-${currentSpliceNum}A]`, l: partL1, w: item.w, colorIdx: item.colorIdx, isSpliced: true });
-                                processedPieces.push({ label: `${item.label} [F-${currentSpliceNum}B]`, l: partL2, w: item.w, colorIdx: item.colorIdx, isSpliced: true });
-                                processedPieces.push({ label: `${item.label} [F-${currentSpliceNum}C]`, l: partL3, w: item.w, colorIdx: item.colorIdx, isSpliced: true });
-                            } else {
-                                partL1 = item.l * 0.5;
-                                partL2 = item.l - partL1;
-                                processedPieces.push({ label: `${item.label} [F-${currentSpliceNum}A]`, l: partL1, w: item.w, colorIdx: item.colorIdx, isSpliced: true });
-                                processedPieces.push({ label: `${item.label} [F-${currentSpliceNum}B]`, l: partL2, w: item.w, colorIdx: item.colorIdx, isSpliced: true });
-                            }
-                        } else {
-                            let partW1, partW2;
-                            if (maxSplits === 3 && item.w > 60) {
-                                partW1 = item.w * 0.4;
-                                partW2 = item.w * 0.3;
-                                let partW3 = item.w - partW1 - partW2;
-                                processedPieces.push({ label: `${item.label} [F-${currentSpliceNum}A]`, l: item.l, w: partW1, colorIdx: item.colorIdx, isSpliced: true });
-                                processedPieces.push({ label: `${item.label} [F-${currentSpliceNum}B]`, l: item.l, w: partW2, colorIdx: item.colorIdx, isSpliced: true });
-                                processedPieces.push({ label: `${item.label} [F-${currentSpliceNum}C]`, l: item.l, w: partW3, colorIdx: item.colorIdx, isSpliced: true });
-                            } else {
-                                partW1 = item.w * 0.5;
-                                partW2 = item.w - partW1;
-                                processedPieces.push({ label: `${item.label} [F-${currentSpliceNum}A]`, l: item.l, w: partW1, colorIdx: item.colorIdx, isSpliced: true });
-                                processedPieces.push({ label: `${item.label} [F-${currentSpliceNum}B]`, l: item.l, w: partW2, colorIdx: item.colorIdx, isSpliced: true });
-                            }
+                        // Case 1: Exceeds Length (e.g. 133" > 96")
+                        if (item.l > sheetL) {
+                            let partL1 = sheetL; // Maximize first part to 96"
+                            let partL2 = item.l - partL1; // The remainder (e.g. 37")
+                            
+                            processedPieces.push({ label: `${item.label} [F-${currentSpliceNum}A]`, l: partL1, w: item.w, colorIdx: item.colorIdx, isSpliced: true });
+                            processedPieces.push({ label: `${item.label} [F-${currentSpliceNum}B]`, l: partL2, w: item.w, colorIdx: item.colorIdx, isSpliced: true });
+                        } 
+                        // Case 2: Exceeds Width (e.g. 73.5" > 48") but Length is fine or both are huge
+                        else if (item.w > sheetW || item.l > sheetW) {
+                            // Example: 83.4 x 73.5
+                            // Try cutting along the width first to make strips that are <= 48"
+                            let partW1 = sheetW; // 48"
+                            let partW2 = item.w - sheetW; // 25.5"
+                            
+                            processedPieces.push({ label: `${item.label} [F-${currentSpliceNum}A]`, l: item.l, w: partW1, colorIdx: item.colorIdx, isSpliced: true });
+                            processedPieces.push({ label: `${item.label} [F-${currentSpliceNum}B]`, l: item.l, w: partW2, colorIdx: item.colorIdx, isSpliced: true });
                         }
                     } else {
                         processedPieces.push(item);
@@ -445,6 +509,7 @@
             });
 
             // Pack elements using Guillotine Shelf packing
+            // Sort primarily by Area descending to pack large panels first
             processedPieces.sort((a, b) => (b.l * b.w) - (a.l * a.w));
 
             let sheets = [];
@@ -452,7 +517,8 @@
             processedPieces.forEach(item => {
                 let placed = false;
                 for (let s = 0; s < sheets.length; s++) {
-                    if (tryPlaceInSheet(sheets[s], item, 0.1, sheetW, sheetL)) {
+                    // Added a 0.2 inch general margin/kerf for cutting safety on gypsum
+                    if (tryPlaceInSheet(sheets[s], item, 0.2, sheetW, sheetL)) {
                         placed = true;
                         break;
                     }
@@ -465,13 +531,11 @@
                         placedItems: [],
                         shelves: []
                     };
-                    if (tryPlaceInSheet(newSheet, item, 0.1, sheetW, sheetL)) {
+                    if (tryPlaceInSheet(newSheet, item, 0.2, sheetW, sheetL)) {
                         sheets.push(newSheet);
                     } else {
-                        // Safe fallback split if piece is still too big for a blank sheet
-                        let halfW = item.w / 2;
-                        processedPieces.push({ label: `${item.label} [F-Extra A]`, l: item.l, w: halfW, colorIdx: item.colorIdx, isSpliced: true });
-                        processedPieces.push({ label: `${item.label} [F-Extra B]`, l: item.l, w: halfW, colorIdx: item.colorIdx, isSpliced: true });
+                        // Emergency fallback if an element is somehow still too big
+                        console.warn(`Element completely failed packing: ${item.l}x${item.w}`);
                     }
                 }
             });
@@ -503,7 +567,7 @@
                 let sheetHTML = `
                     <div class="bg-slate-950/50 p-5 border border-slate-800 rounded-2xl space-y-4 print-card">
                         <div class="flex flex-col sm:flex-row sm:items-center justify-between gap-1.5 text-xs border-b border-slate-800 pb-2">
-                            <span class="font-extrabold text-indigo-400 text-sm">Lámina de Gypsum #${index + 1} (${sheetW}" x ${sheetL}")</span>
+                            <span class="font-extrabold text-purple-400 text-sm">Lámina de Gypsum #${index + 1} (${sheetW}" x ${sheetL}")</span>
                             <span class="text-slate-400 text-[10px] font-mono">
                                 Aprovechamiento de plancha: <b class="text-emerald-400 font-extrabold text-xs">${sheetEff.toFixed(1)}%</b>
                             </span>
@@ -511,26 +575,27 @@
 
                         <!-- Canvas representation -->
                         <div class="flex justify-center bg-slate-900 p-3 rounded-xl border border-slate-800/60 overflow-x-auto">
-                            <canvas id="${canvasId}" width="${sheetW * 8}" height="${sheetL * 4}" class="max-w-full bg-slate-950 border border-slate-700 rounded shadow-inner"></canvas>
+                            <!-- Draw at 4x scale factor. 48x96 becomes 192x384 -->
+                            <canvas id="${canvasId}" width="${sheetW * 5}" height="${sheetL * 5}" class="max-w-full bg-slate-950 border border-slate-700 rounded shadow-inner"></canvas>
                         </div>
 
                         <!-- Visual list of items placed on this sheet -->
-                        <div class="grid grid-cols-1 sm:grid-cols-2 gap-2 text-[11px]">
+                        <div class="flex flex-col gap-1.5 text-[11px]">
                             <p class="font-bold text-slate-400 col-span-2 text-[10px] uppercase">Cortes en esta lámina:</p>
                 `;
 
                 sheet.placedItems.forEach((item, pi) => {
-                    const lVal = displayUnits === 'in' ? `${item.h.toFixed(1)}"` : `${(item.h * 2.54).toFixed(1)} cm`;
-                    const wVal = displayUnits === 'in' ? `${item.w.toFixed(1)}"` : `${(item.w * 2.54).toFixed(1)} cm`;
-                    const spliceIndicator = item.isSpliced ? `<span class="bg-purple-500/20 text-purple-300 border border-purple-500/30 px-1.5 py-0.5 text-[9px] rounded font-bold">Empalme [F]</span>` : '';
+                    const lVal = window.currentUnit === 'in' ? `${item.h.toFixed(1)}"` : `${(item.h * 2.54).toFixed(1)} cm`;
+                    const wVal = window.currentUnit === 'in' ? `${item.w.toFixed(1)}"` : `${(item.w * 2.54).toFixed(1)} cm`;
+                    const spliceIndicator = item.isSpliced ? `<span class="bg-purple-500/20 text-purple-300 border border-purple-500/30 px-1.5 py-0.5 text-[9px] rounded font-bold animate-pulse">Empalme [F]</span>` : '';
 
                     sheetHTML += `
                         <div class="bg-slate-900/60 p-2 rounded-lg border border-slate-800/80 flex justify-between items-center font-mono">
-                            <span class="text-slate-300 truncate max-w-[200px] flex items-center gap-1.5" title="${item.label}">
+                            <span class="text-slate-300 truncate pr-4 flex items-center gap-1.5" title="${item.label}">
                                 <span>${pi + 1}. ${item.label}</span>
                                 ${spliceIndicator}
                             </span>
-                            <span class="text-indigo-400 font-bold whitespace-nowrap">${lVal} x ${wVal}</span>
+                            <span class="text-purple-400 font-bold whitespace-nowrap">${wVal} x ${lVal}</span>
                         </div>
                     `;
                 });
@@ -618,7 +683,7 @@
             const scaleX = canvas.width / sheetW;
             const scaleY = canvas.height / sheetL;
 
-            ctx.fillStyle = '#090d16';
+            ctx.fillStyle = '#090d16'; // Dark slate
             ctx.fillRect(0, 0, canvas.width, canvas.height);
 
             sheet.placedItems.forEach((item, index) => {
@@ -629,55 +694,58 @@
                 const rw = item.w * scaleX;
                 const rh = item.h * scaleY;
 
-                ctx.fillStyle = hexColor + "cc";
+                // Fill panel
+                ctx.fillStyle = hexColor + "cc"; // Add transparency
                 ctx.fillRect(rx, ry, rw, rh);
 
+                // Outline
                 ctx.strokeStyle = hexColor;
                 ctx.lineWidth = 1.5;
                 ctx.strokeRect(rx, ry, rw, rh);
 
-                // Draw red indicator line for spliced edge
+                // Draw red dashed line if this piece was forcibly spliced by the engine
                 if (item.isSpliced) {
                     ctx.strokeStyle = '#ef4444'; // Red-500
-                    ctx.lineWidth = 2.5;
-                    ctx.setLineDash([3, 3]);
-                    
-                    // Draw a dashed indicator across the split edge
+                    ctx.lineWidth = 3;
+                    ctx.setLineDash([5, 5]);
                     ctx.beginPath();
-                    ctx.moveTo(rx, ry);
-                    ctx.lineTo(rx + rw, ry);
-                    ctx.stroke();
+                    ctx.strokeRect(rx+1, ry+1, rw-2, rh-2);
                     ctx.setLineDash([]);
                 }
 
+                // Text styling
                 ctx.fillStyle = '#ffffff';
-                ctx.font = 'bold 9px Plus Jakarta Sans';
+                ctx.textAlign = 'center';
+                ctx.textBaseline = 'middle';
                 
-                const numberLabel = `${index + 1}`;
+                const wDim = fmtSize(item.w * 2.54, item.w);
+                const hDim = fmtSize(item.h * 2.54, item.h);
+                const numberLabel = `${index + 1} (${wDim} x ${hDim})`;
                 const labelText = item.label;
-                
-                const dimInches = `${item.h.toFixed(1)}" x ${item.w.toFixed(1)}"`;
-                const dimCm = `${(item.h * 2.54).toFixed(0)}x${(item.w * 2.54).toFixed(0)} cm`;
-                const dimLabel = displayUnits === 'in' ? dimInches : dimCm;
 
-                if (rw > 32 && rh > 18) {
-                    ctx.fillText(numberLabel, rx + 5, ry + 12);
+                if (rw > 70 && rh > 35) {
+                    ctx.font = 'bold 11px Plus Jakarta Sans';
+                    ctx.fillText(numberLabel, rx + rw / 2, ry + rh / 2 - 8);
                     ctx.font = '7px Plus Jakarta Sans';
-                    ctx.fillText(labelText.substring(0, Math.floor(rw / 5.5)), rx + 5, ry + 22);
-                    ctx.fillStyle = '#cbd5e1';
-                    ctx.fillText(dimLabel, rx + 5, ry + 31);
-                } else if (rw > 18 && rh > 10) {
-                    ctx.fillText(numberLabel, rx + 3, ry + 10);
+                    ctx.fillText(labelText.substring(0, Math.floor(rw / 4)), rx + rw / 2, ry + rh / 2 + 8);
+                } else if (rw > 50 && rh > 25) {
+                    ctx.font = 'bold 9px Plus Jakarta Sans';
+                    ctx.fillText(numberLabel, rx + rw / 2, ry + rh / 2);
+                } else if (rw > 20 && rh > 15) {
+                    ctx.font = 'bold 8px Plus Jakarta Sans';
+                    ctx.fillText(`${index + 1}`, rx + rw / 2, ry + rh / 2);
                 }
             });
 
-            ctx.strokeStyle = '#1e293b';
-            ctx.lineWidth = 1;
+            // Draw outer border of sheet
+            ctx.strokeStyle = '#334155'; // Slate-700
+            ctx.lineWidth = 2;
             ctx.beginPath();
             ctx.strokeRect(0, 0, canvas.width, canvas.height);
         }
 
         window.onload = function() {
+            renderOriginalCutsList();
             recalculate();
         }
     </script>

@@ -108,6 +108,51 @@
         .stat-bar-fill {
             transition: width 1.2s cubic-bezier(0.25, 1, 0.5, 1);
         }
+        @media print {
+            @page { margin: 1cm; }
+            .no-print, header, footer { display: none !important; }
+            body, html { background: white !important; color: black !important; }
+            
+            * {
+                box-shadow: none !important;
+                text-shadow: none !important;
+                -webkit-print-color-adjust: exact !important;
+                print-color-adjust: exact !important;
+            }
+
+            [class*="bg-slate-9"], [class*="bg-slate-8"], [class*="bg-slate-950/50"], [class*="bg-slate-900/60"] {
+                background-color: transparent !important;
+            }
+
+            [class*="border-slate-8"], [class*="border-slate-7"], [class*="border-slate-9"] {
+                border-color: #cbd5e1 !important;
+            }
+
+            [class*="text-slate-1"], [class*="text-slate-2"], [class*="text-slate-3"], [class*="text-slate-4"], .text-white {
+                color: #1e293b !important;
+            }
+
+            .h-full .text-white, .h-full [class*="text-white"], .bg-slate-950\/80 span {
+                color: #ffffff !important;
+            }
+            .bg-slate-950\/80 {
+                background-color: #f1f5f9 !important; 
+            }
+            .bg-slate-950\/80 span {
+                color: #64748b !important;
+            }
+
+            [class*="overflow-"], [class*="max-h-"] {
+                overflow: visible !important;
+                max-height: none !important;
+            }
+
+            .print-card, tr {
+                page-break-inside: avoid !important;
+                break-inside: avoid !important;
+            }
+        }
+
     </style>
 </head>
 <body class="bg-animated grid-pattern min-h-screen text-slate-100 antialiased selection:bg-indigo-500 selection:text-white">
@@ -133,7 +178,7 @@
             <div class="flex items-center gap-2.5">
                 <span class="hidden sm:flex items-center gap-1.5 text-[11px] text-emerald-400 font-semibold bg-emerald-500/10 border border-emerald-500/20 px-3 py-1.5 rounded-lg">
                     <span class="live-dot h-1.5 w-1.5 rounded-full bg-emerald-400 inline-block"></span>
-                    9 herramientas activas
+                    10 herramientas activas
                 </span>
                 <span class="text-[11px] text-slate-400 font-mono bg-slate-800/60 border border-slate-700/50 px-3 py-1.5 rounded-lg">v1.0</span>
             </div>
@@ -163,7 +208,7 @@
         <!-- Stats Row -->
         <section class="grid grid-cols-2 sm:grid-cols-4 gap-4 mb-12 fade-in-up delay-2">
             <div class="bg-slate-900/60 border border-slate-800/80 rounded-2xl p-4 text-center">
-                <p class="text-2xl font-black text-indigo-400 mono">9</p>
+                <p class="text-2xl font-black text-indigo-400 mono">10</p>
                 <p class="text-[11px] text-slate-400 mt-1 font-semibold">Herramientas</p>
             </div>
             <div class="bg-slate-900/60 border border-slate-800/80 rounded-2xl p-4 text-center">
@@ -398,6 +443,29 @@
                         <span class="text-[10px] font-mono bg-cyan-500/10 text-cyan-400 border border-cyan-500/20 px-2.5 py-1 rounded-full font-semibold">Plano 2D</span>
                         <span class="text-[10px] font-mono bg-slate-800 text-slate-400 border border-slate-700 px-2.5 py-1 rounded-full">Ergonomía</span>
                         <span class="text-[10px] font-mono bg-slate-800 text-slate-400 border border-slate-700 px-2.5 py-1 rounded-full">7 Presets</span>
+                    </div>
+                </a>
+
+                <!-- Card 10: Totalizado 2x2 -->
+                <a href="totalizado_galvanizado_2x2.html" id="card-totalizado-2x2"
+                   class="tool-card glow-indigo bg-slate-900/70 border border-slate-800/80 rounded-2xl p-6 flex flex-col gap-4 cursor-pointer no-underline fade-in-up delay-10" style="animation-delay:1.2s">
+                    <div class="flex items-start justify-between">
+                        <div class="p-3 bg-gradient-to-br from-indigo-500/20 to-purple-700/10 rounded-xl border border-indigo-500/20">
+                            <svg xmlns="http://www.w3.org/2000/svg" class="h-6 w-6 text-indigo-400" fill="none" viewBox="0 0 24 24" stroke="currentColor" stroke-width="1.5">
+                                <path stroke-linecap="round" stroke-linejoin="round" d="M19 11H5m14 0a2 2 0 012 2v6a2 2 0 01-2 2H5a2 2 0 01-2-2v-6a2 2 0 012-2m14 0V9a2 2 0 00-2-2M5 11V9a2 2 0 012-2m0 0V5a2 2 0 012-2h6a2 2 0 012 2v2M7 7h10" />
+                            </svg>
+                        </div>
+                        <svg xmlns="http://www.w3.org/2000/svg" class="h-4 w-4 text-slate-600 arrow-icon" fill="none" viewBox="0 0 24 24" stroke="currentColor" stroke-width="2">
+                            <path stroke-linecap="round" stroke-linejoin="round" d="M10 6H6a2 2 0 00-2 2v10a2 2 0 002 2h10a2 2 0 002-2v-4M14 4h6m0 0v6m0-6L10 14" />
+                        </svg>
+                    </div>
+                    <div>
+                        <h3 class="font-extrabold text-white text-base leading-tight mb-1.5">Totalizado Tubo 2"x2"</h3>
+                        <p class="text-xs text-slate-400 leading-relaxed">Fusión de piezas de camas y escalera para el máximo aprovechamiento de barras de 6 metros.</p>
+                    </div>
+                    <div class="flex flex-wrap gap-2 mt-auto">
+                        <span class="text-[10px] font-mono bg-indigo-500/10 text-indigo-400 border border-indigo-500/20 px-2.5 py-1 rounded-full font-semibold">Proyecto Maestro</span>
+                        <span class="text-[10px] font-mono bg-slate-800 text-slate-400 border border-slate-700 px-2.5 py-1 rounded-full">Tubular</span>
                     </div>
                 </a>
 

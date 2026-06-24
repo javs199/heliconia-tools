@@ -16,21 +16,70 @@
             font-family: 'JetBrains Mono', monospace;
         }
         @media print {
-            .no-print {
-                display: none !important;
-            }
-            body {
-                background: white !important;
-                color: black !important;
-            }
-            .print-card {
-                border: 1px solid #cbd5e1 !important;
+            @page { margin: 1cm; }
+            .no-print, header, footer { display: none !important; }
+            body, html { background: white !important; color: black !important; }
+            
+            * {
                 box-shadow: none !important;
-                background: white !important;
-                page-break-inside: avoid;
+                text-shadow: none !important;
+                -webkit-print-color-adjust: exact !important;
+                print-color-adjust: exact !important;
+            }
+
+            [class*="bg-slate-9"], [class*="bg-slate-8"], [class*="bg-slate-950/50"], [class*="bg-slate-900/60"] {
+                background-color: transparent !important;
+            }
+
+            [class*="border-slate-8"], [class*="border-slate-7"], [class*="border-slate-9"] {
+                border-color: #cbd5e1 !important;
+            }
+
+            [class*="text-slate-1"], [class*="text-slate-2"], [class*="text-slate-3"], [class*="text-slate-4"], .text-white {
+                color: #1e293b !important;
+            }
+
+            .h-full .text-white, .h-full [class*="text-white"], .bg-slate-950\/80 span {
+                color: #ffffff !important;
+            }
+            .bg-slate-950\/80 {
+                background-color: #f1f5f9 !important; 
+            }
+            .bg-slate-950\/80 span {
+                color: #64748b !important;
+            }
+
+            [class*="overflow-"], [class*="max-h-"] {
+                overflow: visible !important;
+                max-height: none !important;
+            }
+
+            .print-card, tr {
+                page-break-inside: avoid !important;
+                break-inside: avoid !important;
             }
         }
+
+
     </style>
+    <script>
+        window.currentUnit = 'in';
+        function setUnit(u) {
+            window.currentUnit = u;
+            const btnIn = document.getElementById('btn-unit-in');
+            const btnCm = document.getElementById('btn-unit-cm');
+            if (btnIn && btnCm) {
+                btnIn.className = u === 'in' ? 'px-3 py-1.5 rounded-lg text-xs font-bold bg-indigo-500 text-white shadow-lg transition' : 'px-3 py-1.5 rounded-lg text-xs font-semibold text-slate-400 hover:text-slate-200 hover:bg-slate-800 transition';
+                btnCm.className = u === 'cm' ? 'px-3 py-1.5 rounded-lg text-xs font-bold bg-indigo-500 text-white shadow-lg transition' : 'px-3 py-1.5 rounded-lg text-xs font-semibold text-slate-400 hover:text-slate-200 hover:bg-slate-800 transition';
+            }
+            if (typeof renderList === 'function') renderList();
+            if (typeof recalculate === 'function') recalculate();
+        }
+        function fmtSize(cm, inch) {
+            if (inch !== undefined && window.currentUnit === 'in') return inch.toFixed(1) + '"';
+            return window.currentUnit === 'in' ? (cm / 2.54).toFixed(1) + '"' : cm.toFixed(1) + ' cm';
+        }
+    </script>
 </head>
 <body class="bg-slate-950 text-slate-100 min-h-screen flex flex-col antialiased selection:bg-indigo-500 selection:text-white">
 
@@ -52,6 +101,10 @@
             </div>
             
             <div class="flex items-center gap-3">
+                <div class="flex items-center gap-1 bg-slate-900 p-1 rounded-xl border border-slate-800 mr-2">
+                    <button id="btn-unit-in" onclick="setUnit('in')" class="px-3 py-1.5 rounded-lg text-xs font-bold bg-indigo-500 text-white shadow-lg transition">IN</button>
+                    <button id="btn-unit-cm" onclick="setUnit('cm')" class="px-3 py-1.5 rounded-lg text-xs font-semibold text-slate-400 hover:text-slate-200 hover:bg-slate-800 transition">CM</button>
+                </div>
                 <button onclick="window.print()" class="px-4 py-2 bg-slate-900 hover:bg-slate-800 border border-slate-800 hover:border-slate-700 text-slate-200 text-xs font-semibold rounded-lg transition flex items-center gap-2">
                     <svg xmlns="http://www.w3.org/2000/svg" class="h-4 w-4" fill="none" viewBox="0 0 24 24" stroke="currentColor">
                         <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M17 17h2a2 2 0 002-2v-4a2 2 0 00-2-2H5a2 2 0 00-2 2v4a2 2 0 002 2h2m2 4h6a2 2 0 002-2v-4a2 2 0 00-2-2H9a2 2 0 00-2 2v4a2 2 0 002 2zm8-12V5a2 2 0 00-2-2H9a2 2 0 00-2 2v4h10z" />
@@ -66,7 +119,7 @@
         </div>
     </header>
 
-    <main class="flex-1 max-w-7xl w-full mx-auto p-4 sm:p-6 lg:p-8 grid grid-cols-1 lg:grid-cols-12 gap-8">
+    <main class="flex-1 max-w-7xl w-full mx-auto p-4 sm:p-6 lg:p-8 grid grid-cols-1 lg:grid-cols-12 gap-8 min-w-[350px]">
         
         <!-- Left Column: Source CSV Data Analysis & Settings (4 Cols) -->
         <section class="lg:col-span-4 flex flex-col gap-6 no-print">
@@ -88,23 +141,7 @@
                 </p>
 
                 <!-- Scrollable Table -->
-                <div class="overflow-y-auto max-h-[220px] border border-slate-800 rounded-xl bg-slate-950/50 p-2 space-y-1.5 font-mono">
-                    <div class="grid grid-cols-12 text-[10px] font-bold text-slate-500 uppercase tracking-wider px-2 py-1 border-b border-slate-800">
-                        <div class="col-span-3">Cant.</div>
-                        <div class="col-span-5">Pulgadas</div>
-                        <div class="col-span-4 text-right">CM aprox.</div>
-                    </div>
-                    
-                    <div class="grid grid-cols-12 text-xs py-1.5 px-2 hover:bg-slate-900 rounded transition border-b border-slate-900">
-                        <div class="col-span-3 text-indigo-400 font-bold">6x</div>
-                        <div class="col-span-5 text-slate-300">83.00"</div>
-                        <div class="col-span-4 text-right text-slate-400 font-bold">210.8 cm</div>
-                    </div>
-                    <div class="grid grid-cols-12 text-xs py-1.5 px-2 hover:bg-slate-900 rounded transition">
-                        <div class="col-span-3 text-indigo-400 font-bold">8x</div>
-                        <div class="col-span-5 text-slate-300">3.15"</div>
-                        <div class="col-span-4 text-right text-slate-400">8.0 cm</div>
-                    </div>
+                <div class="overflow-x-auto overflow-y-auto max-h-[220px] border border-slate-800 rounded-xl bg-slate-950/50 p-2 space-y-1.5 font-mono" id="originalCutsList">
                 </div>
             </div>
 
@@ -205,14 +242,14 @@
                 </div>
 
                 <!-- Bars Container -->
-                <div id="barsResult" class="space-y-6">
+                <div id="barsResult" class="space-y-6 overflow-x-auto">
                     <!-- Dynamic Bars Rendered via JS -->
                 </div>
 
             </div>
 
             <!-- Technical Observations -->
-            <div class="bg-slate-900 border border-slate-800 rounded-3xl p-6 shadow-2xl print-card">
+            <div class="bg-slate-900 border border-slate-800 rounded-3xl p-6 shadow-2xl print-card min-w-[500px]">
                 <h3 class="text-sm font-bold text-slate-200 uppercase tracking-wider mb-4 flex items-center gap-2">
                     <svg xmlns="http://www.w3.org/2000/svg" class="h-4 w-4 text-amber-400" fill="none" viewBox="0 0 24 24" stroke="currentColor">
                         <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M13 16h-1v-4h-1m1-4h.01M21 12a9 9 0 11-18 0 9 9 0 0118 0z" />
@@ -251,6 +288,28 @@
             'bg-sky-600 hover:bg-sky-500 border-sky-700 text-sky-100',
             'bg-amber-600 hover:bg-amber-500 border-amber-700 text-amber-100'
         ];
+
+        function renderList() {
+            const container = document.getElementById('originalCutsList');
+            if (!container) return;
+            container.innerHTML = `
+                <div class="grid grid-cols-12 text-[10px] font-bold text-slate-500 uppercase tracking-wider px-2 py-1 border-b border-slate-800 min-w-[350px]">
+                    <div class="col-span-3">Cant.</div>
+                    <div class="col-span-5">Descripción</div>
+                    <div class="col-span-4 text-right">Corte</div>
+                </div>
+            `;
+            
+            csvPieces.forEach(p => {
+                container.innerHTML += `
+                    <div class="grid grid-cols-12 text-xs py-1.5 px-2 hover:bg-slate-900 rounded transition border-b border-slate-900 min-w-[350px]">
+                        <div class="col-span-3 text-indigo-400 font-bold">${p.qty}x</div>
+                        <div class="col-span-5 text-slate-300 truncate pr-2" title="${p.label}">${p.label}</div>
+                        <div class="col-span-4 text-right text-slate-400 font-mono">${fmtSize(p.size, p.inch)}</div>
+                    </div>
+                `;
+            });
+        }
 
         function recalculate() {
             const stockLength = parseFloat(document.getElementById('stockBarLength').value);
@@ -312,11 +371,11 @@
 
             bars.forEach((bar, index) => {
                 let barHTML = `
-                    <div class="bg-slate-950/50 p-5 border border-slate-800 rounded-2xl space-y-3.5 print-card">
+                    <div class="bg-slate-950/50 p-5 border border-slate-800 rounded-2xl space-y-3.5 print-card min-w-[500px]">
                         <div class="flex flex-col sm:flex-row sm:items-center justify-between gap-1.5 text-xs">
                             <span class="font-extrabold text-indigo-400 text-sm">Barra #${index + 1} de Metal Negro 1"x1"</span>
                             <span class="text-slate-400 text-[10px] font-mono">
-                                Sobra libre disponible: <b class="text-emerald-400 font-extrabold text-xs">${bar.remaining.toFixed(1)} cm</b> (${((bar.remaining / stockLength) * 100).toFixed(1)}%)
+                                Sobra libre disponible: <b class="text-emerald-400 font-extrabold text-xs">${fmtSize(bar.remaining)}</b> (${((bar.remaining / stockLength) * 100).toFixed(1)}%)
                             </span>
                         </div>
 
@@ -342,9 +401,9 @@
                     accumMark += kerf;
 
                     barHTML += `
-                        <div class="${styleClass} h-full border-r border-black/20 flex flex-col justify-center px-2 truncate transition duration-150" style="width: ${widthPct}%" title="${cut.label}: ${cut.size.toFixed(1)} cm">
-                            <span class="font-extrabold truncate text-white text-xs">${cut.inch.toFixed(1)}"</span>
-                            <span class="opacity-90 truncate text-[9px] font-semibold">${cut.label}</span>
+                        <div class="${styleClass} h-full border-r border-black/20 flex flex-col items-center justify-center text-center px-1.5 sm:px-2 truncate transition duration-150" style="width: ${widthPct}%" title="${cut.label}: ${cut.size.toFixed(1)} cm">
+                            <span class="font-extrabold truncate text-white text-[10px] sm:text-xs">${fmtSize(cut.size, cut.inch)}</span>
+                            <span class="opacity-90 truncate text-[8px] sm:text-[9px] font-semibold">${cut.label}</span>
                         </div>
                     `;
                 });
@@ -352,9 +411,9 @@
                 // Remainder slice
                 const remainderPct = (bar.remaining / stockLength) * 100;
                 barHTML += `
-                            <div class="bg-slate-950/80 h-full flex flex-col justify-center px-2 text-slate-600 truncate" style="width: ${remainderPct}%">
+                            <div class="bg-slate-950/80 h-full flex flex-col items-center justify-center text-center px-2 text-slate-600 truncate" style="width: ${remainderPct}%">
                                 <span class="font-bold">SOBRA UTILIZABLE</span>
-                                <span class="text-[9px]">${bar.remaining.toFixed(1)} cm</span>
+                                <span class="text-[9px]">${fmtSize(bar.remaining)}</span>
                             </div>
                         </div>
 
@@ -366,15 +425,18 @@
                                 </svg>
                                 Secuencia de Marcado en Taller (Cinta métrica en '0'):
                             </p>
-                            <div class="grid grid-cols-1 sm:grid-cols-2 gap-x-4 gap-y-1.5">
+                            <div class="flex flex-col gap-y-1.5">
                 `;
 
                 marksData.forEach((mark, mIdx) => {
                     barHTML += `
                         <div class="flex items-center justify-between text-[11px] border-b border-slate-800/40 py-1 hover:bg-slate-900/40 px-1 rounded transition">
-                            <span class="text-slate-400 max-w-[210px] truncate">${mIdx + 1}. ${mark.label} (${mark.inch.toFixed(1)}")</span>
-                            <span class="text-white font-bold bg-slate-950 px-2 py-0.5 rounded border border-slate-800">
-                                Cortar en: <span class="text-amber-400 font-extrabold text-xs">${mark.markAt} cm</span>
+                            <span class="text-slate-400 truncate pr-4" title="${mark.label}">
+                                ${mIdx + 1}. ${mark.label} <span class="text-slate-500 font-normal">(${fmtSize(mark.cm, mark.inch)})</span>
+                            </span>
+                            <span class="text-white font-bold bg-slate-950 px-2 py-0.5 rounded border border-slate-800 flex items-center gap-1">
+                                <span class="text-[9px] text-slate-400 font-normal">Marca:</span>
+                                <span class="text-amber-400 font-extrabold text-xs">${fmtSize(parseFloat(mark.markAt))}</span>
                             </span>
                         </div>
                     `;
@@ -390,6 +452,7 @@
         }
 
         window.onload = function() {
+            renderList();
             recalculate();
         }
     </script>

@@ -16,20 +16,51 @@
             font-family: 'JetBrains Mono', monospace;
         }
         @media print {
-            .no-print {
-                display: none !important;
-            }
-            body {
-                background: white !important;
-                color: black !important;
-            }
-            .print-card {
-                border: 1px solid #cbd5e1 !important;
+            @page { margin: 1cm; }
+            .no-print, header, footer { display: none !important; }
+            body, html { background: white !important; color: black !important; }
+            
+            * {
                 box-shadow: none !important;
-                background: white !important;
-                page-break-inside: avoid;
+                text-shadow: none !important;
+                -webkit-print-color-adjust: exact !important;
+                print-color-adjust: exact !important;
+            }
+
+            [class*="bg-slate-9"], [class*="bg-slate-8"], [class*="bg-slate-950/50"], [class*="bg-slate-900/60"] {
+                background-color: transparent !important;
+            }
+
+            [class*="border-slate-8"], [class*="border-slate-7"], [class*="border-slate-9"] {
+                border-color: #cbd5e1 !important;
+            }
+
+            [class*="text-slate-1"], [class*="text-slate-2"], [class*="text-slate-3"], [class*="text-slate-4"], .text-white {
+                color: #1e293b !important;
+            }
+
+            .h-full .text-white, .h-full [class*="text-white"], .bg-slate-950\/80 span {
+                color: #ffffff !important;
+            }
+            .bg-slate-950\/80 {
+                background-color: #f1f5f9 !important; 
+            }
+            .bg-slate-950\/80 span {
+                color: #64748b !important;
+            }
+
+            [class*="overflow-"], [class*="max-h-"] {
+                overflow: visible !important;
+                max-height: none !important;
+            }
+
+            .print-card, tr {
+                page-break-inside: avoid !important;
+                break-inside: avoid !important;
             }
         }
+
+
     </style>
 </head>
 <body class="bg-slate-950 text-slate-100 min-h-screen flex flex-col antialiased selection:bg-amber-500 selection:text-slate-950">
@@ -52,6 +83,10 @@
             </div>
             
             <div class="flex items-center gap-3">
+                <div class="flex items-center gap-1 bg-slate-900 p-1 rounded-xl border border-slate-800 mr-2">
+                    <button id="btn-unit-in" onclick="toggleUnits('in')" class="px-3 py-1.5 rounded-lg text-xs font-bold bg-amber-500 text-slate-900 shadow-lg transition">IN</button>
+                    <button id="btn-unit-cm" onclick="toggleUnits('cm')" class="px-3 py-1.5 rounded-lg text-xs font-semibold text-slate-400 hover:text-slate-200 hover:bg-slate-800 transition">CM</button>
+                </div>
                 <button onclick="window.print()" class="px-4 py-2 bg-slate-900 hover:bg-slate-800 border border-slate-800 hover:border-slate-700 text-slate-200 text-xs font-semibold rounded-lg transition flex items-center gap-2">
                     <svg xmlns="http://www.w3.org/2000/svg" class="h-4 w-4" fill="none" viewBox="0 0 24 24" stroke="currentColor">
                         <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M17 17h2a2 2 0 002-2v-4a2 2 0 00-2-2H5a2 2 0 00-2 2v4a2 2 0 002 2h2m2 4h6a2 2 0 002-2v-4a2 2 0 00-2-2H9a2 2 0 00-2 2v4a2 2 0 002 2zm8-12V5a2 2 0 00-2-2H9a2 2 0 00-2 2v4h10z" />
@@ -66,7 +101,7 @@
         </div>
     </header>
 
-    <main class="flex-1 max-w-7xl w-full mx-auto p-4 sm:p-6 lg:p-8 grid grid-cols-1 lg:grid-cols-12 gap-8">
+    <main class="flex-1 max-w-7xl w-full mx-auto p-4 sm:p-6 lg:p-8 grid grid-cols-1 lg:grid-cols-12 gap-8 min-w-[350px]">
         
         <!-- Left Column: Settings and Rules (4 Cols) -->
         <section class="lg:col-span-4 flex flex-col gap-6 no-print">
@@ -137,7 +172,7 @@
                         <input type="number" id="sheetPrice" value="32500" onchange="recalculate()" onkeyup="recalculate()" class="w-full bg-slate-850 border border-slate-700 rounded-xl px-3 py-2 text-xs text-white focus:outline-none font-mono" />
                     </div>
 
-                    <div class="border-t border-slate-800 pt-3 flex justify-between text-xs">
+                    <div class="border-t border-slate-800 pt-3 flex justify-between text-xs hidden">
                         <span class="text-slate-400">Ver dimensiones en:</span>
                         <div class="flex gap-2">
                             <button id="btnInches" onclick="toggleUnits('in')" class="px-2 py-0.5 bg-amber-500 rounded text-slate-950 font-mono font-bold text-[10px]">Pulgadas</button>
@@ -217,7 +252,7 @@
             </div>
 
             <!-- Carpentry Instructions -->
-            <div class="bg-slate-900 border border-slate-800 rounded-3xl p-6 shadow-2xl print-card">
+            <div class="bg-slate-900 border border-slate-800 rounded-3xl p-6 shadow-2xl print-card min-w-[500px]">
                 <h3 class="text-sm font-bold text-amber-400 uppercase tracking-wider mb-4 flex items-center gap-2">
                     <svg xmlns="http://www.w3.org/2000/svg" class="h-4.5 w-4.5 text-amber-500" fill="none" viewBox="0 0 24 24" stroke="currentColor">
                         <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M13 16h-1v-4h-1m1-4h.01M21 12a9 9 0 11-18 0 9 9 0 0118 0z" />
@@ -268,14 +303,11 @@
 
         function toggleUnits(unit) {
             displayUnits = unit;
-            const btnInches = document.getElementById('btnInches');
-            const btnMetric = document.getElementById('btnMetric');
-            if (unit === 'in') {
-                btnInches.className = "px-2 py-0.5 bg-amber-500 rounded text-slate-950 font-mono font-bold text-[10px]";
-                btnMetric.className = "px-2 py-0.5 bg-slate-800 rounded text-slate-400 font-mono font-bold text-[10px]";
-            } else {
-                btnInches.className = "px-2 py-0.5 bg-slate-800 rounded text-slate-400 font-mono font-bold text-[10px]";
-                btnMetric.className = "px-2 py-0.5 bg-amber-500 rounded text-slate-950 font-mono font-bold text-[10px]";
+            const btnIn = document.getElementById('btn-unit-in');
+            const btnCm = document.getElementById('btn-unit-cm');
+            if (btnIn && btnCm) {
+                btnIn.className = unit === 'in' ? 'px-3 py-1.5 rounded-lg text-xs font-bold bg-amber-500 text-slate-900 shadow-lg transition' : 'px-3 py-1.5 rounded-lg text-xs font-semibold text-slate-400 hover:text-slate-200 hover:bg-slate-800 transition';
+                btnCm.className = unit === 'cm' ? 'px-3 py-1.5 rounded-lg text-xs font-bold bg-amber-500 text-slate-900 shadow-lg transition' : 'px-3 py-1.5 rounded-lg text-xs font-semibold text-slate-400 hover:text-slate-200 hover:bg-slate-800 transition';
             }
             recalculate();
         }
@@ -337,7 +369,7 @@
                 const sheetEff = (sheetCutsArea / (sheetW * sheetL)) * 100;
 
                 let sheetHTML = `
-                    <div class="bg-slate-950/50 p-5 border border-slate-800 rounded-2xl space-y-4 print-card">
+                    <div class="bg-slate-950/50 p-5 border border-slate-800 rounded-2xl space-y-4 print-card min-w-[500px]">
                         <div class="flex flex-col sm:flex-row sm:items-center justify-between gap-1.5 text-xs border-b border-slate-800 pb-2">
                             <span class="font-extrabold text-amber-400 text-sm">Plancha de Plywood #${index + 1} (48" x 96")</span>
                             <span class="text-slate-400 text-[10px] font-mono">
@@ -351,7 +383,7 @@
                         </div>
 
                         <!-- Visual list of items placed on this sheet -->
-                        <div class="grid grid-cols-1 sm:grid-cols-2 gap-2 text-[11px]">
+                        <div class="flex flex-col gap-1.5 text-[11px]">
                             <p class="font-bold text-slate-400 col-span-2 text-[10px] uppercase">Cortes en esta plancha:</p>
                 `;
 
@@ -361,7 +393,7 @@
 
                     sheetHTML += `
                         <div class="bg-slate-900/60 p-2 rounded-lg border border-slate-800/80 flex justify-between items-center font-mono">
-                            <span class="text-slate-300 truncate max-w-[200px]" title="${item.label}">${pi + 1}. ${item.label}</span>
+                            <span class="text-slate-300 truncate pr-4" title="${item.label}">${pi + 1}. ${item.label}</span>
                             <span class="text-amber-400 font-bold whitespace-nowrap">${lVal} x ${wVal}</span>
                         </div>
                     `;
@@ -407,7 +439,8 @@
                 ctx.strokeRect(rx, ry, rw, rh);
 
                 ctx.fillStyle = '#111827';
-                ctx.font = 'bold 11px Plus Jakarta Sans';
+                ctx.textAlign = 'center';
+                ctx.textBaseline = 'middle';
                 
                 const numberLabel = `${index + 1}`;
                 const labelText = item.label;
@@ -416,10 +449,14 @@
                 const dimCm = `${(item.h * 2.54).toFixed(0)}x${(item.w * 2.54).toFixed(0)} cm`;
                 const dimLabel = displayUnits === 'in' ? dimInches : dimCm;
 
-                if (rw > 32 && rh > 18) {
-                    ctx.fillText(labelText, rx + 10, ry + 20);
+                if (rw > 60 && rh > 40) {
+                    ctx.font = 'bold 11px Plus Jakarta Sans';
+                    ctx.fillText(labelText, rx + rw / 2, ry + rh / 2 - 8);
                     ctx.font = 'bold 10px JetBrains Mono';
-                    ctx.fillText(dimLabel, rx + 10, ry + 36);
+                    ctx.fillText(dimLabel, rx + rw / 2, ry + rh / 2 + 8);
+                } else if (rw > 40 && rh > 20) {
+                    ctx.font = 'bold 9px JetBrains Mono';
+                    ctx.fillText(dimLabel, rx + rw / 2, ry + rh / 2);
                 }
             });
 

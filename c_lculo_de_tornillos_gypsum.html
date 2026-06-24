@@ -16,20 +16,51 @@
             font-family: 'JetBrains Mono', monospace;
         }
         @media print {
-            .no-print {
-                display: none !important;
-            }
-            body {
-                background: white !important;
-                color: black !important;
-            }
-            .print-card {
-                border: 1px solid #cbd5e1 !important;
+            @page { margin: 1cm; }
+            .no-print, header, footer { display: none !important; }
+            body, html { background: white !important; color: black !important; }
+            
+            * {
                 box-shadow: none !important;
-                background: white !important;
-                page-break-inside: avoid;
+                text-shadow: none !important;
+                -webkit-print-color-adjust: exact !important;
+                print-color-adjust: exact !important;
+            }
+
+            [class*="bg-slate-9"], [class*="bg-slate-8"], [class*="bg-slate-950/50"], [class*="bg-slate-900/60"] {
+                background-color: transparent !important;
+            }
+
+            [class*="border-slate-8"], [class*="border-slate-7"], [class*="border-slate-9"] {
+                border-color: #cbd5e1 !important;
+            }
+
+            [class*="text-slate-1"], [class*="text-slate-2"], [class*="text-slate-3"], [class*="text-slate-4"], .text-white {
+                color: #1e293b !important;
+            }
+
+            .h-full .text-white, .h-full [class*="text-white"], .bg-slate-950\/80 span {
+                color: #ffffff !important;
+            }
+            .bg-slate-950\/80 {
+                background-color: #f1f5f9 !important; 
+            }
+            .bg-slate-950\/80 span {
+                color: #64748b !important;
+            }
+
+            [class*="overflow-"], [class*="max-h-"] {
+                overflow: visible !important;
+                max-height: none !important;
+            }
+
+            .print-card, tr {
+                page-break-inside: avoid !important;
+                break-inside: avoid !important;
             }
         }
+
+
     </style>
 </head>
 <body class="bg-slate-950 text-slate-100 min-h-screen flex flex-col antialiased selection:bg-amber-500 selection:text-slate-950">
@@ -48,6 +79,13 @@
                         BúnkerScrew Gypsum <span class="text-xs bg-amber-500/20 text-amber-400 px-2.5 py-0.5 rounded-full font-mono border border-amber-500/30 font-bold">Cálculo Estructural</span>
                     </h1>
                     <p class="text-xs text-slate-400 mt-0.5">Cálculo milimétrico de tornillos de fijación para las 40 piezas de gypsum</p>
+                    <div class="border-t border-slate-800 pt-3 flex justify-between text-xs mt-2">
+                        <span class="text-slate-400">Ver dimensiones en:</span>
+                        <div class="flex gap-2">
+                            <button id="btnInches" onclick="toggleUnits('in')" class="px-2 py-0.5 bg-amber-500 rounded text-slate-950 font-mono font-bold text-[10px]">Pulgadas</button>
+                            <button id="btnMetric" onclick="toggleUnits('cm')" class="px-2 py-0.5 bg-slate-800 rounded text-slate-400 font-mono font-bold text-[10px]">Métrico (cm)</button>
+                        </div>
+                    </div>
                 </div>
             </div>
             
@@ -66,7 +104,7 @@
         </div>
     </header>
 
-    <main class="flex-1 max-w-7xl w-full mx-auto p-4 sm:p-6 lg:p-8 grid grid-cols-1 lg:grid-cols-12 gap-8">
+    <main class="flex-1 max-w-7xl w-full mx-auto p-4 sm:p-6 lg:p-8 grid grid-cols-1 lg:grid-cols-12 gap-8 min-w-[350px]">
         
         <!-- Left Column: Variable Sliders & Purchase Assistant (5 Cols) -->
         <section class="lg:col-span-5 flex flex-col gap-6 no-print">
@@ -265,14 +303,11 @@
 
         function toggleUnits(unit) {
             displayUnits = unit;
-            const btnInches = document.getElementById('btnInches');
-            const btnMetric = document.getElementById('btnMetric');
-            if (unit === 'in') {
-                btnInches.className = "px-2 py-0.5 bg-amber-500 rounded text-slate-950 font-mono font-bold text-[10px]";
-                btnMetric.className = "px-2 py-0.5 bg-slate-800 rounded text-slate-400 font-mono font-bold text-[10px]";
-            } else {
-                btnInches.className = "px-2 py-0.5 bg-slate-800 rounded text-slate-400 font-mono font-bold text-[10px]";
-                btnMetric.className = "px-2 py-0.5 bg-amber-500 rounded text-slate-950 font-mono font-bold text-[10px]";
+            const btnIn = document.getElementById('btn-unit-in');
+            const btnCm = document.getElementById('btn-unit-cm');
+            if (btnIn && btnCm) {
+                btnIn.className = unit === 'in' ? 'px-3 py-1.5 rounded-lg text-xs font-bold bg-amber-500 text-slate-900 shadow-lg transition' : 'px-3 py-1.5 rounded-lg text-xs font-semibold text-slate-400 hover:text-slate-200 hover:bg-slate-800 transition';
+                btnCm.className = unit === 'cm' ? 'px-3 py-1.5 rounded-lg text-xs font-bold bg-amber-500 text-slate-900 shadow-lg transition' : 'px-3 py-1.5 rounded-lg text-xs font-semibold text-slate-400 hover:text-slate-200 hover:bg-slate-800 transition';
             }
             updateValues();
         }
@@ -298,6 +333,15 @@
             let grandTotalTheoretical = 0;
             const tableBody = document.getElementById('tblBreakdown');
             tableBody.innerHTML = '';
+
+            const headerTitle = displayUnits === 'in' ? 'Dimensiones (in)' : 'Dimensiones (cm)';
+            
+            // Re-render table header to update dimensions column header text
+            const tableContainer = document.querySelector('.overflow-x-auto');
+            if(tableContainer) {
+                const headerEl = tableContainer.querySelector('th:nth-child(3)');
+                if(headerEl) headerEl.innerText = headerTitle;
+            }
 
             gypsumPieces.forEach(p => {
                 const lenCm = p.l * 2.54;
@@ -352,15 +396,18 @@
             const boxesNeeded = Math.ceil(grandTotalWithMargin / boxSizeVal);
             const totalCost = boxesNeeded * boxPrices[boxSizeVal];
 
+            // Safely update savedMoneyText if it exists
+            const savedMoneyEl = document.getElementById('savedMoneyText');
+            if (savedMoneyEl) {
+                savedMoneyEl.innerText = `Equivale a: ${boxesNeeded} ${boxesNeeded === 1 ? 'caja' : 'cajas'} de empaque`;
+            }
+
             // Render stats
             document.getElementById('tdGrandTotal').innerText = `${grandTotalTheoretical.toLocaleString()} uds`;
             document.getElementById('txtTheoretical').innerText = `${grandTotalTheoretical.toLocaleString()} uds`;
             document.getElementById('txtTotalWithMargin').innerText = `${grandTotalWithMargin.toLocaleString()} uds`;
             document.getElementById('txtBoxesToBuy').innerText = `${boxesNeeded} ${boxesNeeded === 1 ? 'caja' : 'cajas'} de ${boxSizeVal}`;
             document.getElementById('txtEstimatedCost').innerText = `₡${totalCost.toLocaleString('es-CR')}`;
-            
-            // Fix: Removed the duplicate buggy line reference to non-existent 'totalSheetsText'
-            document.getElementById('savedMoneyText').innerText = `Equivale a: ${boxesNeeded} ${boxesNeeded === 1 ? 'caja' : 'cajas'} de empaque`;
         }
 
         window.onload = function() {
